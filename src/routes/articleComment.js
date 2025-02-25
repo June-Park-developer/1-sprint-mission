@@ -16,6 +16,11 @@ articleCommentRouter.route("/").get(
       skip: myCursor ? 1 : 0,
       take: parseInt(limit),
       orderBy: { timeStamp: "desc" },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+      },
     });
     const nextCursor =
       comments.length > 0 ? comments[comments.length - 1].timeStamp : null;
@@ -45,6 +50,11 @@ articleCommentRouter
       const { articleId } = req.params;
       const comments = await prisma.comment.findMany({
         where: { articleId },
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+        },
       });
       res.json(comments);
     })

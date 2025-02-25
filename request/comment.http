@@ -1,5 +1,5 @@
 ###
-POST http://localhost:3000/products/comments/d5726223-d3b0-4b20-b4a3-92107295a9fa
+POST http://localhost:3000/products/comments/b6f86b4f-981b-44f1-85c7-d56cb9cb2fe6
 Content-Type: application/json
 
 {
@@ -7,7 +7,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/products/comments?cursor=20
+GET http://localhost:3000/products/comments?cursor=7
 
 ###
 GET http://localhost:3000/comments/products/d5726223-d3b0-4b20-b4a3-92107295a9fa
