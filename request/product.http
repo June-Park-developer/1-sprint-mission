@@ -1,0 +1,29 @@
+###
+POST http://localhost:3000/products/
+Content-Type: application/json
+
+{
+  "name": "아주 비싼 슈퍼컴퓨터",
+  "description" : "스펙이 참 좋아요",
+  "price": 20000000,
+  "tags": "ELECTRONICS",
+  "stock": 3
+}
+
+###
+GET http://localhost:3000/products?order=recent&search=운동화
+
+###
+GET http://localhost:3000/products/1e112c02-7c92-4d52-b76e-485e41e3f64
+
+###
+PATCH http://localhost:3000/products/1e112c02-7c92-4d52-b76e-485e41e3f64d
+Content-Type: application/json
+
+{
+  "name": "유무선 청소기",
+  "description" : "유무선 둘다 되어서 더욱 손쉽게 청소가 가능합니다~"
+}
+
+###
+DELETE http://localhost:3000/products/1e112c02-7c92-4d52-b76e-485e41e3f64d
