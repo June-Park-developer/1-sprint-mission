@@ -29,7 +29,7 @@ model Article {
 }
 
 model Comment {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -37,7 +37,6 @@ model Comment {
   articleId String?
   product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
   productId String?
-  timeStamp Int      @unique @default(autoincrement())
 }
 
 enum Tags {

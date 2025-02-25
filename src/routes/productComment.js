@@ -12,10 +12,10 @@ productCommentRouter.route("/").get(
     const { cursor: myCursor, limit = 10 } = req.query;
     const comments = await prisma.comment.findMany({
       where: { product: { isNot: null } },
-      cursor: myCursor ? { timeStamp: parseInt(myCursor) } : undefined,
+      cursor: myCursor ? { id: parseInt(myCursor) } : undefined,
       skip: myCursor ? 1 : 0,
       take: parseInt(limit),
-      orderBy: { timeStamp: "desc" },
+      orderBy: { id: "desc" },
       select: {
         id: true,
         content: true,
@@ -23,7 +23,7 @@ productCommentRouter.route("/").get(
       },
     });
     const nextCursor =
-      comments.length > 0 ? comments[comments.length - 1].timeStamp : null;
+      comments.length > 0 ? comments[comments.length - 1].id : null;
     res.json({ comments, nextCursor });
   })
 );
