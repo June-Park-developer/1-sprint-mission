@@ -39,7 +39,7 @@ ERD.md
 ###  /products
 | Method | 기능 설명 |
 |--------|-------------------------------------------|
-| `GET` | offset-based pagination을 이용한 상품 리스트 반환 |
+| `GET` | offset-based pagination을 이용한 상품 리스트 반환 <br> offset = 0, limit = 10, order = recent (recent, oldest, priceLowest, priceHighest), search (name, description 검색)|
 | `POST` | 상품 게시 |
 
 ###  /products/:productId
@@ -53,7 +53,7 @@ ERD.md
 ###  /articles
 | Method | 기능 설명 |
 |--------|-------------------------------------------|
-| `GET` | offset-based pagination을 이용한 게시글 리스트 반환 |
+| `GET` | offset-based pagination을 이용한 게시글 리스트 반환 <br> offset = 0, limit = 10, order = recent (recent, oldest), search (title, content 검색)|
 | `POST` | 게시글 게시 |
 
 ###  /articles/:articleId
@@ -66,23 +66,23 @@ ERD.md
 ###  /products/comments
 | Method | 기능 설명 |
 |--------|-------------------------------------------|
-| `GET` | cursor-based Pagination을 이용한 상품에 대한 댓글 리스트 반환 |
+| `GET` | cursor-based Pagination을 이용한 상품에 대한 댓글 리스트 반환 <br> cursor(해당 timeStamp 기준으로 이전 댓글), limit = 10  |
 
 ###  /products/comments/:productId
 | Method | 기능 설명 |
 |--------|-------------------------------------------|
-| `GET` | cursor-based Pagination을 이용한 해당 Id의 상품에 대한 댓글 리스트 반환 |
+| `GET` | cursor-based Pagination을 이용한 해당 Id의 상품에 대한 댓글 리스트 반환 <br> cursor(해당 timeStamp 기준으로 이전 댓글), limit = 10 |
 | `POST` |해당 Id의 상품에 대한 댓글 게시 |
 
 ###  /articles/comments
 | Method | 기능 설명 |
 |--------|-------------------------------------------|
-| `GET` | cursor-based Pagination을 이용한 게시글에 대한 댓글 리스트 반환 |
+| `GET` | cursor-based Pagination을 이용한 게시글에 대한 댓글 리스트 반환 <br> cursor(해당 timeStamp 기준으로 이전 댓글), limit = 10  |
 
 ###  /articles/comments/:articleId
 | Method | 기능 설명 |
 |--------|-------------------------------------------|
-| `GET` | cursor-based Pagination을 이용한 해당 Id의 게시글에 대한 댓글 리스트 반환 |
+| `GET` | cursor-based Pagination을 이용한 해당 Id의 게시글에 대한 댓글 리스트 반환 <br> cursor(해당 timeStamp 기준으로 이전 댓글), limit = 10 |
 | `POST` |해당 Id의 게시글에 대한 댓글 게시 |
 
 ###  /comments/:commentId
