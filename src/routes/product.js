@@ -9,9 +9,31 @@ import productCommentRouter from "./productComment.js";
 
 const productRouter = express.Router();
 
-// To-do : validateCreateProduct 정의 하고 post에 쓰기
-// To-do : validatePatchProduct 정의하고 patch 에 쓰기
-// ? : status를 여기서 정의해야 하나?
+/**
+ * @swagger
+ * paths:
+ *  /products
+ *    get:
+ *      summary: "상품 데이터 전체조회"
+ *      responses:
+ *        "200":
+ *          description: 전체 유저 정보
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                    ok:
+ *                      type: boolean
+ *                    users:
+ *                      type: object
+ *                      example:
+ *                          [
+ *                            { "id": 1, "name": "상품1" },
+ *                            { "id": 2, "name": "상품2" },
+ *                            { "id": 3, "name": "상품3" },
+ *                          ]
+ */
 productRouter
   .route("/")
   .post(

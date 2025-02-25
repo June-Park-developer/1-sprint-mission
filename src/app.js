@@ -6,6 +6,8 @@ import * as dotenv from "dotenv";
 import errorHandler from "./middlewares/errorHandler.js";
 import multer from "multer";
 import cors from "cors";
+import { specs } from "./utils/swagger.js";
+import swaggerUi from "swagger-ui-express";
 
 dotenv.config();
 const app = express();
@@ -13,6 +15,9 @@ const upload = multer({ dest: "./uploads/" });
 app.use(express.json());
 app.use("/files", express.static("uploads"));
 app.use(cors());
+
+// Swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Uploads
 
