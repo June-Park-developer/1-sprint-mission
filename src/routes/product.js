@@ -11,29 +11,84 @@ const productRouter = express.Router();
 
 /**
  * @swagger
- * paths:
- *  /products
- *    get:
- *      summary: "상품 데이터 전체조회"
- *      responses:
- *        "200":
- *          description: 전체 유저 정보
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                    ok:
- *                      type: boolean
- *                    users:
- *                      type: object
- *                      example:
- *                          [
- *                            { "id": 1, "name": "상품1" },
- *                            { "id": 2, "name": "상품2" },
- *                            { "id": 3, "name": "상품3" },
- *                          ]
+ * tags:
+ *   name: Products
+ *   description: 상품 관련 API
  */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: 상품의 ID
+ *         name:
+ *           type: string
+ *           description: 상품의 이름
+ *         description:
+ *           type: string
+ *           description: 상품 설명
+ *         price:
+ *           type: number
+ *           format: float
+ *           description: 상품의 가격
+ *         stock:
+ *           type: integer
+ *           description: 상품 재고 수량
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: 상품 생성 시간
+ */
+
+/**
+ * @swagger
+ * /products:
+ *   post:
+ *     summary: 상품 등록
+ *     description: 새로운 상품을 등록한다.
+ *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: 상품의 이름
+ *               description:
+ *                 type: string
+ *                 description: 상품의 설명 (선택적)
+ *               tags:
+ *                 type: string
+ *                 enum: [FASHION, BEAUTY, SPORTS, ELECTRONICS, HOME_INTERIOR, HOUSEHOLD_SUPPLIES, KITCHENWARE, ETC]
+ *                 description: 상품의 태그
+ *               price:
+ *                 type: number
+ *                 description: 상품의 가격
+ *               stock:
+ *                 type: integer
+ *                 description: 상품의 재고 수량
+ *     responses:
+ *       201:
+ *         description: 상품이 성공적으로 등록됨
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: 잘못된 요청
+ */
+
 productRouter
   .route("/")
   .post(
