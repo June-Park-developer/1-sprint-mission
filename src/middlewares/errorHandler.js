@@ -22,11 +22,6 @@ export default function errorHandler(err, req, res, next) {
       error: "NotFound",
       message: "해당 데이터는 존재하지 않습니다.",
     });
-  } else if (err.name === "NoMatchingRouter") {
-    res.status(404).json({
-      error: "NoMatchingRouter",
-      message: "해당 URL 요청은 잘못되었습니다.",
-    });
   } else {
     res.status(500).json({
       error: "ServerError",

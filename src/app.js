@@ -31,13 +31,6 @@ app.use("/articles", articleRouter);
 // Comment
 app.use("/comments", commentRouter);
 
-// 해당하는 미들웨어가 없는 경우 에러 발생
-app.use((req, res, next) => {
-  const error = new Error();
-  error.name = "NoMatchingRouter";
-  next(error);
-});
-
 // errorHandler
 app.use(errorHandler);
 
