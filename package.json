@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/app.js",
-    "start": "cross-env NODE_ENV=production node src/app.js"
+    "production": "cross-env NODE_ENV=production node src/app.js",
+    "start": "NODE_ENV=production node src/app.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
