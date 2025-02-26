@@ -9,7 +9,9 @@ import cors from "cors";
 import { specs } from "./utils/swagger.js";
 import swaggerUi from "swagger-ui-express";
 
-dotenv.config();
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
 const app = express();
 const upload = multer({ dest: "./uploads/" });
 app.use(express.json());
