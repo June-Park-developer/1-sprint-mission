@@ -12,6 +12,7 @@ const CreateProduct = s.object({
       "HOME_INTERIOR",
       "HOUSEHOLD_SUPPLIES",
       "KITCHENWARE",
+      "ETC",
     ])
   ),
   price: s.min(s.number(), 0),

@@ -6,12 +6,13 @@ import * as dotenv from "dotenv";
 import errorHandler from "./middlewares/errorHandler.js";
 import multer from "multer";
 import cors from "cors";
-import { specs } from "./utils/swagger.js";
-import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
 
 dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
 });
+import swaggerUi from "swagger-ui-express";
+
 const app = express();
 const upload = multer({ dest: "./uploads/" });
 app.use(express.json());
@@ -19,6 +20,26 @@ app.use("/files", express.static("uploads"));
 app.use(cors());
 
 // Swagger
+
+const options = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      version: "1.0.0",
+      title: "part1-박정은-sprint3",
+      description:
+        "이 프로젝트는 코드잇 Node js 스프린트의 세번째 미션으로 진행한 프로젝트입니다.",
+    },
+    servers: [
+      {
+        url: process.env.SERVER_URL,
+      },
+    ],
+  },
+  apis: ["./src/routes/*.js"],
+};
+const specs = swaggerJsdoc(options);
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Uploads
@@ -44,4 +65,5 @@ app.use(errorHandler);
 // Listen
 app.listen(process.env.PORT, () => {
   console.log("Server started on port 3000");
+  console.log(`mode: ${process.env.NODE_ENV}`);
 });
