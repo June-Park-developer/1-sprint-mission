@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: Part1-박정은-sprint3
+  version: 1.0.0
+  description: 이 프로젝트는 코드잇 Node.js 스프린트의 세 번째 미션으로 진행한 프로젝트입니다.
+
+servers: []
+
+tags:
+  - name: Products
+    description: 상품 관련 API
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "고유 ID (UUID)"
+          example: "b13c2e6f-dc44-4b97-bad7-cf602a90322b"
+        name:
+          type: string
+          description: 상품 이름
+          example: "블루 티셔츠"
+        description:
+          type: string
+          description: 상품 설명
+          example: "편안한 착용감을 제공하는 블루 티셔츠"
+        tags:
+          type: string
+          description: "상품의 태그 (기본값: ETC)"
+          example: "ETC"
+        price:
+          type: number
+          format: float
+          description: 상품 가격
+          example: 29.99
+        stock:
+          type: integer
+          description: 재고 수량
+          example: 100
+        createdAt:
+          type: string
+          format: date-time
+          description: 생성된 날짜 및 시간
+          example: "2025-02-26T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: 마지막으로 업데이트된 날짜 및 시간
+          example: "2025-02-26T12:00:00Z"
+
+    CreateProduct:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 상품 이름
+          example: "블루 티셔츠"
+        description:
+          type: string
+          description: 상품 설명
+          example: "편안한 착용감을 제공하는 블루 티셔츠"
+        tags:
+          type: string
+          description: "상품의 태그 (기본값: ETC)"
+          example: "ETC"
+        price:
+          type: number
+          format: float
+          description: 상품 가격
+          example: 29.99
+        stock:
+          type: integer
+          description: 재고 수량
+          example: 100
+
+paths:
+  /products:
+    post:
+      summary: 새로운 상품 생성
+      tags: [Products]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProduct"
+      responses:
+        201:
+          description: 생성된 상품 정보
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        400:
+          description: 잘못된 요청
+
+    get:
+      summary: 상품 목록 조회
+      tags: [Products]
+      parameters:
+        - in: query
+          name: offset
+          required: false
+          schema:
+            type: integer
+            example: 0
+          description: "조회할 상품의 시작 위치 (기본값: 0)"
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            example: 10
+          description: "조회할 상품의 수 (기본값: 10)"
+        - in: query
+          name: order
+          required: false
+          schema:
+            type: string
+            enum:
+              - recent
+              - oldest
+              - priceLowest
+              - priceHighest
+            example: recent
+          description: 상품을 정렬할 방식
+        - in: query
+          name: search
+          required: false
+          schema:
+            type: string
+            example: "블루 티셔츠"
+          description: 상품을 검색할 키워드
+      responses:
+        200:
+          description: 상품 목록
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        400:
+          description: 잘못된 요청
+
+  /products/{productId}:
+    get:
+      summary: 특정 상품 정보 조회
+      tags: [Products]
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: 조회할 상품의 고유 ID
+      responses:
+        200:
+          description: 조회된 상품 정보
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        404:
+          description: 상품을 찾을 수 없음
+    patch:
+      summary: 특정 상품 정보 수정
+      tags: [Products]
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: 수정할 상품의 고유 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProduct"
+      responses:
+        200:
+          description: 수정된 상품 정보
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        400:
+          description: 잘못된 요청
+        404:
+          description: 상품을 찾을 수 없음
+    delete:
+      summary: 특정 상품 삭제
+      tags: [Products]
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: 삭제할 상품의 고유 ID
+      responses:
+        200:
+          description: 삭제된 상품 정보
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        404:
+          description: 상품을 찾을 수 없음

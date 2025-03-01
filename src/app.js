@@ -7,11 +7,12 @@ import errorHandler from "./middlewares/errorHandler.js";
 import multer from "multer";
 import cors from "cors";
 import swaggerJsdoc from "swagger-jsdoc";
+import yaml from "yamljs";
+import swaggerUi from "swagger-ui-express";
 
 dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
 });
-import swaggerUi from "swagger-ui-express";
 
 const app = express();
 const upload = multer({ dest: "./uploads/" });
@@ -20,27 +21,15 @@ app.use("/files", express.static("uploads"));
 app.use(cors());
 
 // Swagger
-
-const options = {
-  swaggerDefinition: {
-    openapi: "3.0.0",
-    info: {
-      version: "1.0.0",
-      title: "part1-박정은-sprint3",
-      description:
-        "이 프로젝트는 코드잇 Node js 스프린트의 세번째 미션으로 진행한 프로젝트입니다.",
-    },
-    servers: [
-      {
-        url: process.env.SERVER_URL,
-      },
-    ],
+const swaggerDocument = yaml.load("./src/utils/swagger.yaml");
+const serverUrl = process.env.SERVER_URL;
+swaggerDocument.servers = [
+  {
+    url: serverUrl,
+    description: "동적으로 설정된 서버",
   },
-  apis: ["./src/routes/*.js"],
-};
-const specs = swaggerJsdoc(options);
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+];
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Uploads
 

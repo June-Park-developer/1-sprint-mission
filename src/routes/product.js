@@ -58,11 +58,37 @@ const productRouter = express.Router();
  *           format: date-time
  *           description: 마지막으로 업데이트된 날짜 및 시간
  *           example: "2025-02-26T12:00:00Z"
- *         Comment:
- *           type: array
- *           description: 상품에 대한 댓글
- *           items:
- *             $ref: '#/components/schemas/Comment'
+ *
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CreateProduct:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: 상품 이름
+ *           example: "블루 티셔츠"
+ *         description:
+ *           type: string
+ *           description: 상품 설명
+ *           example: "편안한 착용감을 제공하는 블루 티셔츠"
+ *         tags:
+ *           type: string
+ *           description: "상품의 태그 (기본값: ETC)"
+ *           example: "ETC"
+ *         price:
+ *           type: number
+ *           format: float
+ *           description: 상품 가격
+ *           example: 29.99
+ *         stock:
+ *           type: integer
+ *           description: 재고 수량
+ *           example: 100
  */
 
 /**
@@ -76,7 +102,7 @@ const productRouter = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Product'
+ *             $ref: '#/components/schemas/CreateProduct'
  *     responses:
  *       201:
  *         description: 생성된 상품 정보
@@ -229,7 +255,7 @@ productRouter.use("/comments", productCommentRouter);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Product'
+ *             $ref: '#/components/schemas/CreateProduct'
  *     responses:
  *       200:
  *         description: 수정된 상품 정보
