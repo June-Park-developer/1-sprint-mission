@@ -124,3 +124,13 @@ Content-Type: image/png
 
 < ./test.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 유저 회원가입 테스트
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "email" : "userExample@gmail.com",
+    "nickname" : "user1",
+    "password" : "password1"
+}

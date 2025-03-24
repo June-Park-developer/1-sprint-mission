@@ -62,7 +62,7 @@ export async function getArticleList(req, res) {
   };
 
   const totalCount = await articlesRepository.countByKeyword(keyword);
-  const articles = await articlesRepository.getArticleList(page, pageSize, orderBy, keyword);
+  const articles = await articlesRepository.getArticleList({ page, pageSize, orderBy, keyword });
 
   return res.send({
     list: articles,

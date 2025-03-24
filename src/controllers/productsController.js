@@ -1,5 +1,4 @@
 import { create } from 'superstruct';
-import { prismaClient } from '../lib/prismaClient.js';
 import NotFoundError from '../lib/errors/NotFoundError.js';
 import { IdParamsStruct } from '../structs/commonStructs.js';
 import {
@@ -62,7 +61,7 @@ export async function getProductList(req, res) {
   const { page, pageSize, orderBy, keyword } = create(req.query, GetProductListParamsStruct);
 
   const totalCount = await productsRepository.countByKeyword(keyword);
-  const products = await productsRepository.getProductList(page, pageSize, orderBy, keyword);
+  const products = await productsRepository.getProductList({ page, pageSize, orderBy, keyword });
 
   return res.send({
     list: products,

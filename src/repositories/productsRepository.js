@@ -31,7 +31,7 @@ async function countByKeyword(keyword) {
   return await prismaClient.article.count({ where });
 }
 
-async function getProductList(page, pageSize, orderBy, keyword) {
+async function getProductList({ page, pageSize, orderBy, keyword }) {
   const where = {
     title: keyword ? { contains: keyword } : undefined,
   };
