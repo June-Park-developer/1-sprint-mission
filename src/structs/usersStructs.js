@@ -9,6 +9,10 @@ export const CreateUserBodyStruct = s.object({
   password: s.size(s.string(), 6, 20),
 });
 
+export const LoginUserBodyStruct = s.object({
+  email: Email,
+  password: s.size(s.string(), 6, 20),
+});
 // export const GetProductListParamsStruct = PageParamsStruct;
 
 // export const UpdateProductBodyStruct = partial(CreateProductBodyStruct);

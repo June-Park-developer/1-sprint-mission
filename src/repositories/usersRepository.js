@@ -15,8 +15,16 @@ async function create({ email, nickname, hashedPassword }) {
   return user;
 }
 
+async function updateRefreshToken(id, refreshToken) {
+  return await prismaClient.user.update({
+    where: { id },
+    data: { refreshToken: refreshToken },
+  });
+}
+
 export default {
   getByEmail,
   getByNickname,
   create,
+  updateRefreshToken,
 };

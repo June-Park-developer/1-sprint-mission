@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 import { PORT, PUBLIC_PATH, STATIC_PATH } from './lib/constants.js';
 import articlesRouter from './routers/articlesRouter.js';
 import productsRouter from './routers/productsRouter.js';
@@ -13,6 +14,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(STATIC_PATH, express.static(path.resolve(process.cwd(), PUBLIC_PATH)));
 
 app.use('/articles', articlesRouter);
