@@ -17,8 +17,18 @@ async function getCommentsWithCursor(articleId, limit, cursor) {
   });
 }
 
+async function update(id, data) {
+  return await prismaClient.comment.update({ where: { id }, data: { content } });
+}
+
+async function deleteById(id) {
+  return await prismaClient.comment.delete({ where: { id } });
+}
+
 export default {
   getById,
   create,
   getCommentsWithCursor,
+  update,
+  deleteById,
 };
