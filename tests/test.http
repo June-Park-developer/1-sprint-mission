@@ -13,20 +13,20 @@ Content-Type: application/json
 }
 
 ### 특정 ID의 Article 가져오기
-GET http://localhost:3000/articles/101
+GET http://localhost:3000/articles/1
 Accept: application/json
 
 ### Article 업데이트하기
-PATCH http://localhost:3000/articles/12
+PATCH http://localhost:3000/articles/1
 Content-Type: application/json
 
 {
-    "title": "Article 12 업데이트",
+    "title": "Article 1 업데이트",
     "content": "이것은 업데이트된 내용입니다."
 }
 
 ### Article 삭제하기
-DELETE http://localhost:3000/articles/101
+DELETE http://localhost:3000/articles/1
 Accept: application/json
 
 ### Article에 Comment 달기 테스트
@@ -42,7 +42,7 @@ GET http://localhost:3000/articles/2/comments?limit=200
 Accept: application/json
 
 ### Comment 업데이트 테스트
-PATCH http://localhost:3000/comments/105
+PATCH http://localhost:3000/comments/1
 Content-Type: application/json
 
 {
@@ -74,7 +74,7 @@ GET http://localhost:3000/products/1
 Accept: application/json
 
 ### Product 업데이트하기 테스트
-PATCH http://localhost:3000/products/2
+PATCH http://localhost:3000/products/1
 Content-Type: application/json
 
 {
@@ -90,7 +90,7 @@ DELETE http://localhost:3000/products/1
 Accept: application/json
 
 ### Product에 Comment 달기 테스트
-POST http://localhost:3000/products/3/comments
+POST http://localhost:3000/products/1/comments
 Content-Type: application/json
 
 {
@@ -98,7 +98,7 @@ Content-Type: application/json
 }
 
 ### Product의 Comment 가져오기 테스트
-GET http://localhost:3000/products/3/comments
+GET http://localhost:3000/products/1/comments
 Accept: application/json
 
 

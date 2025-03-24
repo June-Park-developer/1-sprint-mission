@@ -8,7 +8,7 @@ import {
   GetArticleListParamsStruct,
 } from '../structs/articlesStructs.js';
 import commentsRepository from '../repositories/commentsRepository.js';
-import { CreatesCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct.js';
+import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct.js';
 import articlesRepository from '../repositories/articlesRepository.js';
 
 // Article
@@ -94,7 +94,12 @@ export async function getCommentList(req, res) {
     throw new NotFoundError('article', articleId);
   }
 
-  const commentsWithCursor = commentsRepository.getCommentsForArticle(articleId, limit, cursor);
+  const commentsWithCursor = await commentsRepository.getCommentsForArticle(
+    articleId,
+    limit,
+    cursor,
+  );
+  console.log(commentsWithCursor);
   const comments = commentsWithCursor.slice(0, limit);
   const cursorComment = commentsWithCursor[commentsWithCursor.length - 1];
   const nextCursor = cursorComment ? cursorComment.id : null;
