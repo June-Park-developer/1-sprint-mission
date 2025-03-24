@@ -8,13 +8,13 @@ import {
   UpdateProductBodyStruct,
 } from '../structs/productsStruct.js';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct.js';
+import productsRepository from '../repositories/productsRepository.js';
+import commentsRepository from '../repositories/commentsRepository.js';
 
 export async function createProduct(req, res) {
   const { name, description, price, tags, images } = create(req.body, CreateProductBodyStruct);
-
-  const product = await prismaClient.product.create({
-    data: { name, description, price, tags, images },
-  });
+  const data = { name, description, price, tags, images };
+  const product = await productsRepository.create(data);
 
   res.status(201).send(product);
 }
@@ -22,7 +22,7 @@ export async function createProduct(req, res) {
 export async function getProduct(req, res) {
   const { id } = create(req.params, IdParamsStruct);
 
-  const product = await prismaClient.product.findUnique({ where: { id } });
+  const product = await productsRepository.getById(id);
   if (!product) {
     throw new NotFoundError('product', id);
   }
@@ -33,29 +33,27 @@ export async function getProduct(req, res) {
 export async function updateProduct(req, res) {
   const { id } = create(req.params, IdParamsStruct);
   const { name, description, price, tags, images } = create(req.body, UpdateProductBodyStruct);
+  const data = { name, description, price, tags, images };
 
-  const existingProduct = await prismaClient.product.findUnique({ where: { id } });
+  const existingProduct = await productsRepository.getById(id);
   if (!existingProduct) {
     throw new NotFoundError('product', id);
   }
 
-  const updatedProduct = await prismaClient.product.update({
-    where: { id },
-    data: { name, description, price, tags, images },
-  });
+  const updatedProduct = await productsRepository.update(id, data);
 
   return res.send(updatedProduct);
 }
 
 export async function deleteProduct(req, res) {
   const { id } = create(req.params, IdParamsStruct);
-  const existingProduct = await prismaClient.product.findUnique({ where: { id } });
+  const existingProduct = await productsRepository.getById(id);
 
   if (!existingProduct) {
     throw new NotFoundError('product', id);
   }
 
-  await prismaClient.product.delete({ where: { id } });
+  await productsRepository.deleteById(id);
 
   return res.status(204).send();
 }
@@ -63,18 +61,8 @@ export async function deleteProduct(req, res) {
 export async function getProductList(req, res) {
   const { page, pageSize, orderBy, keyword } = create(req.query, GetProductListParamsStruct);
 
-  const where = keyword
-    ? {
-        OR: [{ name: { contains: keyword } }, { description: { contains: keyword } }],
-      }
-    : undefined;
-  const totalCount = await prismaClient.product.count({ where });
-  const products = await prismaClient.product.findMany({
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-    orderBy: orderBy === 'recent' ? { id: 'desc' } : { id: 'asc' },
-    where,
-  });
+  const totalCount = await productsRepository.countByKeyword(keyword);
+  const products = await productsRepository.getProductList(page, pageSize, orderBy, keyword);
 
   return res.send({
     list: products,
@@ -82,16 +70,18 @@ export async function getProductList(req, res) {
   });
 }
 
+// Comment
 export async function createComment(req, res) {
   const { id: productId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
+  const data = { productId, content };
 
-  const existingProduct = await prismaClient.product.findUnique({ where: { id: productId } });
+  const existingProduct = await productsRepository.getById(productId);
   if (!existingProduct) {
     throw new NotFoundError('product', productId);
   }
 
-  const comment = await prismaClient.comment.create({ data: { productId, content } });
+  const comment = await commentsRepository.create(data);
 
   return res.status(201).send(comment);
 }
@@ -100,16 +90,17 @@ export async function getCommentList(req, res) {
   const { id: productId } = create(req.params, IdParamsStruct);
   const { cursor, limit } = create(req.query, GetCommentListParamsStruct);
 
-  const existingProduct = await prismaClient.product.findUnique({ where: { id: productId } });
+  const existingProduct = await productsRepository.getById(productId);
   if (!existingProduct) {
     throw new NotFoundError('product', productId);
   }
 
-  const commentsWithCursorComment = await prismaClient.comment.findMany({
-    cursor: cursor ? { id: cursor } : undefined,
-    take: limit + 1,
-    where: { productId },
-  });
+  const commentsWithCursorComment = await commentsRepository.getCommentsForProduct(
+    productId,
+    limit,
+    cursor,
+  );
+
   const comments = commentsWithCursorComment.slice(0, limit);
   const cursorComment = commentsWithCursorComment[comments.length - 1];
   const nextCursor = cursorComment ? cursorComment.id : null;

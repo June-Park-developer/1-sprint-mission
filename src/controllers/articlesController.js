@@ -62,7 +62,7 @@ export async function getArticleList(req, res) {
   };
 
   const totalCount = await articlesRepository.countByKeyword(keyword);
-  const articles = await articlesRepository.getArticleList({ page, pageSize, orderBy, keyword });
+  const articles = await articlesRepository.getArticleList(page, pageSize, orderBy, keyword);
 
   return res.send({
     list: articles,
@@ -94,7 +94,7 @@ export async function getCommentList(req, res) {
     throw new NotFoundError('article', articleId);
   }
 
-  const commentsWithCursor = commentsRepository.getCommentsWithCursor(articleId, limit, cursor);
+  const commentsWithCursor = commentsRepository.getCommentsForArticle(articleId, limit, cursor);
   const comments = commentsWithCursor.slice(0, limit);
   const cursorComment = commentsWithCursor[commentsWithCursor.length - 1];
   const nextCursor = cursorComment ? cursorComment.id : null;
