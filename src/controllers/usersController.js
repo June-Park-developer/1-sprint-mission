@@ -1,7 +1,7 @@
 import { create } from 'superstruct';
 import NotFoundError from '../lib/errors/NotFoundError.js';
 import ConflictError from '../lib/errors/ConflictError.js';
-import UnauthorizedError from '../lib/errors/NotAuthorizedError.js';
+import UnauthorizedError from '../lib/errors/UnauthorizedError.js';
 import {} from '../structs/commonStructs.js';
 import {} from '../structs/usersStructs.js';
 import usersRepository from '../repositories/usersRepository.js';

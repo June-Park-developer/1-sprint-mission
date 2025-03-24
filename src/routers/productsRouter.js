@@ -9,15 +9,15 @@ import {
   createComment,
   getCommentList,
 } from '../controllers/productsController.js';
-
+import { verifyAccessToken } from '../middlewares/verifyToken.js';
 const productsRouter = express.Router();
 
-productsRouter.post('/', withAsync(createProduct));
+productsRouter.post('/', verifyAccessToken, withAsync(createProduct));
 productsRouter.get('/:id', withAsync(getProduct));
 productsRouter.patch('/:id', withAsync(updateProduct));
 productsRouter.delete('/:id', withAsync(deleteProduct));
 productsRouter.get('/', withAsync(getProductList));
-productsRouter.post('/:id/comments', withAsync(createComment));
+productsRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment));
 productsRouter.get('/:id/comments', withAsync(getCommentList));
 
 export default productsRouter;

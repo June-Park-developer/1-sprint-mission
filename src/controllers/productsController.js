@@ -12,7 +12,9 @@ import commentsRepository from '../repositories/commentsRepository.js';
 
 export async function createProduct(req, res) {
   const { name, description, price, tags, images } = create(req.body, CreateProductBodyStruct);
+  const userId = req.user.userId;
   const data = { name, description, price, tags, images };
+  data.authorId = userId;
   const product = await productsRepository.create(data);
 
   res.status(201).send(product);
@@ -73,7 +75,8 @@ export async function getProductList(req, res) {
 export async function createComment(req, res) {
   const { id: productId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
-  const data = { productId, content };
+  const authorId = req.user.userId;
+  const data = { productId, content, authorId };
 
   const existingProduct = await productsRepository.getById(productId);
   if (!existingProduct) {

@@ -14,6 +14,8 @@ import articlesRepository from '../repositories/articlesRepository.js';
 // Article
 export async function createArticle(req, res) {
   const data = create(req.body, CreateArticleBodyStruct);
+  const authorId = req.user.userId;
+  data.authorId = authorId;
   const article = await articlesRepository.create(data);
   return res.status(201).send(article);
 }
@@ -74,7 +76,8 @@ export async function getArticleList(req, res) {
 export async function createComment(req, res) {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
-  const data = { articleId, content };
+  const authorId = req.user.userId;
+  const data = { articleId, content, authorId };
   const existingArticle = await articlesRepository.getById(articleId);
   if (!existingArticle) {
     throw new NotFoundError('article', articleId);

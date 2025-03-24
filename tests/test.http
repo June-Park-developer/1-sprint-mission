@@ -2,9 +2,10 @@
 GET http://localhost:3000/articles?orderBy=recent
 Accept: application/json
 
-### 새로운 Article 만들기
+### 새로운 Article 만들기 (accessToken 필요)
 POST http://localhost:3000/articles
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjgwNTUxMywiZXhwIjoxNzQyODA5MTEzfQ.6jgvMJv2M85h5QTDjpjvEhM-WKnZa9970Cpi4S8-JxI
 
 {
     "title": "새로운 Article",
@@ -26,12 +27,13 @@ Content-Type: application/json
 }
 
 ### Article 삭제하기
-DELETE http://localhost:3000/articles/1
+DELETE http://localhost:3000/articles/4
 Accept: application/json
 
 ### Article에 Comment 달기 테스트
-POST http://localhost:3000/articles/2/comments
+POST http://localhost:3000/articles/6/comments
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjgwNTUxMywiZXhwIjoxNzQyODA5MTEzfQ.6jgvMJv2M85h5QTDjpjvEhM-WKnZa9970Cpi4S8-JxI
 
 {
     "content": "이것은 Article에 대한 테스트 Comment입니다."
@@ -53,9 +55,10 @@ Content-Type: application/json
 DELETE http://localhost:3000/comments/1
 Accept: application/json
 
-### 새로운 Product 만들기 테스트
+### 새로운 Product 만들기 테스트 (accessToken 필요)
 POST http://localhost:3000/products
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjgwNTUxMywiZXhwIjoxNzQyODA5MTEzfQ.6jgvMJv2M85h5QTDjpjvEhM-WKnZa9970Cpi4S8-JxI
 
 {
     "name": "테스트 Product",
@@ -86,12 +89,13 @@ Content-Type: application/json
 }
 
 ### Product 삭제하기 테스트
-DELETE http://localhost:3000/products/1
+DELETE http://localhost:3000/products/5
 Accept: application/json
 
 ### Product에 Comment 달기 테스트
-POST http://localhost:3000/products/1/comments
+POST http://localhost:3000/products/6/comments
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjgwNTUxMywiZXhwIjoxNzQyODA5MTEzfQ.6jgvMJv2M85h5QTDjpjvEhM-WKnZa9970Cpi4S8-JxI
 
 {
     "content": "이것은 Product에 대한 테스트 Comment입니다."

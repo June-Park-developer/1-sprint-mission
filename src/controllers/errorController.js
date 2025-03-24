@@ -1,6 +1,9 @@
 import { StructError } from 'superstruct';
 import BadRequestError from '../lib/errors/BadRequestError.js';
 import NotFoundError from '../lib/errors/NotFoundError.js';
+import ConflictError from '../lib/errors/ConflictError.js';
+import ForbiddenError from '../lib/errors/ForbiddenError.js';
+import UnauthorizedError from '../lib/errors/UnauthorizedError.js';
 
 export function defaultNotFoundHandler(req, res, next) {
   return res.status(404).send({ message: 'Not found' });
@@ -17,15 +20,23 @@ export function globalErrorHandler(err, req, res, next) {
     return res.status(400).send({ message: 'Invalid JSON' });
   }
 
-  /** Prisma error codes */
+  if (err.name === 'ConflictError') {
+    return res.status(409).send({ message: 'Resource already exists.' });
+  }
+  if (err.name === 'ForbiddenError') {
+    return res.status(403).send({ message: 'You do not have permission to access this resource.' });
+  }
+  if (err.name === 'UnauthorizedError') {
+    return res.status(401).send({ message: 'Authentication required.' });
+  }
+  /** Application error */
+  if (err.name === 'NotFoundError') {
+    return res.status(404).send({ message: err.message });
+  }
+
   if (err.code) {
     console.error(err);
     return res.status(500).send({ message: 'Failed to process data' });
-  }
-
-  /** Application error */
-  if (err instanceof NotFoundError) {
-    return res.status(404).send({ message: err.message });
   }
 
   console.error(err);

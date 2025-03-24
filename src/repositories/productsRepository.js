@@ -28,7 +28,7 @@ async function countByKeyword(keyword) {
       }
     : undefined;
 
-  return await prismaClient.article.count({ where });
+  return await prismaClient.product.count({ where });
 }
 
 async function getProductList({ page, pageSize, orderBy, keyword }) {
