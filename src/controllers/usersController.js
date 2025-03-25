@@ -63,7 +63,7 @@ export async function loginUser(req, res) {
   const refreshToken = createToken(user, 'refresh');
   await usersRepository.update(user.id, { refreshToken });
   res.cookie('refreshToken', refreshToken, {
-    path: '/token/refresh',
+    path: '/users/token/refresh',
     httpOnly: true,
     sameSite: 'none',
     secure: true,
@@ -106,4 +106,24 @@ export async function patchMyPassword(req, res) {
   res.status(200).json({
     message: 'Password updated successfully',
   });
+}
+
+// Token Refresh : refreshToken 가져와서 검증을 한 다음에, 새로 createToken 한다음에 재발급
+export async function refreshToken(req, res) {
+  const { refreshToken } = req.cookies;
+  const { userId } = req.auth;
+  const user = await usersRepository.getById(userId);
+  if (!user || user.refreshToken !== refreshToken) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+  const newAccessToken = createToken(user);
+  const newRefreshToken = createToken(user, 'refresh');
+  await usersRepository.update(user.id, { refreshToken: newRefreshToken });
+  res.cookie('refreshToken', newRefreshToken, {
+    path: '/users/token/refresh',
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
+  res.json({ accessToken: newAccessToken });
 }

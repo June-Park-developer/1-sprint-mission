@@ -179,3 +179,7 @@ Content-Type: application/json
 ### 자기가 등록한 product List
 GET http://localhost:3000/users/me/products?page=1&pageSize=2&orderBy=recent
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg3NTAwNiwiZXhwIjoxNzQyODc4NjA2fQ.OlCFZBlym_ya8A8tC5o_XWRwbs7mO5QY1yxD6ha8V74
+
+### 토큰 재발급 
+POST http://localhost:3000/users/token/refresh
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg3NzUxNiwiZXhwIjoxNzQ0MDg3MTE2fQ.nD1RsYCuxGO22HkXqbAxbxqHDnyt0WvdPQTpvYByDqQ; Path=/users/token/refresh; HttpOnly; Secure; SameSite=None

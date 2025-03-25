@@ -6,9 +6,10 @@ import {
   getMyInfo,
   patchMyInfo,
   patchMyPassword,
+  refreshToken,
 } from '../controllers/usersController.js';
 import { getMyProductList } from '../controllers/productsController.js';
-import { verifyAccessToken } from '../middlewares/verifyToken.js';
+import { verifyAccessToken, verifyRefreshToken } from '../middlewares/verifyToken.js';
 
 const usersRouter = express.Router();
 
@@ -18,5 +19,6 @@ usersRouter.get('/me', verifyAccessToken, withAsync(getMyInfo));
 usersRouter.patch('/me', verifyAccessToken, withAsync(patchMyInfo));
 usersRouter.patch('/me/password', verifyAccessToken, withAsync(patchMyPassword));
 usersRouter.get('/me/products', verifyAccessToken, withAsync(getMyProductList));
+usersRouter.post('/token/refresh', verifyRefreshToken, withAsync(refreshToken));
 
 export default usersRouter;
