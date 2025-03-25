@@ -1,5 +1,5 @@
 import { coerce, partial, object, string, min, nonempty, array, integer } from 'superstruct';
-import { PageParamsStruct } from './commonStructs.js';
+import { PageParamsStruct, PageParamsWithoutKeywordStruct } from './commonStructs.js';
 
 export const CreateProductBodyStruct = object({
   name: coerce(nonempty(string()), string(), (value) => value.trim()),
@@ -10,5 +10,6 @@ export const CreateProductBodyStruct = object({
 });
 
 export const GetProductListParamsStruct = PageParamsStruct;
+export const GetMyProductsParamsStruct = PageParamsWithoutKeywordStruct;
 
 export const UpdateProductBodyStruct = partial(CreateProductBodyStruct);

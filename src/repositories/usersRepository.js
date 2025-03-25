@@ -8,6 +8,10 @@ async function getByNickname(nickname) {
   return await prismaClient.user.findUnique({ where: { nickname } });
 }
 
+async function getById(id) {
+  return await prismaClient.user.findUnique({ where: { id } });
+}
+
 async function create({ email, nickname, hashedPassword }) {
   const user = await prismaClient.user.create({
     data: { email, nickname, password: hashedPassword },
@@ -15,16 +19,17 @@ async function create({ email, nickname, hashedPassword }) {
   return user;
 }
 
-async function updateRefreshToken(id, refreshToken) {
+async function update(id, data) {
   return await prismaClient.user.update({
     where: { id },
-    data: { refreshToken: refreshToken },
+    data,
   });
 }
 
 export default {
   getByEmail,
   getByNickname,
+  getById,
   create,
-  updateRefreshToken,
+  update,
 };

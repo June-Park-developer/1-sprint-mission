@@ -6,7 +6,12 @@ import {} from '../structs/commonStructs.js';
 import {} from '../structs/usersStructs.js';
 import usersRepository from '../repositories/usersRepository.js';
 import bcrypt from 'bcrypt';
-import { CreateUserBodyStruct, LoginUserBodyStruct } from '../structs/usersStructs.js';
+import {
+  CreateUserBodyStruct,
+  LoginUserBodyStruct,
+  PatchMyInfoBodyStruct,
+  PatchMyPasswordStruct,
+} from '../structs/usersStructs.js';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../lib/constants.js';
 
@@ -48,7 +53,7 @@ export async function loginUser(req, res) {
   const { email, password } = create(req.body, LoginUserBodyStruct);
   const user = await usersRepository.getByEmail(email);
   if (!user) {
-    throw new NotFoundError(user, email);
+    throw new NotFoundError('user', email);
   }
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
@@ -56,12 +61,49 @@ export async function loginUser(req, res) {
   }
   const accessToken = createToken(user);
   const refreshToken = createToken(user, 'refresh');
-  await usersRepository.updateRefreshToken(user.id, refreshToken);
+  await usersRepository.update(user.id, { refreshToken });
   res.cookie('refreshToken', refreshToken, {
     path: '/token/refresh',
     httpOnly: true,
-    sameSite: 'none', // ? : 이거 옵션 설정 어떻게 하는지..?
+    sameSite: 'none',
     secure: true,
   });
   res.json({ accessToken });
+}
+
+// 나의 정보 조회
+export async function getMyInfo(req, res) {
+  const { userId } = req.user;
+  const user = await usersRepository.getById(userId);
+  if (!user) {
+    throw new NotFoundError('user', userId);
+  }
+  const filteredUser = filterSensitiveUserData(user);
+  res.json(filteredUser);
+}
+
+// 나의 정보 수정
+export async function patchMyInfo(req, res) {
+  const data = create(req.body, PatchMyInfoBodyStruct);
+  const { userId } = req.user;
+  const user = await usersRepository.update(userId, data);
+  if (!user) {
+    throw new NotFoundError('user', userId);
+  }
+  const filteredUser = filterSensitiveUserData(user);
+  res.json(filteredUser);
+}
+
+// 나의 비밀번호 수정
+export async function patchMyPassword(req, res) {
+  const { password } = create(req.body, PatchMyPasswordStruct);
+  const { userId } = req.user;
+  const hashedPassword = await hashPassword(password);
+  const user = await usersRepository.update(userId, { password: hashedPassword });
+  if (!user) {
+    throw new NotFoundError('user', userId);
+  }
+  res.status(200).json({
+    message: 'Password updated successfully',
+  });
 }

@@ -3,6 +3,7 @@ import NotFoundError from '../lib/errors/NotFoundError.js';
 import { IdParamsStruct } from '../structs/commonStructs.js';
 import {
   CreateProductBodyStruct,
+  GetMyProductsParamsStruct,
   GetProductListParamsStruct,
   UpdateProductBodyStruct,
 } from '../structs/productsStruct.js';
@@ -22,17 +23,16 @@ export async function createProduct(req, res) {
 
 export async function getProduct(req, res) {
   const { id } = create(req.params, IdParamsStruct);
-
   const product = await productsRepository.getById(id);
   if (!product) {
     throw new NotFoundError('product', id);
   }
-
   return res.send(product);
 }
 
 export async function updateProduct(req, res) {
   const { id } = create(req.params, IdParamsStruct);
+  console.log(id);
   const { name, description, price, tags, images } = create(req.body, UpdateProductBodyStruct);
   const data = { name, description, price, tags, images };
 
@@ -65,6 +65,22 @@ export async function getProductList(req, res) {
   const totalCount = await productsRepository.countByKeyword(keyword);
   const products = await productsRepository.getProductList({ page, pageSize, orderBy, keyword });
 
+  return res.send({
+    list: products,
+    totalCount,
+  });
+}
+
+export async function getMyProductList(req, res) {
+  const { userId: authorId } = req.user;
+  const { page, pageSize, orderBy } = create(req.query, GetMyProductsParamsStruct);
+  const totalCount = await productsRepository.countByAuthorId(authorId);
+  const products = await productsRepository.getMyProductList({
+    authorId,
+    page,
+    pageSize,
+    orderBy,
+  });
   return res.send({
     list: products,
     totalCount,

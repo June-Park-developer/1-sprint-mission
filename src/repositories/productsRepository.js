@@ -31,9 +31,27 @@ async function countByKeyword(keyword) {
   return await prismaClient.product.count({ where });
 }
 
+async function countByAuthorId(authorId) {
+  const where = { authorId };
+
+  return await prismaClient.product.count({ where });
+}
+
 async function getProductList({ page, pageSize, orderBy, keyword }) {
   const where = {
     title: keyword ? { contains: keyword } : undefined,
+  };
+  return await prismaClient.product.findMany({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { id: 'asc' },
+    where,
+  });
+}
+
+async function getMyProductList({ authorId, page, pageSize, orderBy }) {
+  const where = {
+    authorId,
   };
   return await prismaClient.product.findMany({
     skip: (page - 1) * pageSize,
@@ -49,5 +67,7 @@ export default {
   update,
   deleteById,
   countByKeyword,
+  countByAuthorId,
   getProductList,
+  getMyProductList,
 };

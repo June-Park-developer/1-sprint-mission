@@ -24,13 +24,16 @@ export function globalErrorHandler(err, req, res, next) {
     return res.status(409).send({ message: 'Resource already exists.' });
   }
   if (err.name === 'ForbiddenError') {
+    console.log(err);
     return res.status(403).send({ message: 'You do not have permission to access this resource.' });
   }
   if (err.name === 'UnauthorizedError') {
-    return res.status(401).send({ message: 'Authentication required.' });
+    console.log(err);
+    return res.status(401).send({ message: err.message });
   }
   /** Application error */
   if (err.name === 'NotFoundError') {
+    console.log(err);
     return res.status(404).send({ message: err.message });
   }
 

@@ -59,10 +59,6 @@ export async function deleteArticle(req, res) {
 export async function getArticleList(req, res) {
   const { page, pageSize, orderBy, keyword } = create(req.query, GetArticleListParamsStruct);
 
-  const where = {
-    title: keyword ? { contains: keyword } : undefined,
-  };
-
   const totalCount = await articlesRepository.countByKeyword(keyword);
   const articles = await articlesRepository.getArticleList({ page, pageSize, orderBy, keyword });
 

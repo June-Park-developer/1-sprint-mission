@@ -5,7 +5,7 @@ Accept: application/json
 ### 새로운 Article 만들기 (accessToken 필요)
 POST http://localhost:3000/articles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjgwNTUxMywiZXhwIjoxNzQyODA5MTEzfQ.6jgvMJv2M85h5QTDjpjvEhM-WKnZa9970Cpi4S8-JxI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjgwOTI2OCwiZXhwIjoxNzQyODEyODY4fQ.Dt_BGv4hRgDAnpTlTAy0hLDc7Euns3QLZVBQcBLyRwc
 
 {
     "title": "새로운 Article",
@@ -14,15 +14,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 }
 
 ### 특정 ID의 Article 가져오기
-GET http://localhost:3000/articles/1
+GET http://localhost:3000/articles/8
 Accept: application/json
 
 ### Article 업데이트하기
-PATCH http://localhost:3000/articles/1
+PATCH http://localhost:3000/articles/8
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjgwOTI2OCwiZXhwIjoxNzQyODEyODY4fQ.Dt_BGv4hRgDAnpTlTAy0hLDc7Euns3QLZVBQcBLyRwc
 
 {
-    "title": "Article 1 업데이트",
+    "title": "Article 9 업데이트",
     "content": "이것은 업데이트된 내용입니다."
 }
 
@@ -58,7 +59,7 @@ Accept: application/json
 ### 새로운 Product 만들기 테스트 (accessToken 필요)
 POST http://localhost:3000/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjgwNTUxMywiZXhwIjoxNzQyODA5MTEzfQ.6jgvMJv2M85h5QTDjpjvEhM-WKnZa9970Cpi4S8-JxI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg2MTc2NSwiZXhwIjoxNzQyODY1MzY1fQ.RFOoMkpRdyv9fnIdddWLG8x7p5Nsusv5NnygToTaCH4
 
 {
     "name": "테스트 Product",
@@ -77,8 +78,9 @@ GET http://localhost:3000/products/1
 Accept: application/json
 
 ### Product 업데이트하기 테스트
-PATCH http://localhost:3000/products/1
+PATCH http://localhost:3000/products/6
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg2NzM3OSwiZXhwIjoxNzQyODcwOTc5fQ.NtcFU_yOejrWM86QXYV5N0vRJTOf1g27gqxip5xhTOo
 
 {
     "name": "업데이트된 테스트 Product",
@@ -89,13 +91,14 @@ Content-Type: application/json
 }
 
 ### Product 삭제하기 테스트
-DELETE http://localhost:3000/products/5
+DELETE http://localhost:3000/products/11
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg2MTc2NSwiZXhwIjoxNzQyODY1MzY1fQ.RFOoMkpRdyv9fnIdddWLG8x7p5Nsusv5NnygToTaCH4
 
 ### Product에 Comment 달기 테스트
-POST http://localhost:3000/products/6/comments
+POST http://localhost:3000/products/7/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjgwNTUxMywiZXhwIjoxNzQyODA5MTEzfQ.6jgvMJv2M85h5QTDjpjvEhM-WKnZa9970Cpi4S8-JxI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg2NDU3NSwiZXhwIjoxNzQyODY4MTc1fQ._UpQBmeJVfmHJEEIy_xmBXm8atxwfdCpFFoUV6NEi_8
 
 {
     "content": "이것은 Product에 대한 테스트 Comment입니다."
@@ -107,16 +110,18 @@ Accept: application/json
 
 
 ### Comment 업데이트하기 테스트
-PATCH http://localhost:3000/comments/115
+PATCH http://localhost:3000/comments/5
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg2NDU3NSwiZXhwIjoxNzQyODY4MTc1fQ._UpQBmeJVfmHJEEIy_xmBXm8atxwfdCpFFoUV6NEi_8
 
 {
     "content": "이것은 업데이트된 테스트 Comment입니다."
 }
 
 ### Comment 삭제하기 테스트
-DELETE http://localhost:3000/comments/115
+DELETE http://localhost:3000/comments/5
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg2NDU3NSwiZXhwIjoxNzQyODY4MTc1fQ._UpQBmeJVfmHJEEIy_xmBXm8atxwfdCpFFoUV6NEi_8
 
 ### 이미지 업로드 테스트
 POST http://localhost:3000/images/upload
@@ -144,6 +149,33 @@ POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "email": "userExample@gmail.com",
-    "password": "password1"
+    "email": "newExample@gmail.com",
+    "password": "password2"
 }
+
+### 유저 자기 정보 확인 테스트
+GET http://localhost:3000/users/me
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg3MTE3NiwiZXhwIjoxNzQyODc0Nzc2fQ.9u4lenUsJYhgQzMRowUVlDgGM-le5nyCu6vPT8AW7lk
+
+### 유저 자기 정보 수정 테스트 
+PATCH http://localhost:3000/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg3NDY5MCwiZXhwIjoxNzQyODc4MjkwfQ.3pgsFWEDxoC8y_11DPULBOgJQ0cxvBa_2eRXQj4yrK8
+Content-Type: application/json
+
+{
+    "email": "newExample@gmail.com", 
+    "image": "hello.com"
+}
+
+### 유저 자기 비밀번호 수정 테스트
+PATCH http://localhost:3000/users/me/password
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg3NDY5MCwiZXhwIjoxNzQyODc4MjkwfQ.3pgsFWEDxoC8y_11DPULBOgJQ0cxvBa_2eRXQj4yrK8
+Content-Type: application/json
+
+{
+    "password": "password2"
+}
+
+### 자기가 등록한 product List
+GET http://localhost:3000/users/me/products?page=1&pageSize=2&orderBy=recent
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg3NTAwNiwiZXhwIjoxNzQyODc4NjA2fQ.OlCFZBlym_ya8A8tC5o_XWRwbs7mO5QY1yxD6ha8V74
