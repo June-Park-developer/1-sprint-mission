@@ -20,4 +20,14 @@ async function deleteLike(userId, productId) {
   });
 }
 
-export default { createLike, deleteLike };
+async function getLike(userId, productId) {
+  return await prismaClient.likedProduct.findUnique({
+    where: {
+      userId_productId: {
+        userId,
+        productId,
+      },
+    },
+  });
+}
+export default { createLike, deleteLike, getLike };

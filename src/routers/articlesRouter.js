@@ -8,6 +8,8 @@ import {
   deleteArticle,
   createComment,
   getCommentList,
+  likeArticle,
+  unlikeArticle,
 } from '../controllers/articlesController.js';
 import { verifyAccessToken } from '../middlewares/verifyToken.js';
 import { verifyArticleAuth } from '../middlewares/verifyAuth.js';
@@ -30,5 +32,8 @@ articlesRouter.delete(
 );
 articlesRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment));
 articlesRouter.get('/:id/comments', withAsync(getCommentList));
+
+articlesRouter.post(`/:id/like`, verifyAccessToken, withAsync(likeArticle));
+articlesRouter.post(`/:id/unlike`, verifyAccessToken, withAsync(unlikeArticle));
 
 export default articlesRouter;

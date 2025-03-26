@@ -1,5 +1,6 @@
 import { create } from 'superstruct';
 import NotFoundError from '../lib/errors/NotFoundError.js';
+import ConflictError from '../lib/errors/ConflictError.js';
 import { IdParamsStruct } from '../structs/commonStructs.js';
 import {
   CreateProductBodyStruct,
@@ -134,6 +135,10 @@ export async function getCommentList(req, res) {
 export async function likeProduct(req, res) {
   const { userId } = req.user;
   const { id: productId } = create(req.params, IdParamsStruct);
+  const existingLikedProduct = await likedProductsRepository.getLike(userId, productId);
+  if (existingLikedProduct) {
+    throw new ConflictError('like');
+  }
   await likedProductsRepository.createLike(userId, productId);
   return res.status(201).json({ message: 'Product liked successfully' });
 }
@@ -141,6 +146,10 @@ export async function likeProduct(req, res) {
 export async function unlikeProduct(req, res) {
   const { userId } = req.user;
   const { id: productId } = create(req.params, IdParamsStruct);
+  const existingLikedProduct = await likedProductsRepository.getLike(userId, productId);
+  if (!existingLikedProduct) {
+    throw new NotFoundError('likedProduct', userId);
+  }
   await likedProductsRepository.deleteLike(userId, productId);
-  return res.status(204);
+  return res.status(204).json({ message: 'Product unliked successfully' });
 }

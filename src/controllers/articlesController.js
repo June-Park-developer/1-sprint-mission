@@ -10,6 +10,8 @@ import {
 import commentsRepository from '../repositories/commentsRepository.js';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct.js';
 import articlesRepository from '../repositories/articlesRepository.js';
+import likedArticlesRepository from '../repositories/likedArtriclesRepository.js';
+import ConflictError from '../lib/errors/ConflictError.js';
 
 // Article
 export async function createArticle(req, res) {
@@ -107,4 +109,27 @@ export async function getCommentList(req, res) {
     list: comments,
     nextCursor,
   });
+}
+
+// Like, Unlike
+export async function likeArticle(req, res) {
+  const { userId } = req.user;
+  const { id: articleId } = create(req.params, IdParamsStruct);
+  const existingLikedArticle = await likedArticlesRepository.getLike(userId, articleId);
+  if (existingLikedArticle) {
+    throw new ConflictError('like');
+  }
+  await likedArticlesRepository.createLike(userId, articleId);
+  return res.status(201).json({ message: 'Article liked successfully' });
+}
+
+export async function unlikeArticle(req, res) {
+  const { userId } = req.user;
+  const { id: articleId } = create(req.params, IdParamsStruct);
+  const existingLikedArticle = await likedArticlesRepository.getLike(userId, articleId);
+  if (!existingLikedArticle) {
+    throw new NotFoundError('likedArticle', userId);
+  }
+  await likedArticlesRepository.deleteLike(userId, articleId);
+  return res.status(204).json({ message: 'Article unliked successfuly' });
 }

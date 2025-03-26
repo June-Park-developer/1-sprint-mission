@@ -191,3 +191,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 ### Product Unlike 테스트
 POST http://localhost:3000/products/6/unlike
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjk3MzE0NiwiZXhwIjoxNzQyOTc2NzQ2fQ.L9bF9Igv-MFXHXg73_9oRLzlTEFOesJHPgJfWKuZ-Pg
+
+### Article Like 테스트
+POST http://localhost:3000/articles/8/like
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjk3MzE0NiwiZXhwIjoxNzQyOTc2NzQ2fQ.L9bF9Igv-MFXHXg73_9oRLzlTEFOesJHPgJfWKuZ-Pg
+
+### Article Unlike 테스트
+POST http://localhost:3000/articles/8/unlike
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjk3MzE0NiwiZXhwIjoxNzQyOTc2NzQ2fQ.L9bF9Igv-MFXHXg73_9oRLzlTEFOesJHPgJfWKuZ-Pg
