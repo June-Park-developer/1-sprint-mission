@@ -1,5 +1,6 @@
 import * as s from 'superstruct';
 import isEmail from 'is-email';
+import { PageParamsWithoutKeywordStruct } from './commonStructs.js';
 
 const Email = s.refine(s.string(), 'email', (value) => isEmail(value));
 
@@ -26,6 +27,5 @@ export const PatchMyInfoBodyStruct = s.partial(PatchMyInfoBody);
 export const PatchMyPasswordStruct = s.object({
   password: s.size(s.string(), 6, 20),
 });
-// export const GetProductListParamsStruct = PageParamsStruct;
 
-// export const UpdateProductBodyStruct = partial(CreateProductBodyStruct);
+export const GetLikedProductListParamsStruct = PageParamsWithoutKeywordStruct;

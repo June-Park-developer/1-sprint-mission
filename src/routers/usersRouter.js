@@ -7,6 +7,7 @@ import {
   patchMyInfo,
   patchMyPassword,
   refreshToken,
+  getLikedProductList,
 } from '../controllers/usersController.js';
 import { getMyProductList } from '../controllers/productsController.js';
 import { verifyAccessToken, verifyRefreshToken } from '../middlewares/verifyToken.js';
@@ -20,5 +21,6 @@ usersRouter.patch('/me', verifyAccessToken, withAsync(patchMyInfo));
 usersRouter.patch('/me/password', verifyAccessToken, withAsync(patchMyPassword));
 usersRouter.get('/me/products', verifyAccessToken, withAsync(getMyProductList));
 usersRouter.post('/token/refresh', verifyRefreshToken, withAsync(refreshToken));
+usersRouter.get('/liked-products', verifyAccessToken, withAsync(getLikedProductList));
 
 export default usersRouter;

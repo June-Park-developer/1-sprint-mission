@@ -1,4 +1,5 @@
 import { prismaClient } from '../lib/prismaClient.js';
+import productsRepository from './productsRepository.js';
 
 async function createLike(userId, productId) {
   return await prismaClient.likedProduct.create({
@@ -30,4 +31,23 @@ async function getLike(userId, productId) {
     },
   });
 }
-export default { createLike, deleteLike, getLike };
+
+async function getLikedProductList({ userId, page, pageSize, orderBy }) {
+  const likedProducts = await prismaClient.likedProduct.findMany({
+    where: { userId },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : {},
+    include: { product: true },
+  });
+  const products = likedProducts.map((likedProduct) => likedProduct.product);
+  return products;
+}
+
+async function countByUserId(userId) {
+  return await prismaClient.likedProduct.count({
+    where: { userId },
+  });
+}
+
+export default { createLike, deleteLike, getLike, getLikedProductList, countByUserId };

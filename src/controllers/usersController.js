@@ -5,12 +5,14 @@ import UnauthorizedError from '../lib/errors/UnauthorizedError.js';
 import {} from '../structs/commonStructs.js';
 import {} from '../structs/usersStructs.js';
 import usersRepository from '../repositories/usersRepository.js';
+import likedProductsRepository from '../repositories/likedProductsRepository.js';
 import bcrypt from 'bcrypt';
 import {
   CreateUserBodyStruct,
   LoginUserBodyStruct,
   PatchMyInfoBodyStruct,
   PatchMyPasswordStruct,
+  GetLikedProductListParamsStruct,
 } from '../structs/usersStructs.js';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../lib/constants.js';
@@ -126,4 +128,16 @@ export async function refreshToken(req, res) {
     secure: true,
   });
   res.json({ accessToken: newAccessToken });
+}
+
+export async function getLikedProductList(req, res) {
+  const { userId } = req.user;
+  const { page, pageSize, orderBy } = create(req.query, GetLikedProductListParamsStruct);
+  const totalCount = await likedProductsRepository.countByUserId(userId);
+  const likedProducts = await likedProductsRepository.getLikedProductList({
+    userId,
+    page,
+    pageSize,
+  });
+  return res.json({ list: likedProducts, totalCount });
 }
