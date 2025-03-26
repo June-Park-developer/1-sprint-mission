@@ -7,6 +7,13 @@ export const verifyAccessToken = expressjwt({
   requestProperty: 'user',
 });
 
+export const optionalAccessToken = expressjwt({
+  secret: JWT_SECRET,
+  algorithms: ['HS256'],
+  credentialsRequired: false,
+  requestProperty: 'user',
+});
+
 export const verifyRefreshToken = expressjwt({
   secret: JWT_SECRET,
   algorithms: ['HS256'],

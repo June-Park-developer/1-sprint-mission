@@ -16,6 +16,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 ### 특정 ID의 Article 가져오기
 GET http://localhost:3000/articles/8
 Accept: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjk3NjA5OSwiZXhwIjoxNzQyOTc5Njk5fQ.1gRiIrnM2WRvAbs44djYeFzfRhAFUf9_LGxZVm_8tRo
 
 ### Article 업데이트하기
 PATCH http://localhost:3000/articles/8
@@ -74,8 +75,10 @@ GET http://localhost:3000/products
 Accept: application/json
 
 ### 특정 ID의 Product 가져오기 테스트
-GET http://localhost:3000/products/1
+GET http://localhost:3000/products/8
 Accept: application/json
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjk3NjA5OSwiZXhwIjoxNzQyOTc5Njk5fQ.1gRiIrnM2WRvAbs44djYeFzfRhAFUf9_LGxZVm_8tRo
+
 
 ### Product 업데이트하기 테스트
 PATCH http://localhost:3000/products/6

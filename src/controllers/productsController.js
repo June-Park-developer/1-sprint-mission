@@ -24,12 +24,18 @@ export async function createProduct(req, res) {
 }
 
 export async function getProduct(req, res) {
-  const { id } = create(req.params, IdParamsStruct);
-  const product = await productsRepository.getById(id);
+  const { id: productId } = create(req.params, IdParamsStruct);
+  const product = await productsRepository.getById(productId);
   if (!product) {
-    throw new NotFoundError('product', id);
+    throw new NotFoundError('product', productId);
   }
-  return res.send(product);
+  const { userId } = req.user || {};
+  let isLiked = false;
+  if (userId) {
+    const likedProduct = await likedProductsRepository.getLike(userId, productId);
+    isLiked = likedProduct ? true : false;
+  }
+  return res.send({ ...product, isLiked });
 }
 
 export async function updateProduct(req, res) {

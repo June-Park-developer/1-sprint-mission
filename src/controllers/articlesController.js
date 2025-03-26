@@ -23,14 +23,19 @@ export async function createArticle(req, res) {
 }
 
 export async function getArticle(req, res) {
-  const { id } = create(req.params, IdParamsStruct);
-
-  const article = await articlesRepository.getById(id);
+  const { id: articleId } = create(req.params, IdParamsStruct);
+  const article = await articlesRepository.getById(articleId);
   if (!article) {
-    throw new NotFoundError('article', id);
+    throw new NotFoundError('article', articleId);
+  }
+  const { userId } = req.user || {};
+  let isLiked = false;
+  if (userId) {
+    const likedArticle = await likedArticlesRepository.getLike(userId, articleId);
+    isLiked = likedArticle ? true : false;
   }
 
-  return res.send(article);
+  return res.send({ ...article, isLiked });
 }
 
 export async function updateArticle(req, res) {

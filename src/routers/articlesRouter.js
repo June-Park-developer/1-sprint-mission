@@ -11,12 +11,12 @@ import {
   likeArticle,
   unlikeArticle,
 } from '../controllers/articlesController.js';
-import { verifyAccessToken } from '../middlewares/verifyToken.js';
+import { verifyAccessToken, optionalAccessToken } from '../middlewares/verifyToken.js';
 import { verifyArticleAuth } from '../middlewares/verifyAuth.js';
 const articlesRouter = express.Router();
 
 articlesRouter.post('/', verifyAccessToken, withAsync(createArticle));
-articlesRouter.get('/', withAsync(getArticleList));
+articlesRouter.get('/', optionalAccessToken, withAsync(getArticleList));
 articlesRouter.get('/:id', withAsync(getArticle));
 articlesRouter.patch(
   '/:id',
