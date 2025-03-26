@@ -10,6 +10,7 @@ import {
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct.js';
 import productsRepository from '../repositories/productsRepository.js';
 import commentsRepository from '../repositories/commentsRepository.js';
+import likedProductsRepository from '../repositories/likedProductsRepository.js';
 
 export async function createProduct(req, res) {
   const { name, description, price, tags, images } = create(req.body, CreateProductBodyStruct);
@@ -127,4 +128,19 @@ export async function getCommentList(req, res) {
     list: comments,
     nextCursor,
   });
+}
+
+// Like, Unlike
+export async function likeProduct(req, res) {
+  const { userId } = req.user;
+  const { id: productId } = create(req.params, IdParamsStruct);
+  await likedProductsRepository.createLike(userId, productId);
+  return res.status(201).json({ message: 'Product liked successfully' });
+}
+
+export async function unlikeProduct(req, res) {
+  const { userId } = req.user;
+  const { id: productId } = create(req.params, IdParamsStruct);
+  await likedProductsRepository.deleteLike(userId, productId);
+  return res.status(204);
 }

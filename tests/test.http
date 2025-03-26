@@ -183,3 +183,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 ### 토큰 재발급 
 POST http://localhost:3000/users/token/refresh
 Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg3NzUxNiwiZXhwIjoxNzQ0MDg3MTE2fQ.nD1RsYCuxGO22HkXqbAxbxqHDnyt0WvdPQTpvYByDqQ; Path=/users/token/refresh; HttpOnly; Secure; SameSite=None
+
+### Product Like 테스트
+POST http://localhost:3000/products/6/like
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjk3MzE0NiwiZXhwIjoxNzQyOTc2NzQ2fQ.L9bF9Igv-MFXHXg73_9oRLzlTEFOesJHPgJfWKuZ-Pg
+
+### Product Unlike 테스트
+POST http://localhost:3000/products/6/unlike
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjk3MzE0NiwiZXhwIjoxNzQyOTc2NzQ2fQ.L9bF9Igv-MFXHXg73_9oRLzlTEFOesJHPgJfWKuZ-Pg

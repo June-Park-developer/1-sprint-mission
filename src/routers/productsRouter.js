@@ -8,6 +8,8 @@ import {
   getProductList,
   createComment,
   getCommentList,
+  likeProduct,
+  unlikeProduct,
 } from '../controllers/productsController.js';
 import { verifyAccessToken } from '../middlewares/verifyToken.js';
 import { verifyProductAuth } from '../middlewares/verifyAuth.js';
@@ -30,5 +32,8 @@ productsRouter.delete(
 productsRouter.get('/', withAsync(getProductList));
 productsRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment));
 productsRouter.get('/:id/comments', withAsync(getCommentList));
+
+productsRouter.post(`/:id/like`, verifyAccessToken, withAsync(likeProduct));
+productsRouter.post(`/:id/unlike`, verifyAccessToken, withAsync(unlikeProduct));
 
 export default productsRouter;
