@@ -1,6 +1,6 @@
 import { create } from 'superstruct';
-import NotFoundError from '../lib/errors/NotFoundError.js';
-import ConflictError from '../lib/errors/ConflictError.js';
+import NotFoundError from '../lib/errors/NotFoundError';
+import ConflictError from '../lib/errors/ConflictError';
 import { IdParamsStruct } from '../structs/commonStructs.js';
 import {
   CreateProductBodyStruct,

@@ -1,7 +1,7 @@
 import { create } from 'superstruct';
-import NotFoundError from '../lib/errors/NotFoundError.js';
-import ConflictError from '../lib/errors/ConflictError.js';
-import UnauthorizedError from '../lib/errors/UnauthorizedError.js';
+import NotFoundError from '../lib/errors/NotFoundError';
+import ConflictError from '../lib/errors/ConflictError';
+import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import {} from '../structs/commonStructs.js';
 import {} from '../structs/usersStructs.js';
 import usersRepository from '../repositories/usersRepository.js';
@@ -15,7 +15,7 @@ import {
   GetLikedProductListParamsStruct,
 } from '../structs/usersStructs.js';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../lib/constants.js';
+import { JWT_SECRET } from '../lib/constants';
 
 async function hashPassword(password) {
   return await bcrypt.hash(password, 10);

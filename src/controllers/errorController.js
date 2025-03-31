@@ -1,9 +1,9 @@
 import { StructError } from 'superstruct';
-import BadRequestError from '../lib/errors/BadRequestError.js';
-import NotFoundError from '../lib/errors/NotFoundError.js';
-import ConflictError from '../lib/errors/ConflictError.js';
-import ForbiddenError from '../lib/errors/ForbiddenError.js';
-import UnauthorizedError from '../lib/errors/UnauthorizedError.js';
+import BadRequestError from '../lib/errors/BadRequestError';
+import NotFoundError from '../lib/errors/NotFoundError';
+import ConflictError from '../lib/errors/ConflictError';
+import ForbiddenError from '../lib/errors/ForbiddenError';
+import UnauthorizedError from '../lib/errors/UnauthorizedError';
 
 export function defaultNotFoundHandler(req, res, next) {
   return res.status(404).send({ message: 'Not found' });

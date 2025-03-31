@@ -1,16 +1,16 @@
 import { create } from 'superstruct';
-import NotFoundError from '../lib/errors/NotFoundError.js';
-import { IdParamsStruct } from '../structs/commonStructs.js';
+import NotFoundError from '../lib/errors/NotFoundError';
+import { IdParamsStruct } from '../structs/commonStructs';
 import {
   CreateArticleBodyStruct,
   UpdateArticleBodyStruct,
   GetArticleListParamsStruct,
-} from '../structs/articlesStructs.js';
-import commentsRepository from '../repositories/commentsRepository.js';
-import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct.js';
-import articlesRepository from '../repositories/articlesRepository.js';
-import likedArticlesRepository from '../repositories/likedArtriclesRepository.js';
-import ConflictError from '../lib/errors/ConflictError.js';
+} from '../structs/articlesStructs';
+import commentsRepository from '../repositories/commentsRepository';
+import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
+import articlesRepository from '../repositories/articlesRepository';
+import likedArticlesRepository from '../repositories/likedArtriclesRepository';
+import ConflictError from '../lib/errors/ConflictError';
 
 // Article
 export async function createArticle(req, res) {
