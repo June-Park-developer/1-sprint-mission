@@ -1,18 +1,19 @@
 import articlesRepository from '../repositories/articlesRepository.js';
 import productsRepository from '../repositories/productsRepository.js';
 import commentsRepository from '../repositories/commentsRepository.js';
-import ForbiddenError from '../lib/errors/ForbiddenError';
-import NotFoundError from '../lib/errors/NotFoundError';
+import ForbiddenError from '../lib/errors/ForbiddenError.js';
+import NotFoundError from '../lib/errors/NotFoundError.js';
 import { withAsync } from '../lib/withAsync';
 import { IdParamsStruct } from '../structs/commonStructs.js';
 import { create } from 'superstruct';
+import { RequestHandler } from 'express';
 
-export const verifyArticleAuth = async (req, res, next) => {
-  const { userId } = req.user;
+export const verifyArticleAuth: RequestHandler = async (req, res, next) => {
+  const userId = req.user?.userId;
   const { id: articleId } = create(req.params, IdParamsStruct);
   const article = await articlesRepository.getById(articleId);
   if (!article) {
-    throw new NotFoundError('article', articleId);
+    throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
   if (article.authorId !== userId) {
     throw new ForbiddenError('Forbidden Access');
@@ -20,12 +21,12 @@ export const verifyArticleAuth = async (req, res, next) => {
   return next();
 };
 
-export const verifyProductAuth = withAsync(async (req, res, next) => {
-  const { userId } = req.user;
+export const verifyProductAuth: RequestHandler = withAsync(async (req, res, next) => {
+  const userId = req.user?.userId;
   const { id: productId } = create(req.params, IdParamsStruct);
   const product = await productsRepository.getById(productId);
   if (!product) {
-    throw new NotFoundError('product', productId);
+    throw new NotFoundError(`Product with id ${productId} is not found`);
   }
   if (userId !== product.authorId) {
     throw new ForbiddenError('Forbidden Access');
@@ -33,12 +34,12 @@ export const verifyProductAuth = withAsync(async (req, res, next) => {
   return next();
 });
 
-export const verifyCommentAuth = withAsync(async (req, res, next) => {
-  const { userId } = req.user;
+export const verifyCommentAuth: RequestHandler = withAsync(async (req, res, next) => {
+  const userId = req.user?.userId;
   const { id: commentId } = create(req.params, IdParamsStruct);
   const comment = await commentsRepository.getById(commentId);
   if (!comment) {
-    throw new NotFoundError('comment', commentId);
+    throw new NotFoundError(`Comment with id ${commentId} is not found`);
   }
   if (userId !== comment.authorId) {
     throw new ForbiddenError('Forbidden Access');

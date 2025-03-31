@@ -12,7 +12,7 @@ import {
   unlikeArticle,
 } from '../controllers/articlesController.js';
 import { verifyAccessToken, optionalAccessToken } from '../middlewares/verifyToken.js';
-import { verifyArticleAuth } from '../middlewares/verifyAuth.js';
+import { verifyArticleAuth } from '../middlewares/verifyAuth';
 const articlesRouter = express.Router();
 
 articlesRouter.post('/', verifyAccessToken, withAsync(createArticle));
