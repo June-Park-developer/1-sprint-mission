@@ -8,7 +8,7 @@ import { IdParamsStruct } from '../structs/commonStructs.js';
 import { create } from 'superstruct';
 import { RequestHandler } from 'express';
 
-export const verifyArticleAuth: RequestHandler = async (req, res, next) => {
+export const verifyArticleAuth: RequestHandler = withAsync(async (req, res, next) => {
   const userId = req.user?.userId;
   const { id: articleId } = create(req.params, IdParamsStruct);
   const article = await articlesRepository.getById(articleId);
@@ -19,7 +19,7 @@ export const verifyArticleAuth: RequestHandler = async (req, res, next) => {
     throw new ForbiddenError('Forbidden Access');
   }
   return next();
-};
+});
 
 export const verifyProductAuth: RequestHandler = withAsync(async (req, res, next) => {
   const userId = req.user?.userId;

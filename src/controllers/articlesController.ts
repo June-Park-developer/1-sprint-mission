@@ -11,21 +11,25 @@ import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/
 import articlesRepository from '../repositories/articlesRepository';
 import likedArticlesRepository from '../repositories/likedArtriclesRepository';
 import ConflictError from '../lib/errors/ConflictError';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 // Article
-export async function createArticle(req, res) {
-  const data = create(req.body, CreateArticleBodyStruct);
-  const authorId = req.user.userId;
-  data.authorId = authorId;
+export const createArticle: RequestHandler = async (req, res) => {
+  const parsed = create(req.body, CreateArticleBodyStruct);
+  const userId = req.user?.userId;
+  const data = {
+    ...parsed,
+    authorId: userId,
+  };
   const article = await articlesRepository.create(data);
-  return res.status(201).send(article);
-}
+  res.status(201).send(article);
+};
 
-export async function getArticle(req, res) {
+export const getArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const article = await articlesRepository.getById(articleId);
   if (!article) {
-    throw new NotFoundError('article', articleId);
+    throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
   const { userId } = req.user || {};
   let isLiked = false;
@@ -33,70 +37,69 @@ export async function getArticle(req, res) {
     const likedArticle = await likedArticlesRepository.getLike(userId, articleId);
     isLiked = likedArticle ? true : false;
   }
+  res.send({ ...article, isLiked });
+};
 
-  return res.send({ ...article, isLiked });
-}
-
-export async function updateArticle(req, res) {
-  const { id } = create(req.params, IdParamsStruct);
+export const updateArticle: RequestHandler = async (req, res) => {
+  const { id: articleId } = create(req.params, IdParamsStruct);
   const data = create(req.body, UpdateArticleBodyStruct);
 
-  const article = await articlesRepository.update(id, data);
+  const article = await articlesRepository.update(articleId, data);
   if (!article) {
-    throw new NotFoundError('article', id);
+    throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
 
-  return res.send(article);
-}
+  res.send(article);
+};
 
-export async function deleteArticle(req, res) {
-  const { id } = create(req.params, IdParamsStruct);
+export const deleteArticle: RequestHandler = async (req, res) => {
+  const { id: articleId } = create(req.params, IdParamsStruct);
 
-  const existingArticle = await articlesRepository.getById(id);
+  const existingArticle = await articlesRepository.getById(articleId);
   if (!existingArticle) {
-    throw new NotFoundError('article', id);
+    throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
 
-  await articlesRepository.deleteById(id);
+  await articlesRepository.deleteById(articleId);
 
-  return res.status(204).send();
-}
+  res.status(204).send();
+};
 
-export async function getArticleList(req, res) {
+export const getArticleList: RequestHandler = async (req, res) => {
   const { page, pageSize, orderBy, keyword } = create(req.query, GetArticleListParamsStruct);
 
   const totalCount = await articlesRepository.countByKeyword(keyword);
   const articles = await articlesRepository.getArticleList({ page, pageSize, orderBy, keyword });
 
-  return res.send({
+  res.send({
     list: articles,
     totalCount,
   });
-}
+};
 
 // Comment
-export async function createComment(req, res) {
+export const createComment: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
-  const authorId = req.user.userId;
+  const authorId = req.user?.userId;
   const data = { articleId, content, authorId };
   const existingArticle = await articlesRepository.getById(articleId);
   if (!existingArticle) {
-    throw new NotFoundError('article', articleId);
+    throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
 
   const comment = await commentsRepository.create(data);
 
-  return res.status(201).send(comment);
-}
+  res.status(201).send(comment);
+};
 
-export async function getCommentList(req, res) {
+export const getCommentList: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { cursor, limit } = create(req.query, GetCommentListParamsStruct);
 
   const article = await articlesRepository.getById(articleId);
   if (!article) {
-    throw new NotFoundError('article', articleId);
+    throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
 
   const commentsWithCursor = await commentsRepository.getCommentsForArticle(
@@ -104,36 +107,35 @@ export async function getCommentList(req, res) {
     limit,
     cursor,
   );
-  console.log(commentsWithCursor);
   const comments = commentsWithCursor.slice(0, limit);
   const cursorComment = commentsWithCursor[commentsWithCursor.length - 1];
   const nextCursor = cursorComment ? cursorComment.id : null;
 
-  return res.send({
+  res.send({
     list: comments,
     nextCursor,
   });
-}
+};
 
 // Like, Unlike
-export async function likeArticle(req, res) {
-  const { userId } = req.user;
+export const likeArticle: RequestHandler = async (req, res) => {
+  const { userId } = req.user || {};
   const { id: articleId } = create(req.params, IdParamsStruct);
   const existingLikedArticle = await likedArticlesRepository.getLike(userId, articleId);
   if (existingLikedArticle) {
     throw new ConflictError('like');
   }
   await likedArticlesRepository.createLike(userId, articleId);
-  return res.status(201).json({ message: 'Article liked successfully' });
-}
+  res.status(201).json({ message: 'Article liked successfully' });
+};
 
-export async function unlikeArticle(req, res) {
-  const { userId } = req.user;
+export const unlikeArticle: RequestHandler = async (req, res) => {
+  const { userId } = req.user || {};
   const { id: articleId } = create(req.params, IdParamsStruct);
   const existingLikedArticle = await likedArticlesRepository.getLike(userId, articleId);
   if (!existingLikedArticle) {
-    throw new NotFoundError('likedArticle', userId);
+    throw new NotFoundError(`This article is not liked by user ${userId}`);
   }
   await likedArticlesRepository.deleteLike(userId, articleId);
-  return res.status(204).json({ message: 'Article unliked successfuly' });
-}
+  res.status(204).json({ message: 'Article unliked successfuly' });
+};

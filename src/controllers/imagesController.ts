@@ -3,6 +3,7 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { PUBLIC_PATH, STATIC_PATH } from '../lib/constants';
 import BadRequestError from '../lib/errors/BadRequestError';
+import { Request, RequestHandler, Response } from 'express';
 
 const ALLOWED_MIME_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024;
@@ -33,9 +34,10 @@ export const upload = multer({
   },
 });
 
-export async function uploadImage(req, res) {
+export const uploadImage: RequestHandler = (req, res) => {
+  const protocol = req.protocol;
   const host = req.get('host');
-  const filePath = path.join(host, STATIC_PATH, req.file.filename);
-  const url = `http://${filePath}`;
-  return res.send({ url });
-}
+  const filePath = path.join(host as string, STATIC_PATH, req.file?.filename as string);
+  const url = `${protocol}://${filePath}`;
+  res.send({ url });
+};

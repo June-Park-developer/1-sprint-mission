@@ -1,4 +1,15 @@
-import { coerce, partial, object, string, min, nonempty, array, integer } from 'superstruct';
+import {
+  coerce,
+  partial,
+  object,
+  string,
+  min,
+  nonempty,
+  array,
+  integer,
+  optional,
+  number,
+} from 'superstruct';
 import { PageParamsStruct, PageParamsWithoutKeywordStruct } from './commonStructs.js';
 
 export const CreateProductBodyStruct = object({

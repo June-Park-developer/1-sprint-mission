@@ -1,4 +1,4 @@
-import { coerce, nonempty, nullable, object, partial, string } from 'superstruct';
+import { coerce, nonempty, nullable, object, partial, string, optional, number } from 'superstruct';
 import { PageParamsStruct } from './commonStructs.js';
 
 export const GetArticleListParamsStruct = PageParamsStruct;
