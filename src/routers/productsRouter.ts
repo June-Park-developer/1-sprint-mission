@@ -10,8 +10,8 @@ import {
   getCommentList,
   likeProduct,
   unlikeProduct,
-} from '../controllers/productsController.js';
-import { verifyAccessToken, optionalAccessToken } from '../middlewares/verifyToken.js';
+} from '../controllers/productsController';
+import { verifyAccessToken, optionalAccessToken } from '../middlewares/verifyToken';
 import { verifyProductAuth } from '../middlewares/verifyAuth';
 const productsRouter = express.Router();
 

@@ -1,8 +1,8 @@
 import articlesRepository from '../repositories/articlesRepository.js';
 import productsRepository from '../repositories/productsRepository.js';
 import commentsRepository from '../repositories/commentsRepository.js';
-import ForbiddenError from '../lib/errors/ForbiddenError.js';
-import NotFoundError from '../lib/errors/NotFoundError.js';
+import ForbiddenError from '../lib/errors/ForbiddenError';
+import NotFoundError from '../lib/errors/NotFoundError';
 import { withAsync } from '../lib/withAsync';
 import { IdParamsStruct } from '../structs/commonStructs.js';
 import { create } from 'superstruct';

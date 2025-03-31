@@ -16,7 +16,7 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
 // Article
 export const createArticle: RequestHandler = async (req, res) => {
   const parsed = create(req.body, CreateArticleBodyStruct);
-  const userId = req.user?.userId;
+  const { userId } = req.user!;
   const data = {
     ...parsed,
     authorId: userId,
@@ -31,7 +31,7 @@ export const getArticle: RequestHandler = async (req, res) => {
   if (!article) {
     throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
-  const { userId } = req.user || {};
+  const { userId } = req.user!;
   let isLiked = false;
   if (userId) {
     const likedArticle = await likedArticlesRepository.getLike(userId, articleId);
@@ -81,7 +81,7 @@ export const getArticleList: RequestHandler = async (req, res) => {
 export const createComment: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
-  const authorId = req.user?.userId;
+  const authorId = req.user!.userId;
   const data = { articleId, content, authorId };
   const existingArticle = await articlesRepository.getById(articleId);
   if (!existingArticle) {
@@ -119,7 +119,7 @@ export const getCommentList: RequestHandler = async (req, res) => {
 
 // Like, Unlike
 export const likeArticle: RequestHandler = async (req, res) => {
-  const { userId } = req.user || {};
+  const { userId } = req.user!;
   const { id: articleId } = create(req.params, IdParamsStruct);
   const existingLikedArticle = await likedArticlesRepository.getLike(userId, articleId);
   if (existingLikedArticle) {
@@ -130,7 +130,7 @@ export const likeArticle: RequestHandler = async (req, res) => {
 };
 
 export const unlikeArticle: RequestHandler = async (req, res) => {
-  const { userId } = req.user || {};
+  const { userId } = req.user!;
   const { id: articleId } = create(req.params, IdParamsStruct);
   const existingLikedArticle = await likedArticlesRepository.getLike(userId, articleId);
   if (!existingLikedArticle) {

@@ -8,9 +8,9 @@ import {
   patchMyPassword,
   refreshToken,
   getLikedProductList,
-} from '../controllers/usersController.js';
-import { getMyProductList } from '../controllers/productsController.js';
-import { verifyAccessToken, verifyRefreshToken } from '../middlewares/verifyToken.js';
+} from '../controllers/usersController';
+import { getMyProductList } from '../controllers/productsController';
+import { verifyAccessToken, verifyRefreshToken } from '../middlewares/verifyToken';
 
 const usersRouter = express.Router();
 
