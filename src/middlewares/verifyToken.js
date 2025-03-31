@@ -1,5 +1,5 @@
 import { expressjwt } from 'express-jwt';
-import { JWT_SECRET } from '../lib/constants.js';
+import { JWT_SECRET } from '../lib/constants';
 
 export const verifyAccessToken = expressjwt({
   secret: JWT_SECRET,

@@ -1,5 +1,5 @@
 import express from 'express';
-import { withAsync } from '../lib/withAsync.js';
+import { withAsync } from '../lib/withAsync';
 import {
   createArticle,
   getArticleList,

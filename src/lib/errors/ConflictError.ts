@@ -1,5 +1,5 @@
 class ConflictError extends Error {
-  constructor(fieldName) {
+  constructor(fieldName: string) {
     super(`This ${fieldName} already exists.`);
     this.name = 'ConflictError';
   }

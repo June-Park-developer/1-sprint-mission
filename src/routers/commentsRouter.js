@@ -1,5 +1,5 @@
 import express from 'express';
-import { withAsync } from '../lib/withAsync.js';
+import { withAsync } from '../lib/withAsync';
 import { updateComment, deleteComment } from '../controllers/commentsController.js';
 import { verifyAccessToken } from '../middlewares/verifyToken.js';
 import { verifyCommentAuth } from '../middlewares/verifyAuth.js';

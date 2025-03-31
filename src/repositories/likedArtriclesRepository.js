@@ -1,4 +1,4 @@
-import { prismaClient } from '../lib/prismaClient.js';
+import { prismaClient } from '../lib/prismaClient';
 
 async function createLike(userId, articleId) {
   return await prismaClient.likedArticle.create({

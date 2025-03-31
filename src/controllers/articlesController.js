@@ -1,5 +1,4 @@
 import { create } from 'superstruct';
-import { prismaClient } from '../lib/prismaClient.js';
 import NotFoundError from '../lib/errors/NotFoundError.js';
 import { IdParamsStruct } from '../structs/commonStructs.js';
 import {

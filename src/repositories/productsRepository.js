@@ -1,4 +1,4 @@
-import { prismaClient } from '../lib/prismaClient.js';
+import { prismaClient } from '../lib/prismaClient';
 
 async function create(data) {
   return await prismaClient.product.create({ data });

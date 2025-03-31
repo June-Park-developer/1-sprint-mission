@@ -3,7 +3,7 @@ import productsRepository from '../repositories/productsRepository.js';
 import commentsRepository from '../repositories/commentsRepository.js';
 import ForbiddenError from '../lib/errors/ForbiddenError.js';
 import NotFoundError from '../lib/errors/NotFoundError.js';
-import { withAsync } from '../lib/withAsync.js';
+import { withAsync } from '../lib/withAsync';
 import { IdParamsStruct } from '../structs/commonStructs.js';
 import { create } from 'superstruct';
 

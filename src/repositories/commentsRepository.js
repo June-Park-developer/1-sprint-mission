@@ -1,4 +1,4 @@
-import { prismaClient } from '../lib/prismaClient.js';
+import { prismaClient } from '../lib/prismaClient';
 
 async function getById(id) {
   return await prismaClient.comment.findUnique({ where: { id } });

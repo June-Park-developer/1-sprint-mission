@@ -1,6 +1,6 @@
 class NotFoundError extends Error {
-  constructor(modelName, data) {
-    super(`${modelName} with ${data} not found`);
+  constructor(message: string) {
+    super(message);
     this.name = 'NotFoundError';
   }
 }
