@@ -1,6 +1,6 @@
-import articlesRepository from '../repositories/articlesRepository.js';
-import productsRepository from '../repositories/productsRepository.js';
-import commentsRepository from '../repositories/commentsRepository.js';
+import articlesRepository from '../repositories/articlesRepository';
+import productsRepository from '../repositories/productsRepository';
+import commentsRepository from '../repositories/commentsRepository';
 import ForbiddenError from '../lib/errors/ForbiddenError';
 import NotFoundError from '../lib/errors/NotFoundError';
 import { withAsync } from '../lib/withAsync';

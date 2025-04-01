@@ -11,8 +11,8 @@ import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/
 import articlesRepository from '../repositories/articlesRepository';
 import likedArticlesRepository from '../repositories/likedArtriclesRepository';
 import ConflictError from '../lib/errors/ConflictError';
-import { NextFunction, Request, RequestHandler, Response } from 'express';
-
+import { RequestHandler } from 'express';
+import articlesService from '../services/articlesService';
 // Article
 export const createArticle: RequestHandler = async (req, res) => {
   const parsed = create(req.body, CreateArticleBodyStruct);
@@ -21,60 +21,35 @@ export const createArticle: RequestHandler = async (req, res) => {
     ...parsed,
     authorId: userId,
   };
-  const article = await articlesRepository.create(data);
-  res.status(201).send(article);
+  const result = await articlesService.createArticle(data);
+  res.status(201).send(result);
 };
 
 export const getArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
-  const article = await articlesRepository.getById(articleId);
-  if (!article) {
-    throw new NotFoundError(`Article with id ${articleId} is not found`);
-  }
   const { userId } = req.user!;
-  let isLiked = false;
-  if (userId) {
-    const likedArticle = await likedArticlesRepository.getLike(userId, articleId);
-    isLiked = likedArticle ? true : false;
-  }
-  res.send({ ...article, isLiked });
+  const result = await articlesService.getArticle(articleId, userId);
+  res.send(result);
 };
 
 export const updateArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const data = create(req.body, UpdateArticleBodyStruct);
 
-  const article = await articlesRepository.update(articleId, data);
-  if (!article) {
-    throw new NotFoundError(`Article with id ${articleId} is not found`);
-  }
-
-  res.send(article);
+  const result = await articlesService.updateArticle(articleId, data);
+  res.json(result);
 };
 
 export const deleteArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
-
-  const existingArticle = await articlesRepository.getById(articleId);
-  if (!existingArticle) {
-    throw new NotFoundError(`Article with id ${articleId} is not found`);
-  }
-
-  await articlesRepository.deleteById(articleId);
-
+  await articlesService.deleteArticle(articleId);
   res.status(204).send();
 };
 
 export const getArticleList: RequestHandler = async (req, res) => {
-  const { page, pageSize, orderBy, keyword } = create(req.query, GetArticleListParamsStruct);
-
-  const totalCount = await articlesRepository.countByKeyword(keyword);
-  const articles = await articlesRepository.getArticleList({ page, pageSize, orderBy, keyword });
-
-  res.send({
-    list: articles,
-    totalCount,
-  });
+  const params = create(req.query, GetArticleListParamsStruct);
+  const result = await articlesService.getArticleList(params);
+  res.json(result);
 };
 
 // Comment

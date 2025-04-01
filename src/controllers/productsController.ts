@@ -9,9 +9,9 @@ import {
   UpdateProductBodyStruct,
 } from '../structs/productsStruct';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
-import productsRepository from '../repositories/productsRepository.js';
-import commentsRepository from '../repositories/commentsRepository.js';
-import likedProductsRepository from '../repositories/likedProductsRepository.js';
+import productsRepository from '../repositories/productsRepository';
+import commentsRepository from '../repositories/commentsRepository';
+import likedProductsRepository from '../repositories/likedProductsRepository';
 import { Request, RequestHandler, Response } from 'express';
 
 export const createProduct: RequestHandler = async (req, res) => {

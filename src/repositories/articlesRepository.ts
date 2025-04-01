@@ -1,16 +1,12 @@
 import { prismaClient } from '../lib/prismaClient';
-import {
-  CreateArticleInput,
-  GetArticleListParamsInput,
-  UpdateArticleInput,
-} from '../typings/articleTypes';
+import { Article, GetArticleListParamsInput } from '../typings/articleTypes';
 import { Prisma } from '@prisma/client';
 
 async function create(data: Prisma.ArticleUncheckedCreateInput) {
   return await prismaClient.article.create({ data });
 }
 
-async function getById(id: number) {
+async function getById(id: number): Promise<Article | null> {
   return await prismaClient.article.findUnique({ where: { id } });
 }
 
@@ -30,14 +26,14 @@ async function countByKeyword(keyword?: string) {
   return await prismaClient.article.count({ where });
 }
 
-async function getArticleList({ page, pageSize, orderBy, keyword }: GetArticleListParamsInput) {
+async function getArticleList(params: GetArticleListParamsInput) {
   const where = {
-    title: keyword ? { contains: keyword } : undefined,
+    title: params.keyword ? { contains: params.keyword } : undefined,
   };
   return await prismaClient.article.findMany({
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { id: 'asc' },
+    skip: (params.page - 1) * params.pageSize,
+    take: params.pageSize,
+    orderBy: params.orderBy === 'recent' ? { createdAt: 'desc' } : { id: 'asc' },
     where,
   });
 }

@@ -1,6 +1,6 @@
 import { prismaClient } from '../lib/prismaClient';
 import { LikedProductListParamsInput } from '../typings/likedProductTypes.';
-import productsRepository from './productsRepository.js';
+import productsRepository from './productsRepository';
 
 async function createLike(userId: number, productId: number) {
   return await prismaClient.likedProduct.create({

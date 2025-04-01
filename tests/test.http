@@ -5,7 +5,7 @@ Accept: application/json
 ### 새로운 Article 만들기 (accessToken 필요)
 POST http://localhost:3000/articles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQ5MTIxNCwiZXhwIjoxNzQzNDk0ODE0fQ.qkKv_eiJ5P6bFfVGDv1q-eVIC4imSDxcQlc6uDqXtXA
 
 {
     "title": "새로운 Article",
@@ -14,14 +14,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 }
 
 ### 특정 ID의 Article 가져오기
-GET http://localhost:3000/articles/10
+GET http://localhost:3000/articles/11
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQ5MTIxNCwiZXhwIjoxNzQzNDk0ODE0fQ.qkKv_eiJ5P6bFfVGDv1q-eVIC4imSDxcQlc6uDqXtXA
 
 ### Article 업데이트하기
-PATCH http://localhost:3000/articles/10
+PATCH http://localhost:3000/articles/11
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQ5MTIxNCwiZXhwIjoxNzQzNDk0ODE0fQ.qkKv_eiJ5P6bFfVGDv1q-eVIC4imSDxcQlc6uDqXtXA
 
 {
     "title": "Article 10 업데이트",
@@ -29,7 +29,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 }
 
 ### Article 삭제하기
-DELETE http://localhost:3000/articles/10
+DELETE http://localhost:3000/articles/11
 Accept: application/json
 
 ### Article에 Comment 달기 테스트

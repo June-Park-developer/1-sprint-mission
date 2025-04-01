@@ -4,8 +4,8 @@ import ConflictError from '../lib/errors/ConflictError';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import {} from '../structs/commonStructs';
 import {} from '../structs/usersStructs';
-import usersRepository from '../repositories/usersRepository.js';
-import likedProductsRepository from '../repositories/likedProductsRepository.js';
+import usersRepository from '../repositories/usersRepository';
+import likedProductsRepository from '../repositories/likedProductsRepository';
 import bcrypt from 'bcrypt';
 import {
   CreateUserBodyStruct,
