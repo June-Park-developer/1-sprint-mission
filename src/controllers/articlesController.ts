@@ -13,31 +13,32 @@ import likedArticlesRepository from '../repositories/likedArtriclesRepository';
 import ConflictError from '../lib/errors/ConflictError';
 import { RequestHandler } from 'express';
 import articlesService from '../services/articlesService';
+import { CreateArticleDTO, GetArticleListDTO, UpdateArticleDTO } from '../DTO/articlesDTO';
 // Article
 export const createArticle: RequestHandler = async (req, res) => {
   const parsed = create(req.body, CreateArticleBodyStruct);
   const { userId } = req.user!;
-  const data = {
+  const articleData: CreateArticleDTO = {
     ...parsed,
     authorId: userId,
   };
-  const result = await articlesService.createArticle(data);
-  res.status(201).send(result);
+  const article = await articlesService.createArticle(articleData);
+  res.status(201).send(article);
 };
 
 export const getArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { userId } = req.user!;
-  const result = await articlesService.getArticle(articleId, userId);
-  res.send(result);
+  const responseArticle = await articlesService.getArticle(articleId, userId);
+  res.send(responseArticle);
 };
 
 export const updateArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
-  const data = create(req.body, UpdateArticleBodyStruct);
+  const updateData: UpdateArticleDTO = create(req.body, UpdateArticleBodyStruct);
 
-  const result = await articlesService.updateArticle(articleId, data);
-  res.json(result);
+  const responseArticle = await articlesService.updateArticle(articleId, updateData);
+  res.json(responseArticle);
 };
 
 export const deleteArticle: RequestHandler = async (req, res) => {
@@ -47,9 +48,9 @@ export const deleteArticle: RequestHandler = async (req, res) => {
 };
 
 export const getArticleList: RequestHandler = async (req, res) => {
-  const params = create(req.query, GetArticleListParamsStruct);
-  const result = await articlesService.getArticleList(params);
-  res.json(result);
+  const params: GetArticleListDTO = create(req.query, GetArticleListParamsStruct);
+  const responseArticles = await articlesService.getArticleList(params);
+  res.json(responseArticles);
 };
 
 // Comment

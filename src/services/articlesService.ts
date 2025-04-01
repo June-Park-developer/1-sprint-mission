@@ -1,7 +1,12 @@
-import { CreateArticleDTO, ArticleResponseDTO, UpdateArticleDTO } from '../DTO/articlesDTO';
+import {
+  CreateArticleDTO,
+  ArticleResponseDTO,
+  UpdateArticleDTO,
+  GetArticleListDTO,
+} from '../DTO/articlesDTO';
 import articlesRepository from '../repositories/articlesRepository';
 import likedArtriclesRepository from '../repositories/likedArtriclesRepository';
-import { Article, GetArticleListParamsInput } from '../typings/articleTypes';
+import { Article } from '../typings/articleTypes';
 import NotFoundError from '../lib/errors/NotFoundError';
 
 const toResponseArticleDTO = (article: Article): ArticleResponseDTO => ({
@@ -15,10 +20,10 @@ const toResponseArticleDTO = (article: Article): ArticleResponseDTO => ({
   isLiked: article.isLiked || false,
 });
 
-const createArticle = async (data: CreateArticleDTO) => {
-  const article = await articlesRepository.create(data);
-  const result = toResponseArticleDTO(article);
-  return result;
+const createArticle = async (articleData: CreateArticleDTO) => {
+  const createdArticle = await articlesRepository.create(articleData);
+  const responseArticle = toResponseArticleDTO(createdArticle);
+  return responseArticle;
 };
 
 const getArticle = async (articleId: number, userId: number) => {
@@ -32,13 +37,13 @@ const getArticle = async (articleId: number, userId: number) => {
   return result;
 };
 
-const updateArticle = async (articleId: number, data: UpdateArticleDTO) => {
-  const article = await articlesRepository.update(articleId, data);
+const updateArticle = async (articleId: number, updateData: UpdateArticleDTO) => {
+  const article = await articlesRepository.update(articleId, updateData);
   if (!article) {
     throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
-  const result = toResponseArticleDTO(article);
-  return result;
+  const responseArticle = toResponseArticleDTO(article);
+  return responseArticle;
 };
 
 const deleteArticle = async (articleId: number) => {
@@ -49,12 +54,12 @@ const deleteArticle = async (articleId: number) => {
   await articlesRepository.deleteById(articleId);
 };
 
-const getArticleList = async (params: GetArticleListParamsInput) => {
+const getArticleList = async (params: GetArticleListDTO) => {
   const totalCount = await articlesRepository.countByKeyword(params.keyword);
   const articles = await articlesRepository.getArticleList(params);
   const list = articles.map((article) => toResponseArticleDTO(article));
-  const result = { list, totalCount };
-  return result;
+  const responseArticles = { list, totalCount };
+  return responseArticles;
 };
 
 export default { createArticle, getArticle, updateArticle, deleteArticle, getArticleList };

@@ -11,6 +11,13 @@ export interface UpdateArticleDTO {
   image?: string | null;
 }
 
+export interface GetArticleListDTO {
+  page: number;
+  pageSize: number;
+  orderBy?: 'recent' | undefined;
+  keyword?: string | undefined;
+}
+
 export interface ArticleResponseDTO {
   id: number;
   title: string;

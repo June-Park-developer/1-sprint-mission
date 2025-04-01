@@ -5,6 +5,7 @@ import {
   UpdateArticleBodyStruct,
 } from '../structs/articlesStructs';
 
+// Entity
 export type Article = {
   id: number;
   title: string;
@@ -16,4 +17,5 @@ export type Article = {
   isLiked?: boolean;
 };
 
+// Input
 export type GetArticleListParamsInput = Infer<typeof GetArticleListParamsStruct>;

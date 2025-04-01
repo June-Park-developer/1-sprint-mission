@@ -6,6 +6,18 @@ import {
   UpdateProductBodyStruct,
 } from '../structs/productsStruct';
 
+export type Product = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  tags: string[];
+  images: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  authorId: number;
+  isLiked?: boolean;
+};
 type CreateProductBody = Infer<typeof CreateProductBodyStruct>;
 export type CreateProductInput = CreateProductBody & { authorId: number };
 
