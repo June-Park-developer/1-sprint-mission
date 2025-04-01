@@ -1,6 +1,6 @@
 import { prismaClient } from '../lib/prismaClient';
 
-async function createLike(userId, articleId) {
+async function createLike(userId: number, articleId: number) {
   return await prismaClient.likedArticle.create({
     data: {
       userId,
@@ -9,7 +9,7 @@ async function createLike(userId, articleId) {
   });
 }
 
-async function deleteLike(userId, articleId) {
+async function deleteLike(userId: number, articleId: number) {
   return await prismaClient.likedArticle.delete({
     where: {
       userId_articleId: {
@@ -20,7 +20,7 @@ async function deleteLike(userId, articleId) {
   });
 }
 
-async function getLike(userId, articleId) {
+async function getLike(userId: number, articleId: number) {
   return await prismaClient.likedArticle.findUnique({
     where: {
       userId_articleId: {

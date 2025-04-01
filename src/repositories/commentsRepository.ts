@@ -1,14 +1,16 @@
 import { prismaClient } from '../lib/prismaClient';
+import { CreateCommentInput } from '../typings/commentTypes';
+import { Prisma } from '@prisma/client';
 
-async function getById(id) {
+async function getById(id: number) {
   return await prismaClient.comment.findUnique({ where: { id } });
 }
 
-async function create(data) {
+async function create(data: Prisma.CommentUncheckedCreateInput) {
   return await prismaClient.comment.create({ data });
 }
 
-async function getCommentsForArticle(articleId, limit, cursor) {
+async function getCommentsForArticle(articleId: number, limit: number, cursor: number) {
   return await prismaClient.comment.findMany({
     cursor: cursor ? { id: cursor } : undefined,
     take: limit + 1,
@@ -17,7 +19,7 @@ async function getCommentsForArticle(articleId, limit, cursor) {
   });
 }
 
-async function getCommentsForProduct(productId, limit, cursor) {
+async function getCommentsForProduct(productId: number, limit: number, cursor: number) {
   return await prismaClient.comment.findMany({
     cursor: cursor ? { id: cursor } : undefined,
     take: limit + 1,
@@ -26,11 +28,11 @@ async function getCommentsForProduct(productId, limit, cursor) {
   });
 }
 
-async function update(id, content) {
+async function update(id: number, content?: string) {
   return await prismaClient.comment.update({ where: { id }, data: { content } });
 }
 
-async function deleteById(id) {
+async function deleteById(id: number) {
   return await prismaClient.comment.delete({ where: { id } });
 }
 

@@ -16,8 +16,8 @@ import {
 } from '../structs/usersStructs';
 import jwt, { PrivateKey, Secret } from 'jsonwebtoken';
 import { JWT_SECRET } from '../lib/constants';
-import { User } from '../typings/user';
 import { RequestHandler } from 'express';
+import { User } from '@prisma/client';
 
 async function hashPassword(password: string) {
   return await bcrypt.hash(password, 10);
@@ -40,7 +40,7 @@ function createToken(user: User, type?: string) {
 }
 
 export const createUser: RequestHandler = async (req, res) => {
-  const { email, nickname, password } = create(req.body, CreateUserBodyStruct); // To-do : usersStructs
+  const { email, nickname, password: plainPassword } = create(req.body, CreateUserBodyStruct); // To-do : usersStructs
   const existingEmail = await usersRepository.getByEmail(email);
   const existingNickname = await usersRepository.getByNickname(nickname);
   if (existingEmail) {
@@ -49,8 +49,8 @@ export const createUser: RequestHandler = async (req, res) => {
   if (existingNickname) {
     throw new ConflictError('Nickname');
   }
-  const hashedPassword = await hashPassword(password);
-  const createdUser = await usersRepository.create({ email, nickname, hashedPassword });
+  const password = await hashPassword(plainPassword);
+  const createdUser = await usersRepository.create({ email, nickname, password });
   const filteredUser = filterSensitiveUserData(createdUser);
   res.status(201).send(filteredUser);
 };
@@ -80,7 +80,7 @@ export const loginUser: RequestHandler = async (req, res) => {
 
 // 나의 정보 조회
 export const getMyInfo: RequestHandler = async (req, res) => {
-  const { userId } = req.user || {};
+  const { userId } = req.user!;
   const user = await usersRepository.getById(userId);
   if (!user) {
     throw new NotFoundError(`User with id ${userId} is not found`);
@@ -92,7 +92,7 @@ export const getMyInfo: RequestHandler = async (req, res) => {
 // 나의 정보 수정
 export const patchMyInfo: RequestHandler = async (req, res) => {
   const data = create(req.body, PatchMyInfoBodyStruct);
-  const { userId } = req.user || {};
+  const { userId } = req.user!;
   const user = await usersRepository.update(userId, data);
   if (!user) {
     throw new NotFoundError(`User with id ${userId} is not found`);
@@ -104,7 +104,7 @@ export const patchMyInfo: RequestHandler = async (req, res) => {
 // 나의 비밀번호 수정
 export const patchMyPassword: RequestHandler = async (req, res) => {
   const { password } = create(req.body, PatchMyPasswordStruct);
-  const { userId } = req.user || {};
+  const { userId } = req.user!;
   const hashedPassword = await hashPassword(password);
   const user = await usersRepository.update(userId, { password: hashedPassword });
   if (!user) {
@@ -118,7 +118,7 @@ export const patchMyPassword: RequestHandler = async (req, res) => {
 // Token Refresh : refreshToken 가져와서 검증을 한 다음에, 새로 createToken 한다음에 재발급
 export const refreshToken: RequestHandler = async (req, res) => {
   const { refreshToken } = req.cookies;
-  const { userId } = req.auth || {};
+  const { userId } = req.auth!;
   const user = await usersRepository.getById(userId);
   if (!user || user.refreshToken !== refreshToken) {
     throw new UnauthorizedError('Unauthorized');
@@ -136,7 +136,7 @@ export const refreshToken: RequestHandler = async (req, res) => {
 };
 
 export const getLikedProductList: RequestHandler = async (req, res) => {
-  const { userId } = req.user || {};
+  const { userId } = req.user!;
   const { page, pageSize, orderBy } = create(req.query, GetLikedProductListParamsStruct);
   const totalCount = await likedProductsRepository.countByUserId(userId);
   const likedProducts = await likedProductsRepository.getLikedProductList({

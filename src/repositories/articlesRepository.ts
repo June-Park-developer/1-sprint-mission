@@ -1,22 +1,28 @@
 import { prismaClient } from '../lib/prismaClient';
+import {
+  CreateArticleInput,
+  GetArticleListParamsInput,
+  UpdateArticleInput,
+} from '../typings/articleTypes';
+import { Prisma } from '@prisma/client';
 
-async function create(data) {
+async function create(data: Prisma.ArticleUncheckedCreateInput) {
   return await prismaClient.article.create({ data });
 }
 
-async function getById(id) {
+async function getById(id: number) {
   return await prismaClient.article.findUnique({ where: { id } });
 }
 
-async function update(id, data) {
+async function update(id: number, data: Prisma.ArticleUpdateInput) {
   return await prismaClient.article.update({ where: { id }, data });
 }
 
-async function deleteById(id) {
+async function deleteById(id: number) {
   return await prismaClient.article.delete({ where: { id } });
 }
 
-async function countByKeyword(keyword) {
+async function countByKeyword(keyword?: string) {
   const where = {
     title: keyword ? { contains: keyword } : undefined,
   };
@@ -24,7 +30,7 @@ async function countByKeyword(keyword) {
   return await prismaClient.article.count({ where });
 }
 
-async function getArticleList({ page, pageSize, orderBy, keyword }) {
+async function getArticleList({ page, pageSize, orderBy, keyword }: GetArticleListParamsInput) {
   const where = {
     title: keyword ? { contains: keyword } : undefined,
   };

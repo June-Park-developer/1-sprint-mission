@@ -16,7 +16,7 @@ import { Request, RequestHandler, Response } from 'express';
 
 export const createProduct: RequestHandler = async (req, res) => {
   const parsed = create(req.body, CreateProductBodyStruct);
-  const userId = req.user?.userId;
+  const { userId } = req.user!;
   const data = {
     ...parsed,
     authorId: userId,
@@ -43,8 +43,7 @@ export const getProduct: RequestHandler = async (req, res) => {
 
 export const updateProduct: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
-  const { name, description, price, tags, images } = create(req.body, UpdateProductBodyStruct);
-  const data = { name, description, price, tags, images };
+  const data = create(req.body, UpdateProductBodyStruct);
 
   const existingProduct = await productsRepository.getById(productId);
   if (!existingProduct) {
@@ -82,7 +81,7 @@ export const getProductList: RequestHandler = async (req, res) => {
 };
 
 export const getMyProductList: RequestHandler = async (req, res) => {
-  const { userId: authorId } = req.user || {};
+  const { userId: authorId } = req.user!;
   const { page, pageSize, orderBy } = create(req.query, GetMyProductsParamsStruct);
   const totalCount = await productsRepository.countByAuthorId(authorId);
   const products = await productsRepository.getMyProductList({
@@ -101,7 +100,7 @@ export const getMyProductList: RequestHandler = async (req, res) => {
 export const createComment: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
-  const authorId = req.user?.userId;
+  const { userId: authorId } = req.user!;
   const data = { productId, content, authorId };
 
   const existingProduct = await productsRepository.getById(productId);
@@ -141,7 +140,7 @@ export const getCommentList: RequestHandler = async (req, res) => {
 
 // Like, Unlike
 export const likeProduct: RequestHandler = async (req, res) => {
-  const { userId } = req.user || {};
+  const { userId } = req.user!;
   const { id: productId } = create(req.params, IdParamsStruct);
   const existingLikedProduct = await likedProductsRepository.getLike(userId, productId);
   if (existingLikedProduct) {
@@ -152,7 +151,7 @@ export const likeProduct: RequestHandler = async (req, res) => {
 };
 
 export const unlikeProduct: RequestHandler = async (req, res) => {
-  const { userId } = req.user || {};
+  const { userId } = req.user!;
   const { id: productId } = create(req.params, IdParamsStruct);
   const existingLikedProduct = await likedProductsRepository.getLike(userId, productId);
   if (!existingLikedProduct) {

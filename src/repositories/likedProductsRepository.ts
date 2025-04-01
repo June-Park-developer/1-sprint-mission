@@ -1,7 +1,8 @@
 import { prismaClient } from '../lib/prismaClient';
+import { LikedProductListParamsInput } from '../typings/likedProductTypes.';
 import productsRepository from './productsRepository.js';
 
-async function createLike(userId, productId) {
+async function createLike(userId: number, productId: number) {
   return await prismaClient.likedProduct.create({
     data: {
       userId,
@@ -10,7 +11,7 @@ async function createLike(userId, productId) {
   });
 }
 
-async function deleteLike(userId, productId) {
+async function deleteLike(userId: number, productId: number) {
   return await prismaClient.likedProduct.delete({
     where: {
       userId_productId: {
@@ -21,7 +22,7 @@ async function deleteLike(userId, productId) {
   });
 }
 
-async function getLike(userId, productId) {
+async function getLike(userId: number, productId: number) {
   return await prismaClient.likedProduct.findUnique({
     where: {
       userId_productId: {
@@ -32,7 +33,12 @@ async function getLike(userId, productId) {
   });
 }
 
-async function getLikedProductList({ userId, page, pageSize, orderBy }) {
+async function getLikedProductList({
+  userId,
+  page,
+  pageSize,
+  orderBy,
+}: LikedProductListParamsInput) {
   const likedProducts = await prismaClient.likedProduct.findMany({
     where: { userId },
     skip: (page - 1) * pageSize,
@@ -44,7 +50,7 @@ async function getLikedProductList({ userId, page, pageSize, orderBy }) {
   return products;
 }
 
-async function countByUserId(userId) {
+async function countByUserId(userId: number) {
   return await prismaClient.likedProduct.count({
     where: { userId },
   });

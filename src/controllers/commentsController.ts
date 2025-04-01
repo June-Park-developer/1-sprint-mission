@@ -2,7 +2,7 @@ import { create } from 'superstruct';
 import { UpdateCommentBodyStruct } from '../structs/commentsStruct';
 import NotFoundError from '../lib/errors/NotFoundError';
 import { IdParamsStruct } from '../structs/commonStructs';
-import commentsRepository from '../repositories/commentsRepository.js';
+import commentsRepository from '../repositories/commentsRepository';
 import { Request, RequestHandler, Response } from 'express';
 
 export const updateComment: RequestHandler = async (req, res) => {
