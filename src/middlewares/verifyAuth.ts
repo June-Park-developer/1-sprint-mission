@@ -4,7 +4,7 @@ import commentsRepository from '../repositories/commentsRepository.js';
 import ForbiddenError from '../lib/errors/ForbiddenError';
 import NotFoundError from '../lib/errors/NotFoundError';
 import { withAsync } from '../lib/withAsync';
-import { IdParamsStruct } from '../structs/commonStructs.js';
+import { IdParamsStruct } from '../structs/commonStructs';
 import { create } from 'superstruct';
 import { RequestHandler } from 'express';
 

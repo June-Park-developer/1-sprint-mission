@@ -10,7 +10,7 @@ import {
   optional,
   number,
 } from 'superstruct';
-import { PageParamsStruct, PageParamsWithoutKeywordStruct } from './commonStructs.js';
+import { PageParamsStruct, PageParamsWithoutKeywordStruct } from './commonStructs';
 
 export const CreateProductBodyStruct = object({
   name: coerce(nonempty(string()), string(), (value) => value.trim()),

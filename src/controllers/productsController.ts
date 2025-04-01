@@ -1,14 +1,14 @@
 import { create } from 'superstruct';
 import NotFoundError from '../lib/errors/NotFoundError';
 import ConflictError from '../lib/errors/ConflictError';
-import { IdParamsStruct } from '../structs/commonStructs.js';
+import { IdParamsStruct } from '../structs/commonStructs';
 import {
   CreateProductBodyStruct,
   GetMyProductsParamsStruct,
   GetProductListParamsStruct,
   UpdateProductBodyStruct,
-} from '../structs/productsStruct.js';
-import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct.js';
+} from '../structs/productsStruct';
+import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
 import productsRepository from '../repositories/productsRepository.js';
 import commentsRepository from '../repositories/commentsRepository.js';
 import likedProductsRepository from '../repositories/likedProductsRepository.js';

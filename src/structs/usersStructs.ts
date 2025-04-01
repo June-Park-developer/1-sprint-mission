@@ -1,6 +1,6 @@
 import * as s from 'superstruct';
 import isEmail from 'is-email';
-import { PageParamsWithoutKeywordStruct } from './commonStructs.js';
+import { PageParamsWithoutKeywordStruct } from './commonStructs';
 
 const Email = s.refine(s.string(), 'email', (value) => isEmail(value));
 

@@ -2,8 +2,8 @@ import { create } from 'superstruct';
 import NotFoundError from '../lib/errors/NotFoundError';
 import ConflictError from '../lib/errors/ConflictError';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
-import {} from '../structs/commonStructs.js';
-import {} from '../structs/usersStructs.js';
+import {} from '../structs/commonStructs';
+import {} from '../structs/usersStructs';
 import usersRepository from '../repositories/usersRepository.js';
 import likedProductsRepository from '../repositories/likedProductsRepository.js';
 import bcrypt from 'bcrypt';
@@ -13,7 +13,7 @@ import {
   PatchMyInfoBodyStruct,
   PatchMyPasswordStruct,
   GetLikedProductListParamsStruct,
-} from '../structs/usersStructs.js';
+} from '../structs/usersStructs';
 import jwt, { PrivateKey, Secret } from 'jsonwebtoken';
 import { JWT_SECRET } from '../lib/constants';
 import { User } from '../typings/user';

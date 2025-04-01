@@ -1,7 +1,7 @@
 import { create } from 'superstruct';
-import { UpdateCommentBodyStruct } from '../structs/commentsStruct.js';
+import { UpdateCommentBodyStruct } from '../structs/commentsStruct';
 import NotFoundError from '../lib/errors/NotFoundError';
-import { IdParamsStruct } from '../structs/commonStructs.js';
+import { IdParamsStruct } from '../structs/commonStructs';
 import commentsRepository from '../repositories/commentsRepository.js';
 import { Request, RequestHandler, Response } from 'express';
 
