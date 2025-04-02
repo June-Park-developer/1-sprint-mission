@@ -28,9 +28,9 @@ export const createArticle: RequestHandler = async (req, res) => {
 
 export const getArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
-  const { userId } = req.user!;
+  const userId = req.user?.userId;
   const responseArticle = await articlesService.getArticle(articleId, userId);
-  res.send(responseArticle);
+  res.json(responseArticle);
 };
 
 export const updateArticle: RequestHandler = async (req, res) => {
@@ -48,8 +48,9 @@ export const deleteArticle: RequestHandler = async (req, res) => {
 };
 
 export const getArticleList: RequestHandler = async (req, res) => {
+  const userId = req.user?.userId;
   const params: GetArticleListDTO = create(req.query, GetArticleListParamsStruct);
-  const responseArticles = await articlesService.getArticleList(params);
+  const responseArticles = await articlesService.getArticleList(params, userId);
   res.json(responseArticles);
 };
 

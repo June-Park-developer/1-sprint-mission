@@ -12,59 +12,38 @@ import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/
 import productsRepository from '../repositories/productsRepository';
 import commentsRepository from '../repositories/commentsRepository';
 import likedProductsRepository from '../repositories/likedProductsRepository';
-import { Request, RequestHandler, Response } from 'express';
+import { RequestHandler } from 'express';
+import { CreateProductDTO } from '../DTO/productsDTO';
+import productsService from '../services/productsService';
 
 export const createProduct: RequestHandler = async (req, res) => {
   const parsed = create(req.body, CreateProductBodyStruct);
   const { userId } = req.user!;
-  const data = {
+  const productData: CreateProductDTO = {
     ...parsed,
     authorId: userId,
   };
-  const product = await productsRepository.create(data);
-
-  res.status(201).send(product);
+  const responseProduct = await productsService.createProduct(productData);
+  res.status(201).json(responseProduct);
 };
 
 export const getProduct: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
-  const product = await productsRepository.getById(productId);
-  if (!product) {
-    throw new NotFoundError(`Product with id ${productId} is not found`);
-  }
-  const { userId } = req.user || {};
-  let isLiked = false;
-  if (userId) {
-    const likedProduct = await likedProductsRepository.getLike(userId, productId);
-    isLiked = likedProduct ? true : false;
-  }
-  res.send({ ...product, isLiked });
+  const { userId } = req.user!;
+  const responseProduct = await productsService.getProduct(productId, userId);
+  res.json(responseProduct);
 };
 
 export const updateProduct: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
-  const data = create(req.body, UpdateProductBodyStruct);
-
-  const existingProduct = await productsRepository.getById(productId);
-  if (!existingProduct) {
-    throw new NotFoundError(`Product with id ${productId} is not found`);
-  }
-
-  const updatedProduct = await productsRepository.update(productId, data);
-
-  res.send(updatedProduct);
+  const productData = create(req.body, UpdateProductBodyStruct);
+  const responseProduct = await productsService.updateProduct(productId, productData);
+  res.send(responseProduct);
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
-  const existingProduct = await productsRepository.getById(productId);
-
-  if (!existingProduct) {
-    throw new NotFoundError(`Product with id ${productId} is not found`);
-  }
-
-  await productsRepository.deleteById(productId);
-
+  await productsService.deleteProduct(productId);
   res.status(204).send();
 };
 

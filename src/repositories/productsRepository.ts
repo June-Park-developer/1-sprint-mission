@@ -3,6 +3,7 @@ import {
   CreateProductInput,
   GetMyProductsParamsInput,
   GetProductListParamsInput,
+  Product,
   UpdateProductInput,
 } from '../typings/productTypes';
 import { Prisma } from '@prisma/client';
@@ -11,7 +12,7 @@ async function create(data: Prisma.ProductUncheckedCreateInput) {
   return await prismaClient.product.create({ data });
 }
 
-async function getById(id: number) {
+async function getById(id: number): Promise<Product | null> {
   return await prismaClient.product.findUnique({ where: { id } });
 }
 

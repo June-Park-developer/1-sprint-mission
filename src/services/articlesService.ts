@@ -3,13 +3,14 @@ import {
   ArticleResponseDTO,
   UpdateArticleDTO,
   GetArticleListDTO,
+  ArticleListResponseDTO,
 } from '../DTO/articlesDTO';
 import articlesRepository from '../repositories/articlesRepository';
 import likedArtriclesRepository from '../repositories/likedArtriclesRepository';
 import { Article } from '../typings/articleTypes';
 import NotFoundError from '../lib/errors/NotFoundError';
 
-const toResponseArticleDTO = (article: Article): ArticleResponseDTO => ({
+const toArticleResponseDTO = (article: Article, isLiked: boolean = false): ArticleResponseDTO => ({
   id: article.id,
   title: article.title,
   content: article.content,
@@ -17,24 +18,22 @@ const toResponseArticleDTO = (article: Article): ArticleResponseDTO => ({
   authorId: article.authorId,
   createdAt: article.createdAt,
   updatedAt: article.updatedAt,
-  isLiked: article.isLiked || false,
+  isLiked,
 });
 
 const createArticle = async (articleData: CreateArticleDTO) => {
   const createdArticle = await articlesRepository.create(articleData);
-  const responseArticle = toResponseArticleDTO(createdArticle);
-  return responseArticle;
+  return toArticleResponseDTO(createdArticle);
 };
 
-const getArticle = async (articleId: number, userId: number) => {
+const getArticle = async (articleId: number, userId?: number) => {
   const article = await articlesRepository.getById(articleId);
   if (!article) {
     throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
-  const likedArticle = await likedArtriclesRepository.getLike(userId, articleId);
-  article.isLiked = !!likedArticle;
-  const result = toResponseArticleDTO(article);
-  return result;
+
+  const isLiked = userId ? !!(await likedArtriclesRepository.getLike(userId, articleId)) : false;
+  return toArticleResponseDTO(article, isLiked);
 };
 
 const updateArticle = async (articleId: number, updateData: UpdateArticleDTO) => {
@@ -42,7 +41,7 @@ const updateArticle = async (articleId: number, updateData: UpdateArticleDTO) =>
   if (!article) {
     throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
-  const responseArticle = toResponseArticleDTO(article);
+  const responseArticle = toArticleResponseDTO(article);
   return responseArticle;
 };
 
@@ -54,12 +53,22 @@ const deleteArticle = async (articleId: number) => {
   await articlesRepository.deleteById(articleId);
 };
 
-const getArticleList = async (params: GetArticleListDTO) => {
+const getArticleList = async (params: GetArticleListDTO, userId?: number) => {
   const totalCount = await articlesRepository.countByKeyword(params.keyword);
   const articles = await articlesRepository.getArticleList(params);
-  const list = articles.map((article) => toResponseArticleDTO(article));
-  const responseArticles = { list, totalCount };
-  return responseArticles;
+
+  const list = await Promise.all(
+    articles.map(async (article) => {
+      if (userId) {
+        const liked = await likedArtriclesRepository.getLike(userId, article.id);
+        return toArticleResponseDTO(article, !!liked);
+      }
+      return toArticleResponseDTO(article);
+    }),
+  );
+
+  const response: ArticleListResponseDTO = { list, totalCount };
+  return response;
 };
 
 export default { createArticle, getArticle, updateArticle, deleteArticle, getArticleList };

@@ -6,7 +6,7 @@ import {
 } from '../structs/articlesStructs';
 
 // Entity
-export type Article = {
+export interface Article {
   id: number;
   title: string;
   content: string;
@@ -14,8 +14,7 @@ export type Article = {
   authorId: number;
   createdAt: Date;
   updatedAt: Date;
-  isLiked?: boolean;
-};
+}
 
-// Input
+// Input (Service <-> Repository)
 export type GetArticleListParamsInput = Infer<typeof GetArticleListParamsStruct>;

@@ -1,3 +1,6 @@
+import { Article } from '../typings/articleTypes';
+
+// Request
 export interface CreateArticleDTO {
   title: string;
   content: string;
@@ -18,6 +21,7 @@ export interface GetArticleListDTO {
   keyword?: string | undefined;
 }
 
+// Response
 export interface ArticleResponseDTO {
   id: number;
   title: string;
@@ -27,4 +31,9 @@ export interface ArticleResponseDTO {
   createdAt: Date;
   updatedAt: Date;
   isLiked: boolean;
+}
+
+export interface ArticleListResponseDTO {
+  list: ArticleResponseDTO[];
+  totalCount: number;
 }

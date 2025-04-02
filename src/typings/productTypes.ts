@@ -6,6 +6,7 @@ import {
   UpdateProductBodyStruct,
 } from '../structs/productsStruct';
 
+// Entity
 export type Product = {
   id: number;
   name: string;
@@ -16,8 +17,9 @@ export type Product = {
   createdAt: Date;
   updatedAt: Date;
   authorId: number;
-  isLiked?: boolean;
 };
+
+// Input (Service <->Repository)
 type CreateProductBody = Infer<typeof CreateProductBodyStruct>;
 export type CreateProductInput = CreateProductBody & { authorId: number };
 
