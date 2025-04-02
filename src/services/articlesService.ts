@@ -31,7 +31,6 @@ const getArticle = async (articleId: number, userId?: number) => {
   if (!article) {
     throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
-
   const isLiked = userId ? !!(await likedArtriclesRepository.getLike(userId, articleId)) : false;
   return toArticleResponseDTO(article, isLiked);
 };

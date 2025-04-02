@@ -16,20 +16,12 @@ import { verifyProductAuth } from '../middlewares/verifyAuth';
 const productsRouter = express.Router();
 
 productsRouter.post('/', verifyAccessToken, withAsync(createProduct));
+productsRouter.get('/', optionalAccessToken, withAsync(getProductList));
+
 productsRouter.get('/:id', optionalAccessToken, withAsync(getProduct));
-productsRouter.patch(
-  '/:id',
-  verifyAccessToken,
-  withAsync(verifyProductAuth),
-  withAsync(updateProduct),
-);
-productsRouter.delete(
-  '/:id',
-  verifyAccessToken,
-  withAsync(verifyProductAuth),
-  withAsync(deleteProduct),
-);
-productsRouter.get('/', withAsync(getProductList));
+productsRouter.patch('/:id', verifyAccessToken, verifyProductAuth, withAsync(updateProduct));
+productsRouter.delete('/:id', verifyAccessToken, verifyProductAuth, withAsync(deleteProduct));
+
 productsRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment));
 productsRouter.get('/:id/comments', withAsync(getCommentList));
 

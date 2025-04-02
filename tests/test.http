@@ -5,7 +5,7 @@ Accept: application/json
 ### 새로운 Article 만들기 (accessToken 필요)
 POST http://localhost:3000/articles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQ5MTIxNCwiZXhwIjoxNzQzNDk0ODE0fQ.qkKv_eiJ5P6bFfVGDv1q-eVIC4imSDxcQlc6uDqXtXA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzU2MTA1MywiZXhwIjoxNzQzNTY0NjUzfQ.1GIPsq-lAFgKGKpYr04L_yt9Zmb-XGC9kkWFf7_6ZNQ
 
 {
     "title": "새로운 Article",
@@ -16,12 +16,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 ### 특정 ID의 Article 가져오기
 GET http://localhost:3000/articles/11
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQ5MTIxNCwiZXhwIjoxNzQzNDk0ODE0fQ.qkKv_eiJ5P6bFfVGDv1q-eVIC4imSDxcQlc6uDqXtXA
+
 
 ### Article 업데이트하기
-PATCH http://localhost:3000/articles/11
+PATCH http://localhost:3000/articles/14
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQ5MTIxNCwiZXhwIjoxNzQzNDk0ODE0fQ.qkKv_eiJ5P6bFfVGDv1q-eVIC4imSDxcQlc6uDqXtXA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzU2MTA1MywiZXhwIjoxNzQzNTY0NjUzfQ.1GIPsq-lAFgKGKpYr04L_yt9Zmb-XGC9kkWFf7_6ZNQ
 
 {
     "title": "Article 10 업데이트",
@@ -29,8 +29,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 }
 
 ### Article 삭제하기
-DELETE http://localhost:3000/articles/11
+DELETE http://localhost:3000/articles/14
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzU2MTA1MywiZXhwIjoxNzQzNTY0NjUzfQ.1GIPsq-lAFgKGKpYr04L_yt9Zmb-XGC9kkWFf7_6ZNQ
 
 ### Article에 Comment 달기 테스트
 POST http://localhost:3000/articles/10/comments
@@ -74,17 +75,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 ### 모든 Product 가져오기 테스트
 GET http://localhost:3000/products
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzU2MTA1MywiZXhwIjoxNzQzNTY0NjUzfQ.1GIPsq-lAFgKGKpYr04L_yt9Zmb-XGC9kkWFf7_6ZNQ
 
 ### 특정 ID의 Product 가져오기 테스트
 GET http://localhost:3000/products/14
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzU2MTA1MywiZXhwIjoxNzQzNTY0NjUzfQ.1GIPsq-lAFgKGKpYr04L_yt9Zmb-XGC9kkWFf7_6ZNQ
 
 
 
 ### Product 업데이트하기 테스트
 PATCH http://localhost:3000/products/14
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzU2MTA1MywiZXhwIjoxNzQzNTY0NjUzfQ.1GIPsq-lAFgKGKpYr04L_yt9Zmb-XGC9kkWFf7_6ZNQ
 
 {
     "name": "업데이트된 테스트 Product",

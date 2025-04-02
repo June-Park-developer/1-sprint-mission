@@ -29,7 +29,7 @@ export const createProduct: RequestHandler = async (req, res) => {
 
 export const getProduct: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
-  const { userId } = req.user!;
+  const userId = req.user?.userId;
   const responseProduct = await productsService.getProduct(productId, userId);
   res.json(responseProduct);
 };
