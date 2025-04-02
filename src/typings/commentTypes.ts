@@ -1,9 +1,26 @@
 import { Infer } from 'superstruct';
 import { CreateCommentBodyStruct, UpdateCommentBodyStruct } from '../structs/commentsStruct';
 
-type CreateCommentBody = Infer<typeof CreateCommentBodyStruct>;
-export type CreateCommentInput = CreateCommentBody & {
+// Entity
+export interface Comment {
+  id: number;
+  content: string;
+  productId: number | null;
+  articleId: number | null;
   authorId: number;
-  articleId?: number;
-  productId?: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Input
+export type CreateCommentInput = {
+  authorId: number;
+  articleId: number | null;
+  productId: number | null;
+  content: string;
+};
+
+export type GetCommentListInput = {
+  articleId: number | null;
+  productId: number | null;
 };

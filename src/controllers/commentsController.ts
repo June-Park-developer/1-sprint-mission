@@ -1,33 +1,20 @@
 import { create } from 'superstruct';
 import { UpdateCommentBodyStruct } from '../structs/commentsStruct';
-import NotFoundError from '../lib/errors/NotFoundError';
 import { IdParamsStruct } from '../structs/commonStructs';
-import commentsRepository from '../repositories/commentsRepository';
-import { Request, RequestHandler, Response } from 'express';
+import { RequestHandler } from 'express';
+import commentsService from '../services/commentsService';
 
 export const updateComment: RequestHandler = async (req, res) => {
   const { id: commentId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, UpdateCommentBodyStruct);
-
-  const existingComment = await commentsRepository.getById(commentId);
-  if (!existingComment) {
-    throw new NotFoundError(`Comment with id ${commentId} is not found`);
-  }
-
-  const updatedComment = await commentsRepository.update(commentId, content);
-
-  res.send(updatedComment);
+  const dto = { commentId, content };
+  const commentResponse = await commentsService.updateComment(dto);
+  res.send(commentResponse);
 };
 
 export const deleteComment: RequestHandler = async (req, res) => {
   const { id: commentId } = create(req.params, IdParamsStruct);
-
-  const existingComment = await commentsRepository.getById(commentId);
-  if (!existingComment) {
-    throw new NotFoundError(`Comment with id ${commentId} is not found`);
-  }
-
-  await commentsRepository.deleteById(commentId);
-
+  const dto = { commentId };
+  await commentsService.deleteComment(dto);
   res.status(204).send();
 };

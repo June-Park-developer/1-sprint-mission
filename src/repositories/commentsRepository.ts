@@ -6,11 +6,11 @@ async function getById(id: number) {
   return await prismaClient.comment.findUnique({ where: { id } });
 }
 
-async function create(data: Prisma.CommentUncheckedCreateInput) {
+async function create(data: CreateCommentInput) {
   return await prismaClient.comment.create({ data });
 }
 
-async function getCommentsForArticle(articleId: number, limit: number, cursor: number) {
+async function getCommentsForArticle(articleId: number, limit: number = 10, cursor?: number) {
   return await prismaClient.comment.findMany({
     cursor: cursor ? { id: cursor } : undefined,
     take: limit + 1,
@@ -19,7 +19,7 @@ async function getCommentsForArticle(articleId: number, limit: number, cursor: n
   });
 }
 
-async function getCommentsForProduct(productId: number, limit: number, cursor: number) {
+async function getCommentsForProduct(productId: number, limit: number = 10, cursor?: number) {
   return await prismaClient.comment.findMany({
     cursor: cursor ? { id: cursor } : undefined,
     take: limit + 1,

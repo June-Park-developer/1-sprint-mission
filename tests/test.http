@@ -34,16 +34,16 @@ Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzU2MTA1MywiZXhwIjoxNzQzNTY0NjUzfQ.1GIPsq-lAFgKGKpYr04L_yt9Zmb-XGC9kkWFf7_6ZNQ
 
 ### Article에 Comment 달기 테스트
-POST http://localhost:3000/articles/10/comments
+POST http://localhost:3000/articles/11/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzU4MDYyNywiZXhwIjoxNzQzNTg0MjI3fQ.3ZamkWnerheHEt1qT3ymL7iBS1v5icfOzN_-phY5ZpY
 
 {
     "content": "이것은 Article에 대한 테스트 Comment입니다."
 }
 
 ### Article의 Comment 가져오기 테스트
-GET http://localhost:3000/articles/10/comments?limit=200
+GET http://localhost:3000/articles/11/comments?limit=200
 Accept: application/json
 
 ### Comment 업데이트 테스트

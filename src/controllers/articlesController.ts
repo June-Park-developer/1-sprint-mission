@@ -14,6 +14,10 @@ import ConflictError from '../lib/errors/ConflictError';
 import { RequestHandler } from 'express';
 import articlesService from '../services/articlesService';
 import { CreateArticleDTO, GetArticleListDTO, UpdateArticleDTO } from '../DTO/articlesDTO';
+import { CreateCommentInput } from '../typings/commentTypes';
+import commentsService from '../services/commentsService';
+import { EntityType } from '../typings/EnumTypes';
+import { CreateCommentDTO, GetCommentsForArticleDTO } from '../DTO/commentsDTO';
 // Article
 export const createArticle: RequestHandler = async (req, res) => {
   const parsed = create(req.body, CreateArticleBodyStruct);
@@ -59,39 +63,22 @@ export const createComment: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
   const authorId = req.user!.userId;
-  const data = { articleId, content, authorId };
-  const existingArticle = await articlesRepository.getById(articleId);
-  if (!existingArticle) {
-    throw new NotFoundError(`Article with id ${articleId} is not found`);
-  }
-
-  const comment = await commentsRepository.create(data);
-
+  const dto: CreateCommentDTO = {
+    entityName: EntityType.Article,
+    articleId,
+    content,
+    authorId,
+  };
+  const comment = await commentsService.createComment(dto);
   res.status(201).send(comment);
 };
 
 export const getCommentList: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
-  const { cursor, limit } = create(req.query, GetCommentListParamsStruct);
-
-  const article = await articlesRepository.getById(articleId);
-  if (!article) {
-    throw new NotFoundError(`Article with id ${articleId} is not found`);
-  }
-
-  const commentsWithCursor = await commentsRepository.getCommentsForArticle(
-    articleId,
-    limit,
-    cursor,
-  );
-  const comments = commentsWithCursor.slice(0, limit);
-  const cursorComment = commentsWithCursor[commentsWithCursor.length - 1];
-  const nextCursor = cursorComment ? cursorComment.id : null;
-
-  res.send({
-    list: comments,
-    nextCursor,
-  });
+  const { cursor, limit = 10 } = create(req.query, GetCommentListParamsStruct);
+  const dto: GetCommentsForArticleDTO = { articleId, cursor, limit };
+  const commentsResponse = await commentsService.getCommentsForArticle(dto);
+  res.json(commentsResponse);
 };
 
 // Like, Unlike

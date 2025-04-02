@@ -15,6 +15,9 @@ import likedProductsRepository from '../repositories/likedProductsRepository';
 import { RequestHandler } from 'express';
 import { CreateProductDTO } from '../DTO/productsDTO';
 import productsService from '../services/productsService';
+import { CreateCommentDTO, GetCommentsForProductDTO } from '../DTO/commentsDTO';
+import { EntityType } from '../typings/EnumTypes';
+import commentsService from '../services/commentsService';
 
 export const createProduct: RequestHandler = async (req, res) => {
   const parsed = create(req.body, CreateProductBodyStruct);
@@ -79,42 +82,23 @@ export const getMyProductList: RequestHandler = async (req, res) => {
 export const createComment: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
-  const { userId: authorId } = req.user!;
-  const data = { productId, content, authorId };
-
-  const existingProduct = await productsRepository.getById(productId);
-  if (!existingProduct) {
-    throw new NotFoundError(`Product with id ${productId} is not found`);
-  }
-
-  const comment = await commentsRepository.create(data);
-
+  const authorId = req.user!.userId;
+  const dto: CreateCommentDTO = {
+    entityName: EntityType.Product,
+    productId,
+    content,
+    authorId,
+  };
+  const comment = await commentsService.createComment(dto);
   res.status(201).send(comment);
 };
 
 export const getCommentList: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
-  const { cursor, limit } = create(req.query, GetCommentListParamsStruct);
-
-  const existingProduct = await productsRepository.getById(productId);
-  if (!existingProduct) {
-    throw new NotFoundError(`Product with id ${productId} is not found`);
-  }
-
-  const commentsWithCursorComment = await commentsRepository.getCommentsForProduct(
-    productId,
-    limit,
-    cursor,
-  );
-
-  const comments = commentsWithCursorComment.slice(0, limit);
-  const cursorComment = commentsWithCursorComment[comments.length - 1];
-  const nextCursor = cursorComment ? cursorComment.id : null;
-
-  res.send({
-    list: comments,
-    nextCursor,
-  });
+  const { cursor, limit = 10 } = create(req.query, GetCommentListParamsStruct);
+  const dto: GetCommentsForProductDTO = { productId, cursor, limit };
+  const commentsResponse = await commentsService.getCommentsForProduct(dto);
+  res.send(commentsResponse);
 };
 
 // Like, Unlike
