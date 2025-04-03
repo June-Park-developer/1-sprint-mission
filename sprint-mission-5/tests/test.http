@@ -148,8 +148,8 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "email" : "userExampleasdf@gmail.com",
-    "nickname" : "user12",
+    "email" : "userExampleasdfddd@gmail.com",
+    "nickname" : "user12eee",
     "password" : "password1"
 }
 
@@ -178,7 +178,7 @@ Content-Type: application/json
 
 ### 유저 자기 비밀번호 수정 테스트
 PATCH http://localhost:3000/users/me/password
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2ODk0NSwiZXhwIjoxNzQzNjcyNTQ1fQ.5Nw2u6jxjQmnyBbtzclTXq8cR44Rap_8iz3UfJTmYh0;
 Content-Type: application/json
 
 {
@@ -187,11 +187,11 @@ Content-Type: application/json
 
 ### 자기가 등록한 product List
 GET http://localhost:3000/users/me/products?page=2&pageSize=2&orderBy=recent
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2ODk0NSwiZXhwIjoxNzQzNjcyNTQ1fQ.5Nw2u6jxjQmnyBbtzclTXq8cR44Rap_8iz3UfJTmYh0;
 
 ### 자기가 like 한 productList
 GET http://localhost:3000/users/me/liked-products?page=1&pageSize=2
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2ODk0NSwiZXhwIjoxNzQzNjcyNTQ1fQ.5Nw2u6jxjQmnyBbtzclTXq8cR44Rap_8iz3UfJTmYh0;
 
 ### 토큰 재발급 
 POST http://localhost:3000/users/token/refresh
@@ -199,7 +199,7 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdC
 
 ### Product Like/Unlike 테스트
 POST http://localhost:3000/products/12/like
-Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2NTEzMiwiZXhwIjoxNzQzNjY4NzMyfQ.iYKkfD6NH4CsWiD25u0FN9Xr1-trziE_A-NZI1xpzoU;
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2ODk0NSwiZXhwIjoxNzQzNjcyNTQ1fQ.5Nw2u6jxjQmnyBbtzclTXq8cR44Rap_8iz3UfJTmYh0;
 
 ### Article Like/Unlike 테스트
 POST http://localhost:3000/articles/8/like
