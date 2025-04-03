@@ -1,10 +1,10 @@
-import { nonempty, object, partial, string } from 'superstruct';
+import * as s from 'superstruct';
 import { CursorParamsStruct } from './commonStructs';
 
-export const CreateCommentBodyStruct = object({
-  content: nonempty(string()),
+export const CreateCommentBodyStruct = s.object({
+  content: s.size(s.string(), 2, 200),
 });
 
 export const GetCommentListParamsStruct = CursorParamsStruct;
 
-export const UpdateCommentBodyStruct = partial(CreateCommentBodyStruct);
+export const UpdateCommentBodyStruct = s.partial(CreateCommentBodyStruct);

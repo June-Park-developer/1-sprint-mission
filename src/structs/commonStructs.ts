@@ -1,6 +1,23 @@
-import { coerce, integer, object, string, defaulted, optional, enums, nonempty } from 'superstruct';
+import {
+  coerce,
+  integer,
+  object,
+  string,
+  defaulted,
+  optional,
+  enums,
+  nonempty,
+  size,
+  refine,
+} from 'superstruct';
 
-/** Convert string to integer then validate it */
+const positiveInteger = refine(integer(), 'PositiveInteger', (value) => value >= 1);
+const positiveOrZeroInteger = refine(integer(), 'PositiveInteger', (value) => value >= 0);
+
+const positiveIntegerString = coerce(positiveInteger, string(), (value) => parseInt(value));
+const positiveOrZeroIntegerString = coerce(positiveOrZeroInteger, string(), (value) =>
+  parseInt(value),
+);
 const integerString = coerce(integer(), string(), (value) => parseInt(value));
 
 export const IdParamsStruct = object({
@@ -8,21 +25,21 @@ export const IdParamsStruct = object({
 });
 
 export const PageParamsStruct = object({
-  page: defaulted(integerString, 1),
-  pageSize: defaulted(integerString, 10),
+  page: defaulted(positiveIntegerString, 1),
+  pageSize: defaulted(positiveIntegerString, 10),
   orderBy: optional(enums(['recent'])),
-  keyword: optional(nonempty(string())),
+  keyword: optional(size(string(), 2, 20)),
 });
 
 export const PageParamsWithoutKeywordStruct = object({
-  page: defaulted(integerString, 1),
-  pageSize: defaulted(integerString, 10),
+  page: defaulted(positiveIntegerString, 1),
+  pageSize: defaulted(positiveIntegerString, 10),
   orderBy: optional(enums(['recent'])),
 });
 
 export const CursorParamsStruct = object({
-  cursor: defaulted(integerString, 0),
-  limit: defaulted(integerString, 10),
+  cursor: defaulted(positiveOrZeroIntegerString, 0),
+  limit: defaulted(positiveIntegerString, 10),
   orderBy: optional(enums(['recent'])),
   keyword: optional(nonempty(string())),
 });

@@ -1,23 +1,12 @@
-import {
-  coerce,
-  partial,
-  object,
-  string,
-  min,
-  nonempty,
-  array,
-  integer,
-  optional,
-  number,
-} from 'superstruct';
+import { coerce, partial, object, string, min, array, integer, size } from 'superstruct';
 import { PageParamsStruct, PageParamsWithoutKeywordStruct } from './commonStructs';
 
 export const CreateProductBodyStruct = object({
-  name: coerce(nonempty(string()), string(), (value) => value.trim()),
-  description: nonempty(string()),
+  name: coerce(size(string(), 2, 20), string(), (value) => value.trim()),
+  description: size(string(), 2, 500),
   price: min(integer(), 0),
-  tags: array(nonempty(string())),
-  images: array(nonempty(string())),
+  tags: array(size(string(), 1, 20)),
+  images: array(size(string(), 1, 100)),
 });
 
 export const GetProductListParamsStruct = PageParamsStruct;
