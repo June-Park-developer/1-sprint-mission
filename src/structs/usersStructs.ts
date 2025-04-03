@@ -1,8 +1,10 @@
 import * as s from 'superstruct';
-import isEmail from 'is-email';
 import { PageParamsWithoutKeywordStruct } from './commonStructs';
 
-const Email = s.refine(s.string(), 'email', (value) => isEmail(value));
+const Email = s.define<string>(
+  'Email',
+  (value) => typeof value === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+);
 
 export const CreateUserBodyStruct = s.object({
   email: Email,
@@ -22,7 +24,11 @@ const PatchMyInfoBody = s.object({
   image: s.string(),
 });
 
-export const PatchMyInfoBodyStruct = s.partial(PatchMyInfoBody);
+export const PatchMyInfoBodyStruct = s.object({
+  email: s.optional(Email),
+  nickname: s.optional(s.size(s.string(), 2, 20)),
+  image: s.optional(s.string()),
+});
 
 export const PatchMyPasswordStruct = s.object({
   password: s.size(s.string(), 6, 20),
