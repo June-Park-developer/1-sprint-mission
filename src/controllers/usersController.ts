@@ -36,7 +36,13 @@ export const loginUser: RequestHandler = async (req, res) => {
     sameSite: 'none',
     secure: true,
   });
-  res.json({ accessToken });
+  res.cookie('accessToken', accessToken, {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
+  res.json({ message: 'Log In Success' });
 };
 
 export const getMyInfo: RequestHandler = async (req, res) => {
@@ -75,7 +81,13 @@ export const refreshToken: RequestHandler = async (req, res) => {
     sameSite: 'none',
     secure: true,
   });
-  res.json({ accessToken });
+  res.cookie('accessToken', accessToken, {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
+  res.json({ message: 'Tokens successfully refreshed' });
 };
 
 export const getMyProductList: RequestHandler = async (req, res) => {

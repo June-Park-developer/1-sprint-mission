@@ -5,48 +5,46 @@ import {
   GetArticleListDTO,
   ArticleListResponseDTO,
   LikeArticleDTO,
+  GetArticleDTO,
+  DeleteArticleDTO,
 } from '../DTO/articlesDTO';
 import articlesRepository from '../repositories/articlesRepository';
 import likedArtriclesRepository from '../repositories/likedArticlesRepository';
-import { Article } from '../typings/articleTypes';
 import NotFoundError from '../lib/errors/NotFoundError';
 import likedArticlesRepository from '../repositories/likedArticlesRepository';
 
-const toArticleResponseDTO = (article: Article, isLiked: boolean = false): ArticleResponseDTO => ({
-  id: article.id,
-  title: article.title,
-  content: article.content,
-  image: article.image,
-  authorId: article.authorId,
-  createdAt: article.createdAt,
-  updatedAt: article.updatedAt,
-  isLiked,
-});
-
-const createArticle = async (articleData: CreateArticleDTO) => {
-  const createdArticle = await articlesRepository.create(articleData);
-  return toArticleResponseDTO(createdArticle);
+const createArticle = async (dto: CreateArticleDTO) => {
+  const createdArticle = await articlesRepository.create(dto);
+  const article = new ArticleResponseDTO(createdArticle);
+  return article;
 };
 
-const getArticle = async (articleId: number, userId?: number) => {
+const getArticle = async (dto: GetArticleDTO) => {
+  const { articleId, userId } = dto;
   const article = await articlesRepository.getById(articleId);
   if (!article) {
     throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
-  const isLiked = userId ? !!(await likedArtriclesRepository.getLike(userId, articleId)) : false;
-  return toArticleResponseDTO(article, isLiked);
+  if (userId) {
+    const isLiked = !!(await likedArticlesRepository.getLike(userId, articleId));
+    return new ArticleResponseDTO(article, isLiked);
+  } else {
+    return new ArticleResponseDTO(article);
+  }
 };
 
-const updateArticle = async (articleId: number, updateData: UpdateArticleDTO) => {
-  const article = await articlesRepository.update(articleId, updateData);
+const updateArticle = async (dto: UpdateArticleDTO) => {
+  const { articleId, userId, ...articleData } = dto;
+  const article = await articlesRepository.update(articleId, articleData);
   if (!article) {
     throw new NotFoundError(`Article with id ${articleId} is not found`);
   }
-  const responseArticle = toArticleResponseDTO(article);
-  return responseArticle;
+  const isLiked = !!(await likedArticlesRepository.getLike(userId, articleId));
+  return new ArticleResponseDTO(article, isLiked);
 };
 
-const deleteArticle = async (articleId: number) => {
+const deleteArticle = async (dto: DeleteArticleDTO) => {
+  const { articleId } = dto;
   const existingArticle = await articlesRepository.getById(articleId);
   if (!existingArticle) {
     throw new NotFoundError(`Article with id ${articleId} is not found`);
@@ -54,7 +52,8 @@ const deleteArticle = async (articleId: number) => {
   await articlesRepository.deleteById(articleId);
 };
 
-const getArticleList = async (params: GetArticleListDTO, userId?: number) => {
+const getArticleList = async (dto: GetArticleListDTO) => {
+  const { userId, ...params } = dto;
   const totalCount = await articlesRepository.countByKeyword(params.keyword);
   const articles = await articlesRepository.getArticleList(params);
 
@@ -62,14 +61,13 @@ const getArticleList = async (params: GetArticleListDTO, userId?: number) => {
     articles.map(async (article) => {
       if (userId) {
         const liked = await likedArtriclesRepository.getLike(userId, article.id);
-        return toArticleResponseDTO(article, !!liked);
+        return new ArticleResponseDTO(article, !!liked);
       }
-      return toArticleResponseDTO(article);
+      return new ArticleResponseDTO(article);
     }),
   );
 
-  const response: ArticleListResponseDTO = { list, totalCount };
-  return response;
+  return new ArticleListResponseDTO(list, totalCount);
 };
 
 const likeArticle = async (dto: LikeArticleDTO) => {

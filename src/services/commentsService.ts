@@ -10,8 +10,7 @@ import {
 import commentsRepository from '../repositories/commentsRepository';
 import productsRepository from '../repositories/productsRepository';
 import articlesRepository from '../repositories/articlesRepository';
-import { Comment, CreateCommentInput } from '../typings/commentTypes';
-import { EntityType } from '../typings/EnumTypes';
+import { CreateCommentInput } from '../typings/commentTypes';
 import NotFoundError from '../lib/errors/NotFoundError';
 
 const createComment = async (dto: CreateCommentDTO) => {
@@ -26,12 +25,12 @@ const createComment = async (dto: CreateCommentDTO) => {
     throw new NotFoundError(`The ${entityName} with id ${articleId || productId} is not found`);
   }
   const data: CreateCommentInput = { articleId, productId, content, authorId };
-  const comment: CommentResponseDTO = await commentsRepository.create(data);
-  return comment;
+  const comment = await commentsRepository.create(data);
+  return new CommentResponseDTO(comment);
 };
 
 const getCommentsForArticle = async (dto: GetCommentsForArticleDTO) => {
-  const { articleId, cursor, limit } = dto;
+  const { articleId, cursor, limit = 10 } = dto;
   const existingArticle = await articlesRepository.getById(articleId);
   if (!existingArticle) {
     throw new NotFoundError(`Article with id ${articleId} is not found`);
@@ -42,14 +41,13 @@ const getCommentsForArticle = async (dto: GetCommentsForArticleDTO) => {
     cursor,
   );
   const list = commentsWithCursor.slice(0, limit);
-  const cursorComment = commentsWithCursor[commentsWithCursor.length - 1];
+  const cursorComment = commentsWithCursor[limit - 1];
   const nextCursor = cursorComment ? cursorComment.id : null;
-  const commentsResponse: CommentListResponseDTO = { list, nextCursor };
-  return commentsResponse;
+  return new CommentListResponseDTO(list, nextCursor);
 };
 
 const getCommentsForProduct = async (dto: GetCommentsForProductDTO) => {
-  const { productId, cursor, limit } = dto;
+  const { productId, cursor, limit = 10 } = dto;
   const existingProduct = await productsRepository.getById(productId);
   if (!existingProduct) {
     throw new NotFoundError(`Article with id ${productId} is not found`);
@@ -60,10 +58,9 @@ const getCommentsForProduct = async (dto: GetCommentsForProductDTO) => {
     cursor,
   );
   const list = commentsWithCursor.slice(0, limit);
-  const cursorComment = commentsWithCursor[commentsWithCursor.length - 1];
+  const cursorComment = commentsWithCursor[limit - 1];
   const nextCursor = cursorComment ? cursorComment.id : null;
-  const commentsResponse: CommentListResponseDTO = { list, nextCursor };
-  return commentsResponse;
+  return new CommentListResponseDTO(list, nextCursor);
 };
 
 const updateComment = async (dto: UpdateCommentDTO) => {

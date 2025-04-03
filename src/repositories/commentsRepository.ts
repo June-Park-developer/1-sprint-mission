@@ -1,6 +1,5 @@
 import { prismaClient } from '../lib/prismaClient';
 import { CreateCommentInput } from '../typings/commentTypes';
-import { Prisma } from '@prisma/client';
 
 async function getById(id: number) {
   return await prismaClient.comment.findUnique({ where: { id } });

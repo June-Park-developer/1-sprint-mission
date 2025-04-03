@@ -5,11 +5,9 @@ import jwt from 'jsonwebtoken';
 import {
   CreateUserDTO,
   GetMyInfoDTO,
-  GetMyProductListDTO,
   LoginUserDTO,
   PatchMyInfoDTO,
   PatchMyPasswordDTO,
-  ProductListResponseDTO,
   RefreshTokenDTO,
   TokenResponseDTO,
   UserResponseDTO,
@@ -18,29 +16,9 @@ import usersRepository from '../repositories/usersRepository';
 import ConflictError from '../lib/errors/ConflictError';
 import NotFoundError from '../lib/errors/NotFoundError';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
-import productsRepository from '../repositories/productsRepository';
-
-// Functions
-async function hashPassword(password: string) {
-  return await bcrypt.hash(password, 10);
-}
-
-function filterSensitiveUserData(user: User) {
-  const { password, refreshToken, ...rest } = user;
-  return rest;
-}
-
-function createToken(user: User, type?: string) {
-  const payload = { userId: user.id };
-  const options = {
-    expiresIn: type === 'refresh' ? '2w' : '1h',
-    algorithm: 'HS256' as const,
-  };
-
-  return jwt.sign(payload, JWT_SECRET as jwt.Secret, options as jwt.SignOptions);
-}
-
-// Services
+import { hashPassword } from '../lib/auth/hash';
+import { filterSensitiveUserData } from '../lib/auth/filter';
+import { createToken } from '../lib/auth/jwt';
 
 const createUser = async (dto: CreateUserDTO) => {
   const { email, nickname, password: plainPassword } = dto;
@@ -107,6 +85,7 @@ const patchMyPassword = async (dto: PatchMyPasswordDTO) => {
 const refreshToken = async (dto: RefreshTokenDTO) => {
   const { userId, refreshToken } = dto;
   const user = await usersRepository.getById(userId);
+
   if (!user || user.refreshToken !== refreshToken) {
     throw new UnauthorizedError('Unauthorized');
   }

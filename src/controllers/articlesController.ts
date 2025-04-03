@@ -1,5 +1,4 @@
 import { create } from 'superstruct';
-import NotFoundError from '../lib/errors/NotFoundError';
 import { IdParamsStruct } from '../structs/commonStructs';
 import {
   CreateArticleBodyStruct,
@@ -7,12 +6,12 @@ import {
   GetArticleListParamsStruct,
 } from '../structs/articlesStructs';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
-import likedArticlesRepository from '../repositories/likedArticlesRepository';
-import ConflictError from '../lib/errors/ConflictError';
 import { RequestHandler } from 'express';
 import articlesService from '../services/articlesService';
 import {
   CreateArticleDTO,
+  DeleteArticleDTO,
+  GetArticleDTO,
   GetArticleListDTO,
   LikeArticleDTO,
   UpdateArticleDTO,
@@ -21,47 +20,63 @@ import commentsService from '../services/commentsService';
 import { EntityType } from '../typings/EnumTypes';
 import { CreateCommentDTO, GetCommentsForArticleDTO } from '../DTO/commentsDTO';
 
-// Article
 export const createArticle: RequestHandler = async (req, res) => {
-  const parsed = create(req.body, CreateArticleBodyStruct);
+  const { title, content, image } = create(req.body, CreateArticleBodyStruct);
   const { userId } = req.user!;
-  const articleData: CreateArticleDTO = {
-    ...parsed,
+  const dto: CreateArticleDTO = {
+    title,
+    content,
+    image,
     authorId: userId,
   };
-  const article = await articlesService.createArticle(articleData);
+  const article = await articlesService.createArticle(dto);
   res.status(201).send(article);
 };
 
 export const getArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const userId = req.user?.userId;
-  const responseArticle = await articlesService.getArticle(articleId, userId);
+  const dto: GetArticleDTO = { articleId, userId };
+  const responseArticle = await articlesService.getArticle(dto);
   res.json(responseArticle);
 };
 
 export const updateArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
-  const updateData: UpdateArticleDTO = create(req.body, UpdateArticleBodyStruct);
-
-  const responseArticle = await articlesService.updateArticle(articleId, updateData);
+  const userId = req.user!.userId;
+  const articleData = create(req.body, UpdateArticleBodyStruct);
+  const dto: UpdateArticleDTO = { articleId, userId, ...articleData };
+  const responseArticle = await articlesService.updateArticle(dto);
   res.json(responseArticle);
 };
 
 export const deleteArticle: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
-  await articlesService.deleteArticle(articleId);
+  const dto: DeleteArticleDTO = { articleId };
+  await articlesService.deleteArticle(dto);
   res.status(204).send();
 };
 
 export const getArticleList: RequestHandler = async (req, res) => {
   const userId = req.user?.userId;
-  const params: GetArticleListDTO = create(req.query, GetArticleListParamsStruct);
-  const responseArticles = await articlesService.getArticleList(params, userId);
+  const params = create(req.query, GetArticleListParamsStruct);
+  const dto: GetArticleListDTO = { userId, ...params };
+  const responseArticles = await articlesService.getArticleList(dto);
   res.json(responseArticles);
 };
 
-// Comment
+export const likeArticle: RequestHandler = async (req, res) => {
+  const { userId } = req.user!;
+  const { id: articleId } = create(req.params, IdParamsStruct);
+  const dto: LikeArticleDTO = { userId, articleId };
+  const isLiked = await articlesService.likeArticle(dto);
+  if (isLiked) {
+    res.status(201).json({ message: 'Article liked successfully' });
+  } else {
+    res.status(204).json({ message: 'Article unliked successfuly' });
+  }
+};
+
 export const createComment: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
@@ -82,17 +97,4 @@ export const getCommentList: RequestHandler = async (req, res) => {
   const dto: GetCommentsForArticleDTO = { articleId, cursor, limit };
   const commentsResponse = await commentsService.getCommentsForArticle(dto);
   res.json(commentsResponse);
-};
-
-// Like, Unlike
-export const likeArticle: RequestHandler = async (req, res) => {
-  const { userId } = req.user!;
-  const { id: articleId } = create(req.params, IdParamsStruct);
-  const dto: LikeArticleDTO = { userId, articleId };
-  const isLiked = await articlesService.likeArticle(dto);
-  if (isLiked) {
-    res.status(201).json({ message: 'Article liked successfully' });
-  } else {
-    res.status(204).json({ message: 'Article unliked successfuly' });
-  }
 };

@@ -1,12 +1,12 @@
 import { expressjwt } from 'express-jwt';
 import { JWT_SECRET } from '../lib/constants';
-import { RequestHandler } from 'express';
-import { Jwt, Secret } from 'jsonwebtoken';
+import { Secret } from 'jsonwebtoken';
 
 export const verifyAccessToken = expressjwt({
   secret: JWT_SECRET as Secret,
   algorithms: ['HS256'],
   requestProperty: 'user',
+  getToken: (req) => req.cookies.accessToken,
 });
 
 export const optionalAccessToken = expressjwt({
@@ -14,6 +14,7 @@ export const optionalAccessToken = expressjwt({
   algorithms: ['HS256'],
   credentialsRequired: false,
   requestProperty: 'user',
+  getToken: (req) => req.cookies.accessToken,
 });
 
 export const verifyRefreshToken = expressjwt({

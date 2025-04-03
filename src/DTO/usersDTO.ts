@@ -1,6 +1,5 @@
 import { ProductResponseDTO } from './productsDTO';
 
-// Request
 export interface CreateUserDTO {
   email: string;
   nickname: string;
@@ -33,21 +32,6 @@ export interface RefreshTokenDTO {
   userId: number;
 }
 
-export interface GetMyProductListDTO {
-  authorId: number;
-  page: number;
-  pageSize: number;
-  orderBy?: 'recent' | undefined;
-}
-
-export interface GetMyLikedProductListDTO {
-  userId: number;
-  page: number;
-  pageSize: number;
-  orderBy?: 'recent' | undefined;
-}
-
-// Response
 export interface UserResponseDTO {
   id: number;
   email: string;

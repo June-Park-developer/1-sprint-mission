@@ -8,7 +8,7 @@ import productsRouter from './routers/productsRouter';
 import commentsRouter from './routers/commentsRouter';
 import imagesRouter from './routers/imagesRouter';
 import usersRouter from './routers/usersRouter';
-import { defaultNotFoundHandler, globalErrorHandler } from './controllers/errorController';
+import { defaultNotFoundHandler, globalErrorHandler } from './middlewares/errorHandler';
 
 const app = express();
 

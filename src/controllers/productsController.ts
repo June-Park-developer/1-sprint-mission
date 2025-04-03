@@ -1,52 +1,57 @@
 import { create } from 'superstruct';
-import NotFoundError from '../lib/errors/NotFoundError';
-import ConflictError from '../lib/errors/ConflictError';
 import { IdParamsStruct } from '../structs/commonStructs';
 import {
   CreateProductBodyStruct,
-  GetMyProductsParamsStruct,
   GetProductListParamsStruct,
   UpdateProductBodyStruct,
 } from '../structs/productsStruct';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
-import productsRepository from '../repositories/productsRepository';
-import commentsRepository from '../repositories/commentsRepository';
-import likedProductsRepository from '../repositories/likedProductsRepository';
 import { RequestHandler } from 'express';
-import { CreateProductDTO, GetProductListDTO, LikeProductDTO } from '../DTO/productsDTO';
+import {
+  CreateProductDTO,
+  DeleteProductDTO,
+  GetProductDTO,
+  GetProductListDTO,
+  LikeProductDTO,
+  UpdateProductDTO,
+} from '../DTO/productsDTO';
 import productsService from '../services/productsService';
 import { CreateCommentDTO, GetCommentsForProductDTO } from '../DTO/commentsDTO';
 import { EntityType } from '../typings/EnumTypes';
 import commentsService from '../services/commentsService';
 
 export const createProduct: RequestHandler = async (req, res) => {
-  const parsed = create(req.body, CreateProductBodyStruct);
+  const productData = create(req.body, CreateProductBodyStruct);
   const { userId } = req.user!;
-  const productData: CreateProductDTO = {
-    ...parsed,
+  const dto: CreateProductDTO = {
+    ...productData,
     authorId: userId,
   };
-  const responseProduct = await productsService.createProduct(productData);
+  const responseProduct = await productsService.createProduct(dto);
   res.status(201).json(responseProduct);
 };
 
 export const getProduct: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
   const userId = req.user?.userId;
-  const responseProduct = await productsService.getProduct(productId, userId);
+  const dto: GetProductDTO = { productId, userId };
+  const responseProduct = await productsService.getProduct(dto);
   res.json(responseProduct);
 };
 
 export const updateProduct: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
+  const userId = req.user!.userId;
   const productData = create(req.body, UpdateProductBodyStruct);
-  const responseProduct = await productsService.updateProduct(productId, productData);
+  const dto: UpdateProductDTO = { productId, userId, ...productData };
+  const responseProduct = await productsService.updateProduct(dto);
   res.send(responseProduct);
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
-  await productsService.deleteProduct(productId);
+  const dto: DeleteProductDTO = { productId };
+  await productsService.deleteProduct(dto);
   res.status(204).send();
 };
 
@@ -58,7 +63,18 @@ export const getProductList: RequestHandler = async (req, res) => {
   res.send(productList);
 };
 
-// Comment
+export const likeProduct: RequestHandler = async (req, res) => {
+  const { userId } = req.user!;
+  const { id: productId } = create(req.params, IdParamsStruct);
+  const dto: LikeProductDTO = { userId, productId };
+  const isLiked = await productsService.likeProduct(dto);
+  if (isLiked) {
+    res.status(201).json({ message: 'Product liked successfully' });
+  } else {
+    res.status(204).json({ message: 'Product unliked successfuly' });
+  }
+};
+
 export const createComment: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
@@ -79,17 +95,4 @@ export const getCommentList: RequestHandler = async (req, res) => {
   const dto: GetCommentsForProductDTO = { productId, cursor, limit };
   const commentsResponse = await commentsService.getCommentsForProduct(dto);
   res.send(commentsResponse);
-};
-
-// Like, Unlike
-export const likeProduct: RequestHandler = async (req, res) => {
-  const { userId } = req.user!;
-  const { id: productId } = create(req.params, IdParamsStruct);
-  const dto: LikeProductDTO = { userId, productId };
-  const isLiked = await productsService.likeProduct(dto);
-  if (isLiked) {
-    res.status(201).json({ message: 'Product liked successfully' });
-  } else {
-    res.status(204).json({ message: 'Product unliked successfuly' });
-  }
 };

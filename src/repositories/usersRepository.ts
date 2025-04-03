@@ -1,5 +1,5 @@
 import { prismaClient } from '../lib/prismaClient';
-import { CreateUserInput, UpdateUserInput } from '../typings/userTypes';
+import { UpdateUserInput } from '../typings/userTypes';
 import { Prisma } from '@prisma/client';
 
 async function getByEmail(email: string) {
