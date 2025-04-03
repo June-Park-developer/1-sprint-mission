@@ -5,9 +5,11 @@ import jwt from 'jsonwebtoken';
 import {
   CreateUserDTO,
   GetMyInfoDTO,
+  GetMyProductListDTO,
   LoginUserDTO,
   PatchMyInfoDTO,
   PatchMyPasswordDTO,
+  ProductListResponseDTO,
   RefreshTokenDTO,
   TokenResponseDTO,
   UserResponseDTO,
@@ -16,6 +18,7 @@ import usersRepository from '../repositories/usersRepository';
 import ConflictError from '../lib/errors/ConflictError';
 import NotFoundError from '../lib/errors/NotFoundError';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
+import productsRepository from '../repositories/productsRepository';
 
 // Functions
 async function hashPassword(password: string) {
@@ -116,4 +119,5 @@ const refreshToken = async (dto: RefreshTokenDTO) => {
   };
   return tokenResponse;
 };
+
 export default { createUser, loginUser, getMyInfo, patchMyInfo, patchMyPassword, refreshToken };

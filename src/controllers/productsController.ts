@@ -13,7 +13,7 @@ import productsRepository from '../repositories/productsRepository';
 import commentsRepository from '../repositories/commentsRepository';
 import likedProductsRepository from '../repositories/likedProductsRepository';
 import { RequestHandler } from 'express';
-import { CreateProductDTO } from '../DTO/productsDTO';
+import { CreateProductDTO, GetProductListDTO, LikeProductDTO } from '../DTO/productsDTO';
 import productsService from '../services/productsService';
 import { CreateCommentDTO, GetCommentsForProductDTO } from '../DTO/commentsDTO';
 import { EntityType } from '../typings/EnumTypes';
@@ -52,30 +52,10 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 
 export const getProductList: RequestHandler = async (req, res) => {
   const { page, pageSize, orderBy, keyword } = create(req.query, GetProductListParamsStruct);
-
-  const totalCount = await productsRepository.countByKeyword(keyword);
-  const products = await productsRepository.getProductList({ page, pageSize, orderBy, keyword });
-
-  res.send({
-    list: products,
-    totalCount,
-  });
-};
-
-export const getMyProductList: RequestHandler = async (req, res) => {
-  const { userId: authorId } = req.user!;
-  const { page, pageSize, orderBy } = create(req.query, GetMyProductsParamsStruct);
-  const totalCount = await productsRepository.countByAuthorId(authorId);
-  const products = await productsRepository.getMyProductList({
-    authorId,
-    page,
-    pageSize,
-    orderBy,
-  });
-  res.send({
-    list: products,
-    totalCount,
-  });
+  const userId = req.user?.userId;
+  const dto: GetProductListDTO = { userId, page, pageSize, orderBy, keyword };
+  const productList = await productsService.getProductList(dto);
+  res.send(productList);
 };
 
 // Comment
@@ -105,21 +85,11 @@ export const getCommentList: RequestHandler = async (req, res) => {
 export const likeProduct: RequestHandler = async (req, res) => {
   const { userId } = req.user!;
   const { id: productId } = create(req.params, IdParamsStruct);
-  const existingLikedProduct = await likedProductsRepository.getLike(userId, productId);
-  if (existingLikedProduct) {
-    throw new ConflictError('like');
+  const dto: LikeProductDTO = { userId, productId };
+  const isLiked = await productsService.likeProduct(dto);
+  if (isLiked) {
+    res.status(201).json({ message: 'Product liked successfully' });
+  } else {
+    res.status(204).json({ message: 'Product unliked successfuly' });
   }
-  await likedProductsRepository.createLike(userId, productId);
-  res.status(201).json({ message: 'Product liked successfully' });
-};
-
-export const unlikeProduct: RequestHandler = async (req, res) => {
-  const { userId } = req.user!;
-  const { id: productId } = create(req.params, IdParamsStruct);
-  const existingLikedProduct = await likedProductsRepository.getLike(userId, productId);
-  if (!existingLikedProduct) {
-    throw new NotFoundError(`This product is not liked by user ${userId}`);
-  }
-  await likedProductsRepository.deleteLike(userId, productId);
-  res.status(204).json({ message: 'Product unliked successfully' });
 };

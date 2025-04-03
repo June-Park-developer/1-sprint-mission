@@ -6,18 +6,21 @@ import {
   UpdateArticleBodyStruct,
   GetArticleListParamsStruct,
 } from '../structs/articlesStructs';
-import commentsRepository from '../repositories/commentsRepository';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
-import articlesRepository from '../repositories/articlesRepository';
-import likedArticlesRepository from '../repositories/likedArtriclesRepository';
+import likedArticlesRepository from '../repositories/likedArticlesRepository';
 import ConflictError from '../lib/errors/ConflictError';
 import { RequestHandler } from 'express';
 import articlesService from '../services/articlesService';
-import { CreateArticleDTO, GetArticleListDTO, UpdateArticleDTO } from '../DTO/articlesDTO';
-import { CreateCommentInput } from '../typings/commentTypes';
+import {
+  CreateArticleDTO,
+  GetArticleListDTO,
+  LikeArticleDTO,
+  UpdateArticleDTO,
+} from '../DTO/articlesDTO';
 import commentsService from '../services/commentsService';
 import { EntityType } from '../typings/EnumTypes';
 import { CreateCommentDTO, GetCommentsForArticleDTO } from '../DTO/commentsDTO';
+
 // Article
 export const createArticle: RequestHandler = async (req, res) => {
   const parsed = create(req.body, CreateArticleBodyStruct);
@@ -85,21 +88,11 @@ export const getCommentList: RequestHandler = async (req, res) => {
 export const likeArticle: RequestHandler = async (req, res) => {
   const { userId } = req.user!;
   const { id: articleId } = create(req.params, IdParamsStruct);
-  const existingLikedArticle = await likedArticlesRepository.getLike(userId, articleId);
-  if (existingLikedArticle) {
-    throw new ConflictError('like');
+  const dto: LikeArticleDTO = { userId, articleId };
+  const isLiked = await articlesService.likeArticle(dto);
+  if (isLiked) {
+    res.status(201).json({ message: 'Article liked successfully' });
+  } else {
+    res.status(204).json({ message: 'Article unliked successfuly' });
   }
-  await likedArticlesRepository.createLike(userId, articleId);
-  res.status(201).json({ message: 'Article liked successfully' });
-};
-
-export const unlikeArticle: RequestHandler = async (req, res) => {
-  const { userId } = req.user!;
-  const { id: articleId } = create(req.params, IdParamsStruct);
-  const existingLikedArticle = await likedArticlesRepository.getLike(userId, articleId);
-  if (!existingLikedArticle) {
-    throw new NotFoundError(`This article is not liked by user ${userId}`);
-  }
-  await likedArticlesRepository.deleteLike(userId, articleId);
-  res.status(204).json({ message: 'Article unliked successfuly' });
 };

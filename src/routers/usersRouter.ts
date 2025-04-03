@@ -7,9 +7,9 @@ import {
   patchMyInfo,
   patchMyPassword,
   refreshToken,
-  getLikedProductList,
+  getMyLikedProductList,
+  getMyProductList,
 } from '../controllers/usersController';
-import { getMyProductList } from '../controllers/productsController';
 import { verifyAccessToken, verifyRefreshToken } from '../middlewares/verifyToken';
 
 const usersRouter = express.Router();
@@ -21,6 +21,6 @@ usersRouter.patch('/me', verifyAccessToken, withAsync(patchMyInfo));
 usersRouter.patch('/me/password', verifyAccessToken, withAsync(patchMyPassword));
 usersRouter.get('/me/products', verifyAccessToken, withAsync(getMyProductList));
 usersRouter.post('/token/refresh', verifyRefreshToken, withAsync(refreshToken));
-usersRouter.get('/liked-products', verifyAccessToken, withAsync(getLikedProductList));
+usersRouter.get('/me/liked-products', verifyAccessToken, withAsync(getMyLikedProductList));
 
 export default usersRouter;

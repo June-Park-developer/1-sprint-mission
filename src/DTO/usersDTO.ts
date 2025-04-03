@@ -1,3 +1,5 @@
+import { ProductResponseDTO } from './productsDTO';
+
 // Request
 export interface CreateUserDTO {
   email: string;
@@ -31,6 +33,20 @@ export interface RefreshTokenDTO {
   userId: number;
 }
 
+export interface GetMyProductListDTO {
+  authorId: number;
+  page: number;
+  pageSize: number;
+  orderBy?: 'recent' | undefined;
+}
+
+export interface GetMyLikedProductListDTO {
+  userId: number;
+  page: number;
+  pageSize: number;
+  orderBy?: 'recent' | undefined;
+}
+
 // Response
 export interface UserResponseDTO {
   id: number;
@@ -44,4 +60,9 @@ export interface UserResponseDTO {
 export interface TokenResponseDTO {
   refreshToken: string;
   accessToken: string;
+}
+
+export interface ProductListResponseDTO {
+  list: ProductResponseDTO[];
+  totalCount: number;
 }

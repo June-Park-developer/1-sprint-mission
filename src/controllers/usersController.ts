@@ -1,12 +1,4 @@
 import { create } from 'superstruct';
-import NotFoundError from '../lib/errors/NotFoundError';
-import ConflictError from '../lib/errors/ConflictError';
-import UnauthorizedError from '../lib/errors/UnauthorizedError';
-import {} from '../structs/commonStructs';
-import {} from '../structs/usersStructs';
-import usersRepository from '../repositories/usersRepository';
-import likedProductsRepository from '../repositories/likedProductsRepository';
-import bcrypt from 'bcrypt';
 import {
   CreateUserBodyStruct,
   LoginUserBodyStruct,
@@ -14,10 +6,7 @@ import {
   PatchMyPasswordStruct,
   GetLikedProductListParamsStruct,
 } from '../structs/usersStructs';
-import jwt, { PrivateKey, Secret } from 'jsonwebtoken';
-import { JWT_SECRET } from '../lib/constants';
 import { RequestHandler } from 'express';
-import { User } from '@prisma/client';
 import {
   CreateUserDTO,
   GetMyInfoDTO,
@@ -26,6 +15,9 @@ import {
   UserResponseDTO,
 } from '../DTO/usersDTO';
 import usersService from '../services/usersService';
+import { GetMyProductsParamsStruct } from '../structs/productsStruct';
+import productsService from '../services/productsService';
+import { GetMyLikedProductListDTO } from '../DTO/productsDTO';
 
 export const createUser: RequestHandler = async (req, res) => {
   const { email, nickname, password } = create(req.body, CreateUserBodyStruct); // To-do : usersStructs
@@ -34,7 +26,6 @@ export const createUser: RequestHandler = async (req, res) => {
   res.status(201).send(user);
 };
 
-// 토큰 기반 로그인
 export const loginUser: RequestHandler = async (req, res) => {
   const { email, password } = create(req.body, LoginUserBodyStruct);
   const dto: LoginUserDTO = { email, password };
@@ -48,7 +39,6 @@ export const loginUser: RequestHandler = async (req, res) => {
   res.json({ accessToken });
 };
 
-// 나의 정보 조회
 export const getMyInfo: RequestHandler = async (req, res) => {
   const { userId } = req.user!;
   const dto: GetMyInfoDTO = { userId };
@@ -56,7 +46,6 @@ export const getMyInfo: RequestHandler = async (req, res) => {
   res.json(user);
 };
 
-// 나의 정보 수정
 export const patchMyInfo: RequestHandler = async (req, res) => {
   const { email, nickname, image } = create(req.body, PatchMyInfoBodyStruct);
   const { userId } = req.user!;
@@ -65,7 +54,6 @@ export const patchMyInfo: RequestHandler = async (req, res) => {
   res.json(user);
 };
 
-// 나의 비밀번호 수정
 export const patchMyPassword: RequestHandler = async (req, res) => {
   const { password } = create(req.body, PatchMyPasswordStruct);
   const { userId } = req.user!;
@@ -76,7 +64,6 @@ export const patchMyPassword: RequestHandler = async (req, res) => {
   });
 };
 
-// Token Refresh : refreshToken 가져와서 검증을 한 다음에, 새로 createToken 한다음에 재발급
 export const refreshToken: RequestHandler = async (req, res) => {
   const { refreshToken } = req.cookies;
   const { userId } = req.auth!;
@@ -91,15 +78,18 @@ export const refreshToken: RequestHandler = async (req, res) => {
   res.json({ accessToken });
 };
 
-export const getLikedProductList: RequestHandler = async (req, res) => {
+export const getMyProductList: RequestHandler = async (req, res) => {
+  const { userId: authorId } = req.user!;
+  const { page, pageSize, orderBy } = create(req.query, GetMyProductsParamsStruct);
+  const dto = { authorId, page, pageSize, orderBy };
+  const productList = await productsService.getMyProductList(dto);
+  res.json(productList);
+};
+
+export const getMyLikedProductList: RequestHandler = async (req, res) => {
   const { userId } = req.user!;
   const { page, pageSize, orderBy } = create(req.query, GetLikedProductListParamsStruct);
-  const totalCount = await likedProductsRepository.countByUserId(userId);
-  const likedProducts = await likedProductsRepository.getLikedProductList({
-    userId,
-    page,
-    pageSize,
-    orderBy,
-  });
-  res.json({ list: likedProducts, totalCount });
+  const dto: GetMyLikedProductListDTO = { userId, page, pageSize, orderBy };
+  const productList = await productsService.getMyLikedProductList(dto);
+  res.json(productList);
 };

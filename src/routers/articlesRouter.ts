@@ -9,7 +9,6 @@ import {
   createComment,
   getCommentList,
   likeArticle,
-  unlikeArticle,
 } from '../controllers/articlesController';
 import { verifyAccessToken, optionalAccessToken } from '../middlewares/verifyToken';
 import { verifyArticleAuth } from '../middlewares/verifyAuth';
@@ -26,6 +25,5 @@ articlesRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment)
 articlesRouter.get('/:id/comments', withAsync(getCommentList));
 
 articlesRouter.post(`/:id/like`, verifyAccessToken, withAsync(likeArticle));
-articlesRouter.post(`/:id/unlike`, verifyAccessToken, withAsync(unlikeArticle));
 
 export default articlesRouter;

@@ -4,11 +4,13 @@ import {
   UpdateArticleDTO,
   GetArticleListDTO,
   ArticleListResponseDTO,
+  LikeArticleDTO,
 } from '../DTO/articlesDTO';
 import articlesRepository from '../repositories/articlesRepository';
-import likedArtriclesRepository from '../repositories/likedArtriclesRepository';
+import likedArtriclesRepository from '../repositories/likedArticlesRepository';
 import { Article } from '../typings/articleTypes';
 import NotFoundError from '../lib/errors/NotFoundError';
+import likedArticlesRepository from '../repositories/likedArticlesRepository';
 
 const toArticleResponseDTO = (article: Article, isLiked: boolean = false): ArticleResponseDTO => ({
   id: article.id,
@@ -70,4 +72,27 @@ const getArticleList = async (params: GetArticleListDTO, userId?: number) => {
   return response;
 };
 
-export default { createArticle, getArticle, updateArticle, deleteArticle, getArticleList };
+const likeArticle = async (dto: LikeArticleDTO) => {
+  const { userId, articleId } = dto;
+  const article = await articlesRepository.getById(articleId);
+  if (!article) {
+    throw new NotFoundError(`Article with id ${articleId} is not found`);
+  }
+  const existingLikedArticle = await likedArticlesRepository.getLike(userId, articleId);
+  if (existingLikedArticle) {
+    await likedArticlesRepository.deleteLike(userId, articleId);
+    return false;
+  } else {
+    await likedArticlesRepository.createLike(userId, articleId);
+    return true;
+  }
+};
+
+export default {
+  createArticle,
+  getArticle,
+  updateArticle,
+  deleteArticle,
+  getArticleList,
+  likeArticle,
+};

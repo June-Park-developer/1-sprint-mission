@@ -9,7 +9,6 @@ import {
   createComment,
   getCommentList,
   likeProduct,
-  unlikeProduct,
 } from '../controllers/productsController';
 import { verifyAccessToken, optionalAccessToken } from '../middlewares/verifyToken';
 import { verifyProductAuth } from '../middlewares/verifyAuth';
@@ -26,6 +25,5 @@ productsRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment)
 productsRouter.get('/:id/comments', withAsync(getCommentList));
 
 productsRouter.post(`/:id/like`, verifyAccessToken, withAsync(likeProduct));
-productsRouter.post(`/:id/unlike`, verifyAccessToken, withAsync(unlikeProduct));
 
 export default productsRouter;

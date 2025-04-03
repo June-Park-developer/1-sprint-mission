@@ -162,11 +162,11 @@ Content-Type: application/json
 
 ### 유저 자기 정보 확인 테스트
 GET http://localhost:3000/users/me
-Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY1MzI1MiwiZXhwIjoxNzQzNjU2ODUyfQ.aeyMrDNXWTlsqFFTEgqKt7YHhKRHDXhJAJAf9ucHVjg
 
 ### 유저 자기 정보 수정 테스트 
 PATCH http://localhost:3000/users/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY1MzI1MiwiZXhwIjoxNzQzNjU2ODUyfQ.aeyMrDNXWTlsqFFTEgqKt7YHhKRHDXhJAJAf9ucHVjg
 Content-Type: application/json
 
 {
@@ -176,7 +176,7 @@ Content-Type: application/json
 
 ### 유저 자기 비밀번호 수정 테스트
 PATCH http://localhost:3000/users/me/password
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg3NDY5MCwiZXhwIjoxNzQyODc4MjkwfQ.3pgsFWEDxoC8y_11DPULBOgJQ0cxvBa_2eRXQj4yrK8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY1MzI1MiwiZXhwIjoxNzQzNjU2ODUyfQ.aeyMrDNXWTlsqFFTEgqKt7YHhKRHDXhJAJAf9ucHVjg
 Content-Type: application/json
 
 {
@@ -184,25 +184,21 @@ Content-Type: application/json
 }
 
 ### 자기가 등록한 product List
-GET http://localhost:3000/users/me/products?page=1&pageSize=2&orderBy=recent
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
+GET http://localhost:3000/users/me/products?page=2&pageSize=2&orderBy=recent
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY1MzI1MiwiZXhwIjoxNzQzNjU2ODUyfQ.aeyMrDNXWTlsqFFTEgqKt7YHhKRHDXhJAJAf9ucHVjg
 
+### 자기가 like 한 productList
+GET http://localhost:3000/users/me/liked-products?page=1&pageSize=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY1MzI1MiwiZXhwIjoxNzQzNjU2ODUyfQ.aeyMrDNXWTlsqFFTEgqKt7YHhKRHDXhJAJAf9ucHVjg
 ### 토큰 재발급 
 POST http://localhost:3000/users/token/refresh
 Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg3NzUxNiwiZXhwIjoxNzQ0MDg3MTE2fQ.nD1RsYCuxGO22HkXqbAxbxqHDnyt0WvdPQTpvYByDqQ; Path=/users/token/refresh; HttpOnly; Secure; SameSite=None
 
-### Product Like 테스트
-POST http://localhost:3000/products/14/like
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
+### Product Like/Unlike 테스트
+POST http://localhost:3000/products/12/like
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY1MzI1MiwiZXhwIjoxNzQzNjU2ODUyfQ.aeyMrDNXWTlsqFFTEgqKt7YHhKRHDXhJAJAf9ucHVjg
 
-### Product Unlike 테스트
-POST http://localhost:3000/products/14/unlike
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzQzNTYzNiwiZXhwIjoxNzQzNDM5MjM2fQ.iVwVrAFAkiQvFcFK0Pp6WRE814E8EeNjH4LmCH8vQRU
-
-### Article Like 테스트
+### Article Like/Unlike 테스트
 POST http://localhost:3000/articles/8/like
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjk3MzE0NiwiZXhwIjoxNzQyOTc2NzQ2fQ.L9bF9Igv-MFXHXg73_9oRLzlTEFOesJHPgJfWKuZ-Pg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY1MzI1MiwiZXhwIjoxNzQzNjU2ODUyfQ.aeyMrDNXWTlsqFFTEgqKt7YHhKRHDXhJAJAf9ucHVjg
 
-### Article Unlike 테스트
-POST http://localhost:3000/articles/8/unlike
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjk3MzE0NiwiZXhwIjoxNzQyOTc2NzQ2fQ.L9bF9Igv-MFXHXg73_9oRLzlTEFOesJHPgJfWKuZ-Pg

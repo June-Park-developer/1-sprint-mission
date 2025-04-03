@@ -1,10 +1,8 @@
 import { prismaClient } from '../lib/prismaClient';
 import {
-  CreateProductInput,
   GetMyProductsParamsInput,
   GetProductListParamsInput,
   Product,
-  UpdateProductInput,
 } from '../typings/productTypes';
 import { Prisma } from '@prisma/client';
 

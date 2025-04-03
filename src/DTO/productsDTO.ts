@@ -17,10 +17,30 @@ export interface UpdateProductDTO {
 }
 
 export interface GetProductListDTO {
+  userId?: number;
   page: number;
   pageSize: number;
   orderBy?: 'recent' | undefined;
   keyword?: string | undefined;
+}
+
+export interface GetMyProductListDTO {
+  authorId: number;
+  page: number;
+  pageSize: number;
+  orderBy?: 'recent' | undefined;
+}
+
+export interface LikeProductDTO {
+  userId: number;
+  productId: number;
+}
+
+export interface GetMyLikedProductListDTO {
+  userId: number;
+  page: number;
+  pageSize: number;
+  orderBy?: 'recent' | undefined;
 }
 
 // Response

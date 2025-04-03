@@ -4,6 +4,9 @@ import {
   UpdateProductDTO,
   GetProductListDTO,
   ProductListResponseDTO,
+  LikeProductDTO,
+  GetMyProductListDTO,
+  GetMyLikedProductListDTO,
 } from '../DTO/productsDTO';
 import productsRepository from '../repositories/productsRepository';
 import likedProductsRepository from '../repositories/likedProductsRepository';
@@ -55,7 +58,8 @@ const deleteProduct = async (productId: number) => {
   await productsRepository.deleteById(productId);
 };
 
-const getProductList = async (params: GetProductListDTO, userId?: number) => {
+const getProductList = async (dto: GetProductListDTO) => {
+  const { userId, ...params } = dto;
   const totalCount = await productsRepository.countByKeyword(params.keyword);
   const products = await productsRepository.getProductList(params);
 
@@ -68,8 +72,66 @@ const getProductList = async (params: GetProductListDTO, userId?: number) => {
       return toProductResponseDTO(product);
     }),
   );
-  const response: ProductListResponseDTO = { list, totalCount };
-  return response;
+  const productList: ProductListResponseDTO = { list, totalCount };
+  return productList;
 };
 
-export default { createProduct, getProduct, updateProduct, deleteProduct, getProductList };
+const getMyProductList = async (dto: GetMyProductListDTO) => {
+  const { authorId, page, pageSize, orderBy } = dto;
+  const totalCount = await productsRepository.countByAuthorId(authorId);
+  const products = await productsRepository.getMyProductList({
+    authorId,
+    page,
+    pageSize,
+    orderBy,
+  });
+  const list = await Promise.all(
+    products.map(async (product) => {
+      const liked = await likedProductsRepository.getLike(authorId, product.id);
+      return toProductResponseDTO(product, !!liked);
+    }),
+  );
+  const productList: ProductListResponseDTO = { list, totalCount };
+  return productList;
+};
+
+const getMyLikedProductList = async (dto: GetMyLikedProductListDTO) => {
+  const { userId, page, pageSize, orderBy } = dto;
+  const totalCount = await likedProductsRepository.countByUserId(userId);
+  const likedProducts = await likedProductsRepository.getLikedProductList({
+    userId,
+    page,
+    pageSize,
+    orderBy,
+  });
+  const list = likedProducts.map((product) => toProductResponseDTO(product, true));
+  const productList: ProductListResponseDTO = { list, totalCount };
+  return productList;
+};
+
+const likeProduct = async (dto: LikeProductDTO) => {
+  const { userId, productId } = dto;
+  const product = await productsRepository.getById(productId);
+  if (!product) {
+    throw new NotFoundError(`Product with id ${productId} is not found`);
+  }
+  const existingLikedProduct = await likedProductsRepository.getLike(userId, productId);
+  if (existingLikedProduct) {
+    await likedProductsRepository.deleteLike(userId, productId);
+    return false;
+  } else {
+    await likedProductsRepository.createLike(userId, productId);
+    return true;
+  }
+};
+
+export default {
+  createProduct,
+  getProduct,
+  updateProduct,
+  deleteProduct,
+  getProductList,
+  getMyProductList,
+  getMyLikedProductList,
+  likeProduct,
+};

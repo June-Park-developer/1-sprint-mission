@@ -21,6 +21,11 @@ export interface GetArticleListDTO {
   keyword?: string | undefined;
 }
 
+export interface LikeArticleDTO {
+  userId: number;
+  articleId: number;
+}
+
 // Response
 export interface ArticleResponseDTO {
   id: number;
