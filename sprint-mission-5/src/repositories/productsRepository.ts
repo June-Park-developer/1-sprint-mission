@@ -6,28 +6,28 @@ import {
 } from '../typings/productTypes';
 import { Prisma } from '@prisma/client';
 
-async function create(data: Prisma.ProductUncheckedCreateInput) {
+export async function create(data: Prisma.ProductUncheckedCreateInput): Promise<Product> {
   return await prismaClient.product.create({ data });
 }
 
-async function getById(id: number): Promise<Product | null> {
+export async function getById(id: number): Promise<Product | null> {
   return await prismaClient.product.findUnique({ where: { id } });
 }
 
-async function update(id: number, data: Prisma.ProductUpdateInput) {
+export async function update(id: number, data: Prisma.ProductUpdateInput): Promise<Product> {
   return await prismaClient.product.update({
     where: { id },
     data,
   });
 }
 
-async function deleteById(id: number) {
+export async function deleteById(id: number): Promise<Product> {
   return await prismaClient.product.delete({
     where: { id },
   });
 }
 
-async function countByKeyword(keyword?: string) {
+export async function countByKeyword(keyword?: string) {
   const where = keyword
     ? {
         OR: [{ name: { contains: keyword } }, { description: { contains: keyword } }],
@@ -37,13 +37,18 @@ async function countByKeyword(keyword?: string) {
   return await prismaClient.product.count({ where });
 }
 
-async function countByAuthorId(authorId: number) {
+export async function countByAuthorId(authorId: number) {
   const where = { authorId };
 
   return await prismaClient.product.count({ where });
 }
 
-async function getProductList({ page, pageSize, orderBy, keyword }: GetProductListParamsInput) {
+export async function getProductList({
+  page,
+  pageSize,
+  orderBy,
+  keyword,
+}: GetProductListParamsInput): Promise<Product[]> {
   const where = {
     name: keyword ? { contains: keyword } : undefined,
   };
@@ -55,7 +60,12 @@ async function getProductList({ page, pageSize, orderBy, keyword }: GetProductLi
   });
 }
 
-async function getMyProductList({ authorId, page, pageSize, orderBy }: GetMyProductsParamsInput) {
+export async function getMyProductList({
+  authorId,
+  page,
+  pageSize,
+  orderBy,
+}: GetMyProductsParamsInput): Promise<Product[]> {
   const where = {
     authorId,
   };
@@ -66,14 +76,3 @@ async function getMyProductList({ authorId, page, pageSize, orderBy }: GetMyProd
     where,
   });
 }
-
-export default {
-  create,
-  getById,
-  update,
-  deleteById,
-  countByKeyword,
-  countByAuthorId,
-  getProductList,
-  getMyProductList,
-};

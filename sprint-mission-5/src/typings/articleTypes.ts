@@ -1,9 +1,5 @@
 import { Infer } from 'superstruct';
-import {
-  CreateArticleBodyStruct,
-  GetArticleListParamsStruct,
-  UpdateArticleBodyStruct,
-} from '../structs/articlesStructs';
+import { GetArticleListParamsStruct } from '../structs/articlesStructs';
 
 // Entity
 export interface Article {

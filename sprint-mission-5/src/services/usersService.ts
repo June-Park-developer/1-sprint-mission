@@ -1,7 +1,4 @@
 import bcrypt from 'bcrypt';
-import { User } from '../typings/userTypes';
-import { JWT_SECRET } from '../lib/constants';
-import jwt from 'jsonwebtoken';
 import {
   CreateUserDTO,
   GetMyInfoDTO,
@@ -12,15 +9,15 @@ import {
   TokenResponseDTO,
   UserResponseDTO,
 } from '../DTO/usersDTO';
-import usersRepository from '../repositories/usersRepository';
-import ConflictError from '../lib/errors/ConflictError';
-import NotFoundError from '../lib/errors/NotFoundError';
-import UnauthorizedError from '../lib/errors/UnauthorizedError';
+import * as usersRepository from '../repositories/usersRepository';
+import { ConflictError } from '../lib/errors/ConflictError';
+import { NotFoundError } from '../lib/errors/NotFoundError';
+import { UnauthorizedError } from '../lib/errors/UnauthorizedError';
 import { hashPassword } from '../lib/auth/hash';
 import { filterSensitiveUserData } from '../lib/auth/filter';
 import { createToken } from '../lib/auth/jwt';
 
-const createUser = async (dto: CreateUserDTO) => {
+export const createUser = async (dto: CreateUserDTO) => {
   const { email, nickname, password: plainPassword } = dto;
   const existingEmail = await usersRepository.getByEmail(email);
   const existingNickname = await usersRepository.getByNickname(nickname);
@@ -36,7 +33,7 @@ const createUser = async (dto: CreateUserDTO) => {
   return filteredUser;
 };
 
-const loginUser = async (dto: LoginUserDTO) => {
+export const loginUser = async (dto: LoginUserDTO) => {
   const { email, password } = dto;
   const user = await usersRepository.getByEmail(email);
   if (!user) {
@@ -53,7 +50,7 @@ const loginUser = async (dto: LoginUserDTO) => {
   return tokenResponse;
 };
 
-const getMyInfo = async (dto: GetMyInfoDTO) => {
+export const getMyInfo = async (dto: GetMyInfoDTO) => {
   const { userId } = dto;
   const user = await usersRepository.getById(userId);
   if (!user) {
@@ -63,7 +60,7 @@ const getMyInfo = async (dto: GetMyInfoDTO) => {
   return userResponse;
 };
 
-const patchMyInfo = async (dto: PatchMyInfoDTO) => {
+export const patchMyInfo = async (dto: PatchMyInfoDTO) => {
   const { userId, ...data } = dto;
   const user = await usersRepository.update(userId, data);
   if (!user) {
@@ -73,7 +70,7 @@ const patchMyInfo = async (dto: PatchMyInfoDTO) => {
   return userResponse;
 };
 
-const patchMyPassword = async (dto: PatchMyPasswordDTO) => {
+export const patchMyPassword = async (dto: PatchMyPasswordDTO) => {
   const { userId, password } = dto;
   const hashedPassword = await hashPassword(password);
   const user = await usersRepository.update(userId, { password: hashedPassword });
@@ -82,7 +79,7 @@ const patchMyPassword = async (dto: PatchMyPasswordDTO) => {
   }
 };
 
-const refreshToken = async (dto: RefreshTokenDTO) => {
+export const refreshToken = async (dto: RefreshTokenDTO) => {
   const { userId, refreshToken } = dto;
   const user = await usersRepository.getById(userId);
 
@@ -98,5 +95,3 @@ const refreshToken = async (dto: RefreshTokenDTO) => {
   };
   return tokenResponse;
 };
-
-export default { createUser, loginUser, getMyInfo, patchMyInfo, patchMyPassword, refreshToken };

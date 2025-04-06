@@ -1,6 +1,3 @@
-import { Infer } from 'superstruct';
-import { CreateCommentBodyStruct, UpdateCommentBodyStruct } from '../structs/commentsStruct';
-
 // Entity
 export interface Comment {
   id: number;

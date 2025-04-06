@@ -12,7 +12,7 @@ import {
 } from '../controllers/usersController';
 import { verifyAccessToken, verifyRefreshToken } from '../middlewares/verifyToken';
 
-const usersRouter = express.Router();
+export const usersRouter = express.Router();
 
 usersRouter.post('/', withAsync(createUser));
 usersRouter.post('/login', withAsync(loginUser));
@@ -22,5 +22,3 @@ usersRouter.patch('/me/password', verifyAccessToken, withAsync(patchMyPassword))
 usersRouter.get('/me/products', verifyAccessToken, withAsync(getMyProductList));
 usersRouter.post('/token/refresh', verifyRefreshToken, withAsync(refreshToken));
 usersRouter.get('/me/liked-products', verifyAccessToken, withAsync(getMyLikedProductList));
-
-export default usersRouter;

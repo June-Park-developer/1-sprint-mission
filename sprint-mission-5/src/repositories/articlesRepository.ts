@@ -2,23 +2,23 @@ import { prismaClient } from '../lib/prismaClient';
 import { Article, GetArticleListParamsInput } from '../typings/articleTypes';
 import { Prisma } from '@prisma/client';
 
-async function create(data: Prisma.ArticleUncheckedCreateInput) {
+export async function create(data: Prisma.ArticleUncheckedCreateInput): Promise<Article> {
   return await prismaClient.article.create({ data });
 }
 
-async function getById(id: number): Promise<Article | null> {
+export async function getById(id: number): Promise<Article | null> {
   return await prismaClient.article.findUnique({ where: { id } });
 }
 
-async function update(id: number, data: Prisma.ArticleUpdateInput) {
+export async function update(id: number, data: Prisma.ArticleUpdateInput): Promise<Article> {
   return await prismaClient.article.update({ where: { id }, data });
 }
 
-async function deleteById(id: number) {
+export async function deleteById(id: number): Promise<Article> {
   return await prismaClient.article.delete({ where: { id } });
 }
 
-async function countByKeyword(keyword?: string) {
+export async function countByKeyword(keyword?: string) {
   const where = {
     title: keyword ? { contains: keyword } : undefined,
   };
@@ -26,7 +26,7 @@ async function countByKeyword(keyword?: string) {
   return await prismaClient.article.count({ where });
 }
 
-async function getArticleList(params: GetArticleListParamsInput) {
+export async function getArticleList(params: GetArticleListParamsInput): Promise<Article[]> {
   const where = {
     title: params.keyword ? { contains: params.keyword } : undefined,
   };
@@ -37,12 +37,3 @@ async function getArticleList(params: GetArticleListParamsInput) {
     where,
   });
 }
-
-export default {
-  create,
-  getById,
-  update,
-  deleteById,
-  countByKeyword,
-  getArticleList,
-};

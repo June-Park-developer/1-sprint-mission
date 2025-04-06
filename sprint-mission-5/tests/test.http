@@ -1,7 +1,7 @@
 ### 모든 Article 가져오기
 GET http://localhost:3000/articles?orderBy=recent
 Accept: application/json
-### Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
+
 
 ### 새로운 Article 만들기 (accessToken 필요)
 POST http://localhost:3000/articles
@@ -82,7 +82,7 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdC
 ### 특정 ID의 Product 가져오기 테스트
 GET http://localhost:3000/products/14
 Accept: application/json
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQ1MTQzMDY4fQ.II5v0jD7BYKLextQxTliK8BhmndwAa5ngYIzKDzcejw;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQzOTM3MDY4fQ.q-CWQuyOLfWk-9CqefrBaFJ8EEBx4dfbfOgA75swRvc;
 
 
 
@@ -187,11 +187,11 @@ Content-Type: application/json
 
 ### 자기가 등록한 product List
 GET http://localhost:3000/users/me/products?page=2&pageSize=2&orderBy=recent
-Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2ODk0NSwiZXhwIjoxNzQzNjcyNTQ1fQ.5Nw2u6jxjQmnyBbtzclTXq8cR44Rap_8iz3UfJTmYh0;
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQ1MTQzMDY4fQ.II5v0jD7BYKLextQxTliK8BhmndwAa5ngYIzKDzcejw;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQzOTM3MDY4fQ.q-CWQuyOLfWk-9CqefrBaFJ8EEBx4dfbfOgA75swRvc;
 
 ### 자기가 like 한 productList
 GET http://localhost:3000/users/me/liked-products?page=1&pageSize=2
-Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2ODk0NSwiZXhwIjoxNzQzNjcyNTQ1fQ.5Nw2u6jxjQmnyBbtzclTXq8cR44Rap_8iz3UfJTmYh0;
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQ1MTQzMDY4fQ.II5v0jD7BYKLextQxTliK8BhmndwAa5ngYIzKDzcejw;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQzOTM3MDY4fQ.q-CWQuyOLfWk-9CqefrBaFJ8EEBx4dfbfOgA75swRvc;
 
 ### 토큰 재발급 
 POST http://localhost:3000/users/token/refresh
@@ -199,7 +199,7 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdC
 
 ### Product Like/Unlike 테스트
 POST http://localhost:3000/products/12/like
-Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2ODk0NSwiZXhwIjoxNzQzNjcyNTQ1fQ.5Nw2u6jxjQmnyBbtzclTXq8cR44Rap_8iz3UfJTmYh0;
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQ1MTQzMDY4fQ.II5v0jD7BYKLextQxTliK8BhmndwAa5ngYIzKDzcejw;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQzOTM3MDY4fQ.q-CWQuyOLfWk-9CqefrBaFJ8EEBx4dfbfOgA75swRvc;
 
 ### Article Like/Unlike 테스트
 POST http://localhost:3000/articles/8/like

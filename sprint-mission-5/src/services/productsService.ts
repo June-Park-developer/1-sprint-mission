@@ -10,16 +10,16 @@ import {
   GetProductDTO,
   DeleteProductDTO,
 } from '../DTO/productsDTO';
-import productsRepository from '../repositories/productsRepository';
-import likedProductsRepository from '../repositories/likedProductsRepository';
-import NotFoundError from '../lib/errors/NotFoundError';
+import * as productsRepository from '../repositories/productsRepository';
+import * as likedProductsRepository from '../repositories/likedProductsRepository';
+import { NotFoundError } from '../lib/errors/NotFoundError';
 
-const createProduct = async (dto: CreateProductDTO) => {
+export const createProduct = async (dto: CreateProductDTO) => {
   const product = await productsRepository.create(dto);
   return new ProductResponseDTO(product);
 };
 
-const getProduct = async (dto: GetProductDTO) => {
+export const getProduct = async (dto: GetProductDTO) => {
   const { productId, userId } = dto;
   const product = await productsRepository.getById(productId);
   if (!product) {
@@ -33,7 +33,7 @@ const getProduct = async (dto: GetProductDTO) => {
   }
 };
 
-const updateProduct = async (dto: UpdateProductDTO) => {
+export const updateProduct = async (dto: UpdateProductDTO) => {
   const { productId, userId, ...productData } = dto;
   const product = await productsRepository.update(productId, productData);
   if (!product) {
@@ -43,7 +43,7 @@ const updateProduct = async (dto: UpdateProductDTO) => {
   return new ProductResponseDTO(product, isLiked);
 };
 
-const deleteProduct = async (dto: DeleteProductDTO) => {
+export const deleteProduct = async (dto: DeleteProductDTO) => {
   const { productId } = dto;
   const existingProduct = await productsRepository.getById(productId);
   if (!existingProduct) {
@@ -52,7 +52,7 @@ const deleteProduct = async (dto: DeleteProductDTO) => {
   await productsRepository.deleteById(productId);
 };
 
-const getProductList = async (dto: GetProductListDTO) => {
+export const getProductList = async (dto: GetProductListDTO) => {
   const { userId, ...params } = dto;
   const totalCount = await productsRepository.countByKeyword(params.keyword);
   const products = await productsRepository.getProductList(params);
@@ -69,7 +69,7 @@ const getProductList = async (dto: GetProductListDTO) => {
   return new ProductListResponseDTO(list, totalCount);
 };
 
-const likeProduct = async (dto: LikeProductDTO) => {
+export const likeProduct = async (dto: LikeProductDTO) => {
   const { userId, productId } = dto;
   const product = await productsRepository.getById(productId);
   if (!product) {
@@ -86,7 +86,7 @@ const likeProduct = async (dto: LikeProductDTO) => {
 };
 
 // usersController.ts와 연결
-const getMyProductList = async (dto: GetMyProductListDTO) => {
+export const getMyProductList = async (dto: GetMyProductListDTO) => {
   const { authorId, page, pageSize, orderBy } = dto;
   const totalCount = await productsRepository.countByAuthorId(authorId);
   const products = await productsRepository.getMyProductList({
@@ -104,7 +104,7 @@ const getMyProductList = async (dto: GetMyProductListDTO) => {
   return new ProductListResponseDTO(list, totalCount);
 };
 
-const getMyLikedProductList = async (dto: GetMyLikedProductListDTO) => {
+export const getMyLikedProductList = async (dto: GetMyLikedProductListDTO) => {
   const { userId, page, pageSize, orderBy } = dto;
   const totalCount = await likedProductsRepository.countByUserId(userId);
   const likedProducts = await likedProductsRepository.getLikedProductList({
@@ -115,15 +115,4 @@ const getMyLikedProductList = async (dto: GetMyLikedProductListDTO) => {
   });
   const list = likedProducts.map((product) => new ProductResponseDTO(product, true));
   return new ProductListResponseDTO(list, totalCount);
-};
-
-export default {
-  createProduct,
-  getProduct,
-  updateProduct,
-  deleteProduct,
-  getProductList,
-  getMyProductList,
-  getMyLikedProductList,
-  likeProduct,
 };

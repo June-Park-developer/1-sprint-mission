@@ -7,13 +7,13 @@ import {
   GetCommentsForProductDTO,
   UpdateCommentDTO,
 } from '../DTO/commentsDTO';
-import commentsRepository from '../repositories/commentsRepository';
-import productsRepository from '../repositories/productsRepository';
-import articlesRepository from '../repositories/articlesRepository';
+import * as commentsRepository from '../repositories/commentsRepository';
+import * as productsRepository from '../repositories/productsRepository';
+import * as articlesRepository from '../repositories/articlesRepository';
 import { CreateCommentInput } from '../typings/commentTypes';
-import NotFoundError from '../lib/errors/NotFoundError';
+import { NotFoundError } from '../lib/errors/NotFoundError';
 
-const createComment = async (dto: CreateCommentDTO) => {
+export const createComment = async (dto: CreateCommentDTO) => {
   const { entityName, articleId = null, productId = null, content, authorId } = dto;
   let existingEntity;
   if (entityName === 'article' && articleId) {
@@ -29,7 +29,7 @@ const createComment = async (dto: CreateCommentDTO) => {
   return new CommentResponseDTO(comment);
 };
 
-const getCommentsForArticle = async (dto: GetCommentsForArticleDTO) => {
+export const getCommentsForArticle = async (dto: GetCommentsForArticleDTO) => {
   const { articleId, cursor, limit = 10 } = dto;
   const existingArticle = await articlesRepository.getById(articleId);
   if (!existingArticle) {
@@ -46,7 +46,7 @@ const getCommentsForArticle = async (dto: GetCommentsForArticleDTO) => {
   return new CommentListResponseDTO(list, nextCursor);
 };
 
-const getCommentsForProduct = async (dto: GetCommentsForProductDTO) => {
+export const getCommentsForProduct = async (dto: GetCommentsForProductDTO) => {
   const { productId, cursor, limit = 10 } = dto;
   const existingProduct = await productsRepository.getById(productId);
   if (!existingProduct) {
@@ -63,7 +63,7 @@ const getCommentsForProduct = async (dto: GetCommentsForProductDTO) => {
   return new CommentListResponseDTO(list, nextCursor);
 };
 
-const updateComment = async (dto: UpdateCommentDTO) => {
+export const updateComment = async (dto: UpdateCommentDTO) => {
   const { commentId, content } = dto;
   const existingComment = await commentsRepository.getById(commentId);
   if (!existingComment) {
@@ -73,7 +73,7 @@ const updateComment = async (dto: UpdateCommentDTO) => {
   return updatedComment;
 };
 
-const deleteComment = async (dto: DeleteCommentDTO) => {
+export const deleteComment = async (dto: DeleteCommentDTO) => {
   const { commentId } = dto;
 
   const existingComment = await commentsRepository.getById(commentId);
@@ -82,11 +82,4 @@ const deleteComment = async (dto: DeleteCommentDTO) => {
   }
 
   await commentsRepository.deleteById(commentId);
-};
-export default {
-  createComment,
-  getCommentsForArticle,
-  getCommentsForProduct,
-  updateComment,
-  deleteComment,
 };

@@ -7,7 +7,7 @@ import {
 } from '../structs/articlesStructs';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
 import { RequestHandler } from 'express';
-import articlesService from '../services/articlesService';
+import * as articlesService from '../services/articlesService';
 import {
   CreateArticleDTO,
   DeleteArticleDTO,
@@ -16,7 +16,7 @@ import {
   LikeArticleDTO,
   UpdateArticleDTO,
 } from '../DTO/articlesDTO';
-import commentsService from '../services/commentsService';
+import * as commentsService from '../services/commentsService';
 import { EntityType } from '../typings/EnumTypes';
 import { CreateCommentDTO, GetCommentsForArticleDTO } from '../DTO/commentsDTO';
 

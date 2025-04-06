@@ -2,7 +2,7 @@ import { create } from 'superstruct';
 import { UpdateCommentBodyStruct } from '../structs/commentsStruct';
 import { IdParamsStruct } from '../structs/commonStructs';
 import { RequestHandler } from 'express';
-import commentsService from '../services/commentsService';
+import * as commentsService from '../services/commentsService';
 
 export const updateComment: RequestHandler = async (req, res) => {
   const { id: commentId } = create(req.params, IdParamsStruct);

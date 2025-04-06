@@ -1,8 +1,8 @@
-import articlesRepository from '../repositories/articlesRepository';
-import productsRepository from '../repositories/productsRepository';
-import commentsRepository from '../repositories/commentsRepository';
-import ForbiddenError from '../lib/errors/ForbiddenError';
-import NotFoundError from '../lib/errors/NotFoundError';
+import * as articlesRepository from '../repositories/articlesRepository';
+import * as productsRepository from '../repositories/productsRepository';
+import * as commentsRepository from '../repositories/commentsRepository';
+import { ForbiddenError } from '../lib/errors/ForbiddenError';
+import { NotFoundError } from '../lib/errors/NotFoundError';
 import { withAsync } from '../lib/withAsync';
 import { IdParamsStruct } from '../structs/commonStructs';
 import { create } from 'superstruct';

@@ -1,7 +1,8 @@
 import { prismaClient } from '../lib/prismaClient';
-import { LikedProductListParamsInput } from '../typings/likedProductTypes.';
+import { LikedProduct, LikedProductListParamsInput } from '../typings/likedProductTypes';
+import { Product } from '../typings/productTypes';
 
-async function createLike(userId: number, productId: number) {
+export async function createLike(userId: number, productId: number): Promise<LikedProduct> {
   return await prismaClient.likedProduct.create({
     data: {
       userId,
@@ -10,7 +11,7 @@ async function createLike(userId: number, productId: number) {
   });
 }
 
-async function deleteLike(userId: number, productId: number) {
+export async function deleteLike(userId: number, productId: number): Promise<LikedProduct> {
   return await prismaClient.likedProduct.delete({
     where: {
       userId_productId: {
@@ -21,7 +22,7 @@ async function deleteLike(userId: number, productId: number) {
   });
 }
 
-async function getLike(userId: number, productId: number) {
+export async function getLike(userId: number, productId: number): Promise<LikedProduct | null> {
   return await prismaClient.likedProduct.findUnique({
     where: {
       userId_productId: {
@@ -32,12 +33,12 @@ async function getLike(userId: number, productId: number) {
   });
 }
 
-async function getLikedProductList({
+export async function getLikedProductList({
   userId,
   page,
   pageSize,
   orderBy,
-}: LikedProductListParamsInput) {
+}: LikedProductListParamsInput): Promise<Product[]> {
   const likedProducts = await prismaClient.likedProduct.findMany({
     where: { userId },
     skip: (page - 1) * pageSize,
@@ -49,10 +50,8 @@ async function getLikedProductList({
   return products;
 }
 
-async function countByUserId(userId: number) {
+export async function countByUserId(userId: number) {
   return await prismaClient.likedProduct.count({
     where: { userId },
   });
 }
-
-export default { createLike, deleteLike, getLike, getLikedProductList, countByUserId };

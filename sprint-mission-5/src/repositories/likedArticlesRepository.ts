@@ -1,6 +1,7 @@
 import { prismaClient } from '../lib/prismaClient';
+import { LikedArticle } from '../typings/likedArticleTypes';
 
-async function createLike(userId: number, articleId: number) {
+export async function createLike(userId: number, articleId: number): Promise<LikedArticle> {
   return await prismaClient.likedArticle.create({
     data: {
       userId,
@@ -9,7 +10,7 @@ async function createLike(userId: number, articleId: number) {
   });
 }
 
-async function deleteLike(userId: number, articleId: number) {
+export async function deleteLike(userId: number, articleId: number): Promise<LikedArticle> {
   return await prismaClient.likedArticle.delete({
     where: {
       userId_articleId: {
@@ -20,7 +21,7 @@ async function deleteLike(userId: number, articleId: number) {
   });
 }
 
-async function getLike(userId: number, articleId: number) {
+export async function getLike(userId: number, articleId: number): Promise<LikedArticle | null> {
   return await prismaClient.likedArticle.findUnique({
     where: {
       userId_articleId: {
@@ -30,5 +31,3 @@ async function getLike(userId: number, articleId: number) {
     },
   });
 }
-
-export default { createLike, deleteLike, getLike };

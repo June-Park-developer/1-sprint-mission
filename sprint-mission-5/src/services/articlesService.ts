@@ -8,18 +8,17 @@ import {
   GetArticleDTO,
   DeleteArticleDTO,
 } from '../DTO/articlesDTO';
-import articlesRepository from '../repositories/articlesRepository';
-import likedArtriclesRepository from '../repositories/likedArticlesRepository';
-import NotFoundError from '../lib/errors/NotFoundError';
-import likedArticlesRepository from '../repositories/likedArticlesRepository';
+import * as articlesRepository from '../repositories/articlesRepository';
+import * as likedArticlesRepository from '../repositories/likedArticlesRepository';
+import { NotFoundError } from '../lib/errors/NotFoundError';
 
-const createArticle = async (dto: CreateArticleDTO) => {
+export const createArticle = async (dto: CreateArticleDTO) => {
   const createdArticle = await articlesRepository.create(dto);
   const article = new ArticleResponseDTO(createdArticle);
   return article;
 };
 
-const getArticle = async (dto: GetArticleDTO) => {
+export const getArticle = async (dto: GetArticleDTO) => {
   const { articleId, userId } = dto;
   const article = await articlesRepository.getById(articleId);
   if (!article) {
@@ -33,7 +32,7 @@ const getArticle = async (dto: GetArticleDTO) => {
   }
 };
 
-const updateArticle = async (dto: UpdateArticleDTO) => {
+export const updateArticle = async (dto: UpdateArticleDTO) => {
   const { articleId, userId, ...articleData } = dto;
   const article = await articlesRepository.update(articleId, articleData);
   if (!article) {
@@ -43,7 +42,7 @@ const updateArticle = async (dto: UpdateArticleDTO) => {
   return new ArticleResponseDTO(article, isLiked);
 };
 
-const deleteArticle = async (dto: DeleteArticleDTO) => {
+export const deleteArticle = async (dto: DeleteArticleDTO) => {
   const { articleId } = dto;
   const existingArticle = await articlesRepository.getById(articleId);
   if (!existingArticle) {
@@ -52,7 +51,7 @@ const deleteArticle = async (dto: DeleteArticleDTO) => {
   await articlesRepository.deleteById(articleId);
 };
 
-const getArticleList = async (dto: GetArticleListDTO) => {
+export const getArticleList = async (dto: GetArticleListDTO) => {
   const { userId, ...params } = dto;
   const totalCount = await articlesRepository.countByKeyword(params.keyword);
   const articles = await articlesRepository.getArticleList(params);
@@ -60,7 +59,7 @@ const getArticleList = async (dto: GetArticleListDTO) => {
   const list = await Promise.all(
     articles.map(async (article) => {
       if (userId) {
-        const liked = await likedArtriclesRepository.getLike(userId, article.id);
+        const liked = await likedArticlesRepository.getLike(userId, article.id);
         return new ArticleResponseDTO(article, !!liked);
       }
       return new ArticleResponseDTO(article);
@@ -70,7 +69,7 @@ const getArticleList = async (dto: GetArticleListDTO) => {
   return new ArticleListResponseDTO(list, totalCount);
 };
 
-const likeArticle = async (dto: LikeArticleDTO) => {
+export const likeArticle = async (dto: LikeArticleDTO) => {
   const { userId, articleId } = dto;
   const article = await articlesRepository.getById(articleId);
   if (!article) {
@@ -84,13 +83,4 @@ const likeArticle = async (dto: LikeArticleDTO) => {
     await likedArticlesRepository.createLike(userId, articleId);
     return true;
   }
-};
-
-export default {
-  createArticle,
-  getArticle,
-  updateArticle,
-  deleteArticle,
-  getArticleList,
-  likeArticle,
 };

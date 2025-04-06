@@ -12,7 +12,7 @@ import {
 } from '../controllers/productsController';
 import { verifyAccessToken, optionalAccessToken } from '../middlewares/verifyToken';
 import { verifyProductAuth } from '../middlewares/verifyAuth';
-const productsRouter = express.Router();
+export const productsRouter = express.Router();
 
 productsRouter.post('/', verifyAccessToken, withAsync(createProduct));
 productsRouter.get('/', optionalAccessToken, withAsync(getProductList));
@@ -25,5 +25,3 @@ productsRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment)
 productsRouter.get('/:id/comments', withAsync(getCommentList));
 
 productsRouter.post(`/:id/like`, verifyAccessToken, withAsync(likeProduct));
-
-export default productsRouter;

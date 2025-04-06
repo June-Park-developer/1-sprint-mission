@@ -1,15 +1,19 @@
 import { prismaClient } from '../lib/prismaClient';
-import { CreateCommentInput } from '../typings/commentTypes';
+import { CreateCommentInput, Comment } from '../typings/commentTypes';
 
-async function getById(id: number) {
+export async function getById(id: number): Promise<Comment | null> {
   return await prismaClient.comment.findUnique({ where: { id } });
 }
 
-async function create(data: CreateCommentInput) {
+export async function create(data: CreateCommentInput): Promise<Comment> {
   return await prismaClient.comment.create({ data });
 }
 
-async function getCommentsForArticle(articleId: number, limit: number = 10, cursor?: number) {
+export async function getCommentsForArticle(
+  articleId: number,
+  limit: number = 10,
+  cursor?: number,
+): Promise<Comment[]> {
   return await prismaClient.comment.findMany({
     cursor: cursor ? { id: cursor } : undefined,
     take: limit + 1,
@@ -18,7 +22,11 @@ async function getCommentsForArticle(articleId: number, limit: number = 10, curs
   });
 }
 
-async function getCommentsForProduct(productId: number, limit: number = 10, cursor?: number) {
+export async function getCommentsForProduct(
+  productId: number,
+  limit: number = 10,
+  cursor?: number,
+): Promise<Comment[]> {
   return await prismaClient.comment.findMany({
     cursor: cursor ? { id: cursor } : undefined,
     take: limit + 1,
@@ -27,19 +35,10 @@ async function getCommentsForProduct(productId: number, limit: number = 10, curs
   });
 }
 
-async function update(id: number, content?: string) {
+export async function update(id: number, content?: string): Promise<Comment> {
   return await prismaClient.comment.update({ where: { id }, data: { content } });
 }
 
-async function deleteById(id: number) {
+export async function deleteById(id: number): Promise<Comment> {
   return await prismaClient.comment.delete({ where: { id } });
 }
-
-export default {
-  getById,
-  create,
-  getCommentsForArticle,
-  getCommentsForProduct,
-  update,
-  deleteById,
-};

@@ -14,9 +14,9 @@ import {
   PatchMyInfoDTO,
   UserResponseDTO,
 } from '../DTO/usersDTO';
-import usersService from '../services/usersService';
+import * as usersService from '../services/usersService';
 import { GetMyProductsParamsStruct } from '../structs/productsStruct';
-import productsService from '../services/productsService';
+import * as productsService from '../services/productsService';
 import { GetMyLikedProductListDTO } from '../DTO/productsDTO';
 
 export const createUser: RequestHandler = async (req, res) => {

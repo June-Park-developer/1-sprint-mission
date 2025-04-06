@@ -1,37 +1,29 @@
 import { prismaClient } from '../lib/prismaClient';
-import { UpdateUserInput } from '../typings/userTypes';
+import { User } from '../typings/userTypes';
 import { Prisma } from '@prisma/client';
 
-async function getByEmail(email: string) {
+export async function getByEmail(email: string): Promise<User | null> {
   return await prismaClient.user.findUnique({ where: { email } });
 }
 
-async function getByNickname(nickname: string) {
+export async function getByNickname(nickname: string): Promise<User | null> {
   return await prismaClient.user.findUnique({ where: { nickname } });
 }
 
-async function getById(id: number) {
+export async function getById(id: number): Promise<User | null> {
   return await prismaClient.user.findUnique({ where: { id } });
 }
 
-async function create({ email, nickname, password }: Prisma.UserCreateInput) {
+export async function create({ email, nickname, password }: Prisma.UserCreateInput): Promise<User> {
   const user = await prismaClient.user.create({
     data: { email, nickname, password },
   });
   return user;
 }
 
-async function update(id: number, data: UpdateUserInput) {
+export async function update(id: number, data: Prisma.UserUpdateInput): Promise<User> {
   return await prismaClient.user.update({
     where: { id },
     data,
   });
 }
-
-export default {
-  getByEmail,
-  getByNickname,
-  getById,
-  create,
-  update,
-};

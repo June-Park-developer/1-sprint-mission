@@ -15,10 +15,10 @@ import {
   LikeProductDTO,
   UpdateProductDTO,
 } from '../DTO/productsDTO';
-import productsService from '../services/productsService';
+import * as productsService from '../services/productsService';
 import { CreateCommentDTO, GetCommentsForProductDTO } from '../DTO/commentsDTO';
 import { EntityType } from '../typings/EnumTypes';
-import commentsService from '../services/commentsService';
+import * as commentsService from '../services/commentsService';
 
 export const createProduct: RequestHandler = async (req, res) => {
   const productData = create(req.body, CreateProductBodyStruct);

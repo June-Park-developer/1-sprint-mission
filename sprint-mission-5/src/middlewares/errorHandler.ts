@@ -1,5 +1,5 @@
 import { StructError } from 'superstruct';
-import BadRequestError from '../lib/errors/BadRequestError';
+import { BadRequestError } from '../lib/errors/BadRequestError';
 import { ErrorRequestHandler, RequestHandler } from 'express';
 
 export const defaultNotFoundHandler: RequestHandler = (req, res) => {
