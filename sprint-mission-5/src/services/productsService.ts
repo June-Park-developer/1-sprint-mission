@@ -12,7 +12,10 @@ import {
 } from '../DTO/productsDTO';
 import * as productsRepository from '../repositories/productsRepository';
 import * as likedProductsRepository from '../repositories/likedProductsRepository';
+import * as notiRepository from '../repositories/notificationsRepository';
 import { NotFoundError } from '../lib/errors/NotFoundError';
+import { PayloadForPriceNoti } from '../typings/notificationTypes';
+import { NotificationType } from '@prisma/client';
 
 export const createProduct = async (dto: CreateProductDTO) => {
   const product = await productsRepository.create(dto);
@@ -35,12 +38,18 @@ export const getProduct = async (dto: GetProductDTO) => {
 
 export const updateProduct = async (dto: UpdateProductDTO) => {
   const { productId, userId, ...productData } = dto;
-  const product = await productsRepository.update(productId, productData);
-  if (!product) {
+  const originalProduct = await productsRepository.getById(productId);
+  if (!originalProduct) {
     throw new NotFoundError(`Product with id ${productId} is not found`);
   }
+  const beforePrice = originalProduct.price;
+  const updatedProduct = await productsRepository.update(productId, productData);
+  const afterPrice = updatedProduct.price;
+  if (beforePrice !== afterPrice) {
+    await createPriceNotifications(productId, beforePrice, afterPrice);
+  }
   const isLiked = !!(await likedProductsRepository.getLike(userId, productId));
-  return new ProductResponseDTO(product, isLiked);
+  return new ProductResponseDTO(updatedProduct, isLiked);
 };
 
 export const deleteProduct = async (dto: DeleteProductDTO) => {
@@ -115,4 +124,25 @@ export const getMyLikedProductList = async (dto: GetMyLikedProductListDTO) => {
   });
   const list = likedProducts.map((product) => new ProductResponseDTO(product, true));
   return new ProductListResponseDTO(list, totalCount);
+};
+
+// 함수
+export const createPriceNotifications = async (
+  productId: number,
+  beforePrice: number,
+  afterPrice: number,
+) => {
+  const userIdTuples = await likedProductsRepository.getUserIdsByProductId(productId);
+  const userIds = userIdTuples.map((u) => u.userId);
+  const payload: PayloadForPriceNoti = { productId, beforePrice, afterPrice };
+  await Promise.all(
+    userIds.map(
+      async (userId) =>
+        await notiRepository.createPriceNoti({
+          userId,
+          type: NotificationType.PRICE,
+          payload,
+        }),
+    ),
+  );
 };

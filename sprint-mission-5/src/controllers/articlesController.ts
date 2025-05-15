@@ -94,7 +94,7 @@ export const createComment: RequestHandler = async (req, res) => {
     userId: article.authorId,
     commentId: comment.id,
   };
-  await notiService.createForComment(notiDto);
+  await notiService.createCommentNoti(notiDto);
   res.status(201).send(comment);
 };
 

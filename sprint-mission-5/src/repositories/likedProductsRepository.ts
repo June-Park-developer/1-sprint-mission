@@ -55,3 +55,10 @@ export async function countByUserId(userId: number) {
     where: { userId },
   });
 }
+
+export const getUserIdsByProductId = async (productId: number): Promise<{ userId: number }[]> => {
+  return await prismaClient.likedProduct.findMany({
+    where: { productId },
+    select: { userId: true },
+  });
+};

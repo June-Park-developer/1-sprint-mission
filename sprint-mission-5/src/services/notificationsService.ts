@@ -1,8 +1,12 @@
 import { NotificationType, Prisma } from '@prisma/client';
 import { createCommentNotiDTO, UnreadNotiCountResponseDTO } from '../DTO/notificationsDTO';
 import * as notiRepository from '../repositories/notificationsRepository';
-import * as articleRepository from '../repositories/articlesRepository';
-import { Notification, PayloadForCommentNoti } from '../typings/notificationTypes';
+import {
+  Notification,
+  PayloadForCommentNoti,
+  PayloadForPriceNoti,
+} from '../typings/notificationTypes';
+import * as likedProductsRepository from '../repositories/likedProductsRepository';
 
 export const getMyNotifications = async (userId: number): Promise<Notification[]> => {
   return await notiRepository.findByUserId(userId);
@@ -13,7 +17,7 @@ export const getUnreadNotiCount = async (userId: number) => {
   return new UnreadNotiCountResponseDTO(count);
 };
 
-export const createForComment = async (dto: createCommentNotiDTO) => {
+export const createCommentNoti = async (dto: createCommentNotiDTO) => {
   const { articleId, commentId, userId } = dto;
   const payload: PayloadForCommentNoti = { articleId, commentId };
   const type = NotificationType.COMMENT;

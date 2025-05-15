@@ -21,8 +21,8 @@ import {
   CreateProductCommentDTO,
   GetCommentsForProductDTO,
 } from '../DTO/commentsDTO';
-import { EntityType } from '../typings/EnumTypes';
 import * as commentsService from '../services/commentsService';
+import * as notiService from '../services/notificationsService';
 
 export const createProduct: RequestHandler = async (req, res) => {
   const productData = create(req.body, CreateProductBodyStruct);
@@ -48,8 +48,8 @@ export const updateProduct: RequestHandler = async (req, res) => {
   const userId = req.user!.userId;
   const productData = create(req.body, UpdateProductBodyStruct);
   const dto: UpdateProductDTO = { productId, userId, ...productData };
-  const responseProduct = await productsService.updateProduct(dto);
-  res.send(responseProduct);
+  const updatedProduct = await productsService.updateProduct(dto);
+  res.status(200).json(updatedProduct);
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {

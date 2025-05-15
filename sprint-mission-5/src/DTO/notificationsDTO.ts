@@ -6,6 +6,12 @@ export interface createCommentNotiDTO {
   commentId: number;
   userId: number;
 }
+
+export interface createPriceNotiDTO {
+  productId: number;
+  beforePrice: number;
+  afterPrice: number;
+}
 // Response
 export type NotiListResponseDTO = Notification[];
 

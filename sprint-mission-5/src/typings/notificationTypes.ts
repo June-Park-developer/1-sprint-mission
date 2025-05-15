@@ -16,9 +16,21 @@ export interface PayloadForCommentNoti {
   commentId: number;
 }
 
+export interface PayloadForPriceNoti {
+  productId: number;
+  beforePrice: number;
+  afterPrice: number;
+}
+
 // Input
 export interface createCommentNotiInput {
   payload: PayloadForCommentNoti;
+  userId: number;
+  type: NotificationType;
+}
+
+export interface createPriceNotiInput {
+  payload: PayloadForPriceNoti;
   userId: number;
   type: NotificationType;
 }
