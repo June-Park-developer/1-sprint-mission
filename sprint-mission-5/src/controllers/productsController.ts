@@ -48,8 +48,11 @@ export const updateProduct: RequestHandler = async (req, res) => {
   const userId = req.user!.userId;
   const productData = create(req.body, UpdateProductBodyStruct);
   const dto: UpdateProductDTO = { productId, userId, ...productData };
-  const updatedProduct = await productsService.updateProduct(dto);
-  res.status(200).json(updatedProduct);
+  const { product, beforePrice, afterPrice } = await productsService.updateProduct(dto);
+  if (beforePrice !== afterPrice) {
+    await notiService.createPriceNotifications(productId, beforePrice, afterPrice);
+  }
+  await res.status(200).json(product);
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {

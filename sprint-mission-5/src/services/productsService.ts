@@ -45,11 +45,9 @@ export const updateProduct = async (dto: UpdateProductDTO) => {
   const beforePrice = originalProduct.price;
   const updatedProduct = await productsRepository.update(productId, productData);
   const afterPrice = updatedProduct.price;
-  if (beforePrice !== afterPrice) {
-    await createPriceNotifications(productId, beforePrice, afterPrice);
-  }
   const isLiked = !!(await likedProductsRepository.getLike(userId, productId));
-  return new ProductResponseDTO(updatedProduct, isLiked);
+  const product = new ProductResponseDTO(updatedProduct, isLiked);
+  return { product, beforePrice, afterPrice };
 };
 
 export const deleteProduct = async (dto: DeleteProductDTO) => {

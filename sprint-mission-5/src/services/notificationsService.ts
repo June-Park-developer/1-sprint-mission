@@ -27,3 +27,23 @@ export const createCommentNoti = async (dto: createCommentNotiDTO) => {
     payload,
   });
 };
+
+export const createPriceNotifications = async (
+  productId: number,
+  beforePrice: number,
+  afterPrice: number,
+) => {
+  const userIdTuples = await likedProductsRepository.getUserIdsByProductId(productId);
+  const userIds = userIdTuples.map((u) => u.userId);
+  const payload: PayloadForPriceNoti = { productId, beforePrice, afterPrice };
+  await Promise.all(
+    userIds.map(
+      async (userId) =>
+        await notiRepository.createPriceNoti({
+          userId,
+          type: NotificationType.PRICE,
+          payload,
+        }),
+    ),
+  );
+};
