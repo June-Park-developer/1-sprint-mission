@@ -34,3 +34,8 @@ export interface createPriceNotiInput {
   userId: number;
   type: NotificationType;
 }
+
+export interface UpdateNotificationInput {
+  id: number;
+  data: Prisma.NotificationUpdateInput;
+}

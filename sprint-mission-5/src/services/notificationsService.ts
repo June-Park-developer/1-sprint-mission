@@ -1,12 +1,19 @@
 import { NotificationType, Prisma } from '@prisma/client';
-import { createCommentNotiDTO, UnreadNotiCountResponseDTO } from '../DTO/notificationsDTO';
+import {
+  createCommentNotiDTO,
+  ReadMyNotificationDTO,
+  UnreadNotiCountResponseDTO,
+} from '../DTO/notificationsDTO';
 import * as notiRepository from '../repositories/notificationsRepository';
 import {
   Notification,
   PayloadForCommentNoti,
   PayloadForPriceNoti,
+  UpdateNotificationInput,
 } from '../typings/notificationTypes';
 import * as likedProductsRepository from '../repositories/likedProductsRepository';
+import { NotFoundError } from '../lib/errors/NotFoundError';
+import { UnauthorizedError } from '../lib/errors/UnauthorizedError';
 
 export const getMyNotifications = async (userId: number): Promise<Notification[]> => {
   return await notiRepository.findByUserId(userId);
@@ -46,4 +53,17 @@ export const createPriceNotifications = async (
         }),
     ),
   );
+};
+
+export const readMyNotification = async (dto: ReadMyNotificationDTO): Promise<void> => {
+  const { userId, notificationId } = dto;
+  const notification = await notiRepository.findById(notificationId);
+  if (!notification) {
+    throw new NotFoundError(`Notification with id ${notificationId} does not exist.`);
+  }
+  if (notification.userId !== userId) {
+    throw new UnauthorizedError(`No authorization`);
+  }
+  const input: UpdateNotificationInput = { id: notificationId, data: { isRead: true } };
+  await notiRepository.update(input);
 };

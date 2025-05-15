@@ -12,6 +12,12 @@ export interface createPriceNotiDTO {
   beforePrice: number;
   afterPrice: number;
 }
+
+export interface ReadMyNotificationDTO {
+  notificationId: number;
+  userId: number;
+}
+
 // Response
 export type NotiListResponseDTO = Notification[];
 
