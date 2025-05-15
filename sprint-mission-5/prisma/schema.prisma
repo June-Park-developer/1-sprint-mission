@@ -97,6 +97,7 @@ model Notification {
   type      NotificationType
   payload   Json
   createdAt DateTime         @default(now())
+  isRead    Boolean          @default(false)
   userId    Int
 }
 

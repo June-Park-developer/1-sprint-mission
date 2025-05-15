@@ -9,6 +9,7 @@ import { commentsRouter } from './routers/commentsRouter';
 import { imagesRouter } from './routers/imagesRouter';
 import { usersRouter } from './routers/usersRouter';
 import { defaultNotFoundHandler, globalErrorHandler } from './middlewares/errorHandler';
+import { notificationRouter } from './routers/notificationsRouter';
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/products', productsRouter);
 app.use('/comments', commentsRouter);
 app.use('/images', imagesRouter);
 app.use('/users', usersRouter);
+app.use('notifications', notificationRouter);
 
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
