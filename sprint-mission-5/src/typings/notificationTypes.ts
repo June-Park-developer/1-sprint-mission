@@ -1,11 +1,24 @@
-import { NotificationType as NotiType, Prisma } from '@prisma/client';
+import { NotificationType, Prisma } from '@prisma/client';
 //Entity
 
-export interface NotificationType {
+export interface Notification {
   id: number;
   userId: number;
-  type: NotiType;
+  type: NotificationType;
   isRead: Boolean;
   payload: Prisma.JsonValue;
   createdAt: Date;
+}
+
+// Payload
+export interface PayloadForCommentNoti {
+  articleId: number;
+  commentId: number;
+}
+
+// Input
+export interface createCommentNotiInput {
+  payload: PayloadForCommentNoti;
+  userId: number;
+  type: NotificationType;
 }

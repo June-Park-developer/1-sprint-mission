@@ -17,8 +17,9 @@ import {
   UpdateArticleDTO,
 } from '../DTO/articlesDTO';
 import * as commentsService from '../services/commentsService';
-import { EntityType } from '../typings/EnumTypes';
-import { CreateCommentDTO, GetCommentsForArticleDTO } from '../DTO/commentsDTO';
+import * as notiService from '../services/notificationsService';
+import { CreateArticleCommentDTO, GetCommentsForArticleDTO } from '../DTO/commentsDTO';
+import { createCommentNotiDTO } from '../DTO/notificationsDTO';
 
 export const createArticle: RequestHandler = async (req, res) => {
   const { title, content, image } = create(req.body, CreateArticleBodyStruct);
@@ -81,13 +82,19 @@ export const createComment: RequestHandler = async (req, res) => {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
   const authorId = req.user!.userId;
-  const dto: CreateCommentDTO = {
-    entityName: EntityType.Article,
+  const commentDto: CreateArticleCommentDTO = {
     articleId,
     content,
     authorId,
   };
-  const comment = await commentsService.createComment(dto);
+  const article = await articlesService.getArticle({ articleId });
+  const comment = await commentsService.createCommentForArticle(commentDto);
+  const notiDto: createCommentNotiDTO = {
+    articleId,
+    userId: article.authorId,
+    commentId: comment.id,
+  };
+  await notiService.createForComment(notiDto);
   res.status(201).send(comment);
 };
 

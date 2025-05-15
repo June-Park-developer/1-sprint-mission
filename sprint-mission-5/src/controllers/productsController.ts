@@ -16,7 +16,11 @@ import {
   UpdateProductDTO,
 } from '../DTO/productsDTO';
 import * as productsService from '../services/productsService';
-import { CreateCommentDTO, GetCommentsForProductDTO } from '../DTO/commentsDTO';
+import {
+  CreateCommentDTO,
+  CreateProductCommentDTO,
+  GetCommentsForProductDTO,
+} from '../DTO/commentsDTO';
 import { EntityType } from '../typings/EnumTypes';
 import * as commentsService from '../services/commentsService';
 
@@ -79,13 +83,12 @@ export const createComment: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
   const authorId = req.user!.userId;
-  const dto: CreateCommentDTO = {
-    entityName: EntityType.Product,
+  const dto: CreateProductCommentDTO = {
     productId,
     content,
     authorId,
   };
-  const comment = await commentsService.createComment(dto);
+  const comment = await commentsService.createCommentForProduct(dto);
   res.status(201).send(comment);
 };
 

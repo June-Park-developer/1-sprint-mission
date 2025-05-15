@@ -18,7 +18,7 @@ export const createArticle = async (dto: CreateArticleDTO) => {
   return article;
 };
 
-export const getArticle = async (dto: GetArticleDTO) => {
+export const getArticle = async (dto: GetArticleDTO): Promise<ArticleResponseDTO> => {
   const { articleId, userId } = dto;
   const article = await articlesRepository.getById(articleId);
   if (!article) {

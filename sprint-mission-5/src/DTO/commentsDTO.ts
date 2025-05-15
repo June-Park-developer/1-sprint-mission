@@ -9,6 +9,17 @@ export interface CreateCommentDTO {
   authorId: number;
 }
 
+export interface CreateArticleCommentDTO {
+  articleId: number;
+  content: string;
+  authorId: number;
+}
+
+export interface CreateProductCommentDTO {
+  productId: number;
+  content: string;
+  authorId: number;
+}
 export interface GetCommentsForArticleDTO {
   articleId: number;
   cursor?: number;
