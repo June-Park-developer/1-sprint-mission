@@ -1,6 +1,7 @@
 import { NotificationType, Prisma } from '@prisma/client';
 import {
   createCommentNotiDTO,
+  createPriceNotiDTO,
   ReadMyNotificationDTO,
   UnreadNotiCountResponseDTO,
 } from '../DTO/notificationsDTO';
@@ -14,6 +15,7 @@ import {
 import * as likedProductsRepository from '../repositories/likedProductsRepository';
 import { NotFoundError } from '../lib/errors/NotFoundError';
 import { UnauthorizedError } from '../lib/errors/UnauthorizedError';
+import { emitNotification } from '../websocket/emitters';
 
 export const getMyNotifications = async (userId: number): Promise<Notification[]> => {
   return await notiRepository.findByUserId(userId);
@@ -24,7 +26,7 @@ export const getUnreadNotiCount = async (userId: number) => {
   return new UnreadNotiCountResponseDTO(count);
 };
 
-export const createCommentNoti = async (dto: createCommentNotiDTO) => {
+export const createCommentNotification = async (dto: createCommentNotiDTO) => {
   const { articleId, commentId, userId } = dto;
   const payload: PayloadForCommentNoti = { articleId, commentId };
   const type = NotificationType.COMMENT;
@@ -33,25 +35,24 @@ export const createCommentNoti = async (dto: createCommentNotiDTO) => {
     userId,
     payload,
   });
+  emitNotification<PayloadForCommentNoti>(userId, payload);
 };
 
-export const createPriceNotifications = async (
-  productId: number,
-  beforePrice: number,
-  afterPrice: number,
-) => {
+export const createPriceNotifications = async (dto: createPriceNotiDTO) => {
+  const { productId, afterPrice, beforePrice } = dto;
   const userIdTuples = await likedProductsRepository.getUserIdsByProductId(productId);
   const userIds = userIdTuples.map((u) => u.userId);
   const payload: PayloadForPriceNoti = { productId, beforePrice, afterPrice };
   await Promise.all(
-    userIds.map(
-      async (userId) =>
-        await notiRepository.createPriceNoti({
-          userId,
-          type: NotificationType.PRICE,
-          payload,
-        }),
-    ),
+    userIds.map(async (userId) => {
+      const notification = await notiRepository.createPriceNoti({
+        userId,
+        type: NotificationType.PRICE,
+        payload,
+      });
+      emitNotification<PayloadForPriceNoti>(userId, payload);
+      return notification;
+    }),
   );
 };
 

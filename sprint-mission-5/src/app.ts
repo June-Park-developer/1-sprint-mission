@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import http from 'http';
 import cookieParser from 'cookie-parser';
 import { PORT, PUBLIC_PATH, STATIC_PATH } from './lib/constants';
 import { articlesRouter } from './routers/articlesRouter';
@@ -10,8 +11,11 @@ import { imagesRouter } from './routers/imagesRouter';
 import { usersRouter } from './routers/usersRouter';
 import { defaultNotFoundHandler, globalErrorHandler } from './middlewares/errorHandler';
 import { notificationRouter } from './routers/notificationsRouter';
+import { setupWebSocket } from './websocket/setupWebSocket';
 
 const app = express();
+const server = http.createServer(app);
+setupWebSocket(server);
 
 app.use(cors());
 app.use(express.json());
@@ -28,6 +32,6 @@ app.use('notifications', notificationRouter);
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
