@@ -50,7 +50,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
   const dto: UpdateProductDTO = { productId, userId, ...productData };
   const { product, beforePrice, afterPrice } = await productsService.updateProduct(dto);
   if (beforePrice !== afterPrice) {
-    await notiService.createPriceNotifications(productId, beforePrice, afterPrice);
+    await notiService.createPriceNotifications({ productId, beforePrice, afterPrice });
   }
   await res.status(200).json(product);
 };

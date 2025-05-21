@@ -6,7 +6,7 @@ Accept: application/json
 ### 새로운 Article 만들기 (accessToken 필요)
 POST http://localhost:3000/articles
 Content-Type: application/json
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0NzM1Nzc0NiwiZXhwIjoxNzQ3MzYxMzQ2fQ.66mrOnoDhMKRAlH-GMtAf8ktOGKD_j9IPiGMUHfdm0I
 
 {
     "title": "새로운 Article",
@@ -35,12 +35,12 @@ Accept: application/json
 Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
 
 ### Article에 Comment 달기 테스트
-POST http://localhost:3000/articles/12/comments
+POST http://localhost:3000/articles/1/comments
 Content-Type: application/json
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0NzM1Nzc0NiwiZXhwIjoxNzQ3MzYxMzQ2fQ.66mrOnoDhMKRAlH-GMtAf8ktOGKD_j9IPiGMUHfdm0I
 
 {
-    "content": "이것은 Article에 대한 테스트 Comment입니다."
+    "content": "이것은 Article에 대한 테스트 Comment2입니다."
 }
 
 ### Article의 Comment 가져오기 테스트
@@ -64,7 +64,8 @@ Accept: application/json
 ### 새로운 Product 만들기 테스트 (accessToken 필요)
 POST http://localhost:3000/products
 Content-Type: application/json
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0NzgwODMxNCwiZXhwIjoxNzQ3ODExOTE0fQ.DiCKNMgkyTM36QrsJTscfbN25h-i2RMNRGsFmPU-XJA
+
 
 {
     "name": "테스트 Product",
@@ -87,14 +88,14 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdC
 
 
 ### Product 업데이트하기 테스트
-PATCH http://localhost:3000/products/14
+PATCH http://localhost:3000/products/3
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzU2MTA1MywiZXhwIjoxNzQzNTY0NjUzfQ.1GIPsq-lAFgKGKpYr04L_yt9Zmb-XGC9kkWFf7_6ZNQ
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0NzgwODMxNCwiZXhwIjoxNzQ3ODExOTE0fQ.DiCKNMgkyTM36QrsJTscfbN25h-i2RMNRGsFmPU-XJA
 
 {
     "name": "업데이트된 테스트 Product",
     "description": "이것은 업데이트된 테스트 Product 설명입니다.",
-    "price": 150,
+    "price": 100,
     "tags": ["업데이트", "Product"],
     "images": ["업데이트된_image1.png"]
 }
@@ -105,9 +106,9 @@ Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0Mjg2MTc2NSwiZXhwIjoxNzQyODY1MzY1fQ.RFOoMkpRdyv9fnIdddWLG8x7p5Nsusv5NnygToTaCH4
 
 ### Product에 Comment 달기 테스트
-POST http://localhost:3000/products/14/comments
+POST http://localhost:3000/products/3/comments
 Content-Type: application/json
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQ0ODcxNDc4fQ.w7M0BjZBl4EuyAcws_ymv4x47T76tN4lMbn4_CMLKGU;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2MTg3OCwiZXhwIjoxNzQzNjY1NDc4fQ.-n_z7Hqmb9hkzbt0dg0mmuZ9wOQX7UJApg5VCktcUIA;
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0NzgwODMxNCwiZXhwIjoxNzQ3ODExOTE0fQ.DiCKNMgkyTM36QrsJTscfbN25h-i2RMNRGsFmPU-XJA
 
 {
     "content": "이것은 Product에 대한 테스트 Comment입니다."
@@ -148,9 +149,9 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "email" : "userExampleasdfddd@gmail.com",
-    "nickname" : "user12eee",
-    "password" : "password1"
+    "email" : "hello@gmail.com",
+    "nickname" : "newUser",
+    "password" : "password1234"
 }
 
 ### 유저 로그인 테스트
@@ -158,8 +159,8 @@ POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "email": "newExample@gmail.com",
-    "password": "password2"
+    "email": "hello@gmail.com",
+    "password": "password1234"
 }
 
 ### 유저 자기 정보 확인 테스트
@@ -198,8 +199,8 @@ POST http://localhost:3000/users/token/refresh
 Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2NTExNCwiZXhwIjoxNzQ0ODc0NzE0fQ.M-0_Cty2eEm3yScVh2CWnX6_KfLf7tTP7ldY9ZSM62Q;
 
 ### Product Like/Unlike 테스트
-POST http://localhost:3000/products/12/like
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQ1MTQzMDY4fQ.II5v0jD7BYKLextQxTliK8BhmndwAa5ngYIzKDzcejw;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzkzMzQ2OCwiZXhwIjoxNzQzOTM3MDY4fQ.q-CWQuyOLfWk-9CqefrBaFJ8EEBx4dfbfOgA75swRvc;
+POST http://localhost:3000/products/3/like
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0NzgwODMxNCwiZXhwIjoxNzQ3ODExOTE0fQ.DiCKNMgkyTM36QrsJTscfbN25h-i2RMNRGsFmPU-XJA
 
 ### Article Like/Unlike 테스트
 POST http://localhost:3000/articles/8/like

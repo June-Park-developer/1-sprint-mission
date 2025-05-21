@@ -22,9 +22,9 @@ export const createCommentForArticle = async (
 
 export const createCommentForProduct = async (dto: CreateProductCommentDTO) => {
   const { productId, content, authorId } = dto;
-  const existingProduct = await articlesRepository.getById(productId);
+  const existingProduct = await productsRepository.getById(productId);
   if (!existingProduct) {
-    throw new NotFoundError(` with id ${productId} does not exist.`);
+    throw new NotFoundError(`Product with id ${productId} does not exist.`);
   }
   const comment = await commentsRepository.createForProduct(dto);
   return new CommentResponseDTO(comment);
