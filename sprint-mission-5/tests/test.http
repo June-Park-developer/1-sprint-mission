@@ -206,3 +206,6 @@ Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI
 POST http://localhost:3000/articles/8/like
 Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MzY2NTEzMiwiZXhwIjoxNzQzNjY4NzMyfQ.iYKkfD6NH4CsWiD25u0FN9Xr1-trziE_A-NZI1xpzoU;
 
+### 나의 notification 가져오기 테스트
+GET http://localhost:3000/notifications/me
+Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0NzgxMDAxNiwiZXhwIjoxNzQ3ODEzNjE2fQ.GApBVrnmcq9yCCKmm0i5KpIVXH18xskOjimdcUuIwmw
