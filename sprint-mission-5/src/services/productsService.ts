@@ -9,6 +9,7 @@ import {
   GetMyLikedProductListDTO,
   GetProductDTO,
   DeleteProductDTO,
+  ProductSummaryDTO,
 } from '../DTO/productsDTO';
 import * as productsRepository from '../repositories/productsRepository';
 import * as likedProductsRepository from '../repositories/likedProductsRepository';
@@ -59,7 +60,7 @@ export const deleteProduct = async (dto: DeleteProductDTO) => {
   await productsRepository.deleteById(productId);
 };
 
-export const getProductList = async (dto: GetProductListDTO) => {
+export const getProductList = async (dto: GetProductListDTO): Promise<ProductListResponseDTO> => {
   const { userId, ...params } = dto;
   const totalCount = await productsRepository.countByKeyword(params.keyword);
   const products = await productsRepository.getProductList(params);
@@ -68,12 +69,12 @@ export const getProductList = async (dto: GetProductListDTO) => {
     products.map(async (product) => {
       if (userId) {
         const liked = await likedProductsRepository.getLike(userId, product.id);
-        return new ProductResponseDTO(product, !!liked);
+        return new ProductSummaryDTO(product, !!liked);
       }
-      return new ProductResponseDTO(product);
+      return new ProductSummaryDTO(product);
     }),
   );
-  return new ProductListResponseDTO(list, totalCount);
+  return { list, totalCount };
 };
 
 export const likeProduct = async (dto: LikeProductDTO) => {
@@ -93,7 +94,9 @@ export const likeProduct = async (dto: LikeProductDTO) => {
 };
 
 // usersController.ts와 연결
-export const getMyProductList = async (dto: GetMyProductListDTO) => {
+export const getMyProductList = async (
+  dto: GetMyProductListDTO,
+): Promise<ProductListResponseDTO> => {
   const { authorId, page, pageSize, orderBy } = dto;
   const totalCount = await productsRepository.countByAuthorId(authorId);
   const products = await productsRepository.getMyProductList({
@@ -108,7 +111,7 @@ export const getMyProductList = async (dto: GetMyProductListDTO) => {
       return new ProductResponseDTO(product, !!liked);
     }),
   );
-  return new ProductListResponseDTO(list, totalCount);
+  return { list, totalCount };
 };
 
 export const getMyLikedProductList = async (dto: GetMyLikedProductListDTO) => {
@@ -121,7 +124,7 @@ export const getMyLikedProductList = async (dto: GetMyLikedProductListDTO) => {
     orderBy,
   });
   const list = likedProducts.map((product) => new ProductResponseDTO(product, true));
-  return new ProductListResponseDTO(list, totalCount);
+  return { list, totalCount };
 };
 
 // 함수

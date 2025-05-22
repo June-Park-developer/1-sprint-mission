@@ -1,7 +1,6 @@
 import type { Config } from 'jest';
 
 const config: Config = {
-  collectCoverage: true,
   verbose: true,
   testEnvironment: 'node',
   coverageDirectory: 'coverage',

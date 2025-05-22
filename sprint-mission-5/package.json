@@ -3,7 +3,8 @@
     "dev": "nodemon --watch src src/main.ts",
     "build": "tsc",
     "start": "ts-node src/main.ts",
-    "test": "dotenv -e .env.test -- npm run prisma:migrate && dotenv -e .env.test -- jest"
+    "test": "dotenv -e .env.test -- npm run prisma:migrate && dotenv -e .env.test -- jest",
+    "prisma:migrate": "prisma migrate dev"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

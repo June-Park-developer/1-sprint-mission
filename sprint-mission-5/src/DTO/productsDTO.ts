@@ -81,11 +81,22 @@ export class ProductResponseDTO {
   }
 }
 
-export class ProductListResponseDTO {
-  list: ProductResponseDTO[];
-  totalCount: number;
+export class ProductSummaryDTO {
+  id: number;
+  name: string;
+  price: number;
+  createdAt: Date;
+  isLiked?: boolean;
 
-  constructor(list: ProductResponseDTO[], totalCount: number) {
-    (this.list = list), (this.totalCount = totalCount);
+  constructor(product: Product, isLiked?: boolean) {
+    this.id = product.id;
+    this.name = product.name;
+    this.price = product.price;
+    this.createdAt = product.createdAt;
+    this.isLiked = isLiked;
   }
+}
+export interface ProductListResponseDTO {
+  list: ProductSummaryDTO[];
+  totalCount: number;
 }
