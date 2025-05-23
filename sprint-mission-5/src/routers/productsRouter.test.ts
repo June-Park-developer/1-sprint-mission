@@ -262,6 +262,15 @@ describe('인증 필요한 상품 API', () => {
         expect(getResponse.status).toBe(200);
         expect(getResponse.body).toMatchObject({ isLiked: true });
       });
+      test('like 된 상품은 unliked 되어 get 시 isLiked=false 여야 함', async () => {
+        await likeProductByUser(user1.id, product1.id);
+        const agent = getAuthenticatedAgent(user1.id);
+        const response = await agent.post(`/products/${product1.id}/like`);
+        expect(response.status).toBe(204);
+        const getResponse = await agent.get(`/products/${product1.id}`);
+        expect(getResponse.status).toBe(200);
+        expect(getResponse.body).toMatchObject({ isLiked: false });
+      });
     });
     describe('오류', () => {});
   });
