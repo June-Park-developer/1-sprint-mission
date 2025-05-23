@@ -1,6 +1,7 @@
 import { CreateProductCommentDTO } from '../DTO/commentsDTO';
 import { CreateProductDTO } from '../DTO/productsDTO';
 import { CreateUserDTO } from '../DTO/usersDTO';
+import { Product } from '../typings/productTypes';
 import { prismaClient } from './prismaClient';
 import bcrypt from 'bcrypt';
 
@@ -15,7 +16,7 @@ export const createTestUser = async (data: CreateUserDTO) => {
   });
 };
 
-export const createTestProduct = async (data: CreateProductDTO) => {
+export const createTestProduct = async (data: CreateProductDTO): Promise<Product> => {
   return await prismaClient.product.create({
     data,
   });
