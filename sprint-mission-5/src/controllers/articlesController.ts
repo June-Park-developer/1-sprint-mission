@@ -74,7 +74,7 @@ export const likeArticle: RequestHandler = async (req, res) => {
   if (isLiked) {
     res.status(201).json({ message: 'Article liked successfully' });
   } else {
-    res.status(204).json({ message: 'Article unliked successfuly' });
+    res.status(204).send();
   }
 };
 

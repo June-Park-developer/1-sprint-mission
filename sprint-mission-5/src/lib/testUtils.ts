@@ -40,6 +40,7 @@ export const createTestArticleComment = async (data: CreateArticleCommentDTO) =>
 
 export const clearTestDB = async () => {
   await prismaClient.comment.deleteMany();
+  await prismaClient.notification.deleteMany();
   await prismaClient.likedProduct.deleteMany();
   await prismaClient.likedArticle.deleteMany();
   await prismaClient.product.deleteMany();

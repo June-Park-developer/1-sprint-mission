@@ -17,11 +17,11 @@ export const articlesRouter = express.Router();
 articlesRouter.post('/', verifyAccessToken, withAsync(createArticle));
 articlesRouter.get('/', optionalAccessToken, withAsync(getArticleList));
 
+articlesRouter.post(`/:id/like`, verifyAccessToken, withAsync(likeArticle));
+
 articlesRouter.get('/:id', optionalAccessToken, withAsync(getArticle));
 articlesRouter.patch('/:id', verifyAccessToken, verifyArticleAuth, withAsync(updateArticle));
 articlesRouter.delete('/:id', verifyAccessToken, verifyArticleAuth, withAsync(deleteArticle));
 
 articlesRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment));
 articlesRouter.get('/:id/comments', withAsync(getCommentList));
-
-articlesRouter.post(`/:id/like`, verifyAccessToken, withAsync(likeArticle));

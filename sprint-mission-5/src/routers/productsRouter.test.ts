@@ -133,19 +133,21 @@ describe('인증 필요한 상품 API', () => {
   });
   describe('GET /products/', () => {
     let user1: User;
+    let product1: Product;
+    let product2: Product;
     beforeEach(async () => {
       user1 = await createTestUser(testUser1);
-      const product1 = await createTestProduct({ ...testProduct1, authorId: user1.id });
-      await createTestProduct({ ...testProduct2, authorId: user1.id });
+      product1 = await createTestProduct({ ...testProduct1, authorId: user1.id });
+      product2 = await createTestProduct({ ...testProduct2, authorId: user1.id });
       await likeProductByUser(user1.id, product1.id);
     });
-    describe('정상', () => {
-      test('로그인 후 조회 시 isLiked도 확인되어야 함', async () => {
+    describe('성공(로그인 상태)', () => {
+      test('like 여부에 따라 isLiked 값이 다르게 반환되어야 함', async () => {
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent.get('/products');
         expect(response.status).toBe(200);
-        expect(response.body.list[0]).toMatchObject({ isLiked: true });
-        expect(response.body.list[1]).toMatchObject({ isLiked: false });
+        expect(response.body.list[0]).toMatchObject({ name: product1.name, isLiked: true });
+        expect(response.body.list[1]).toMatchObject({ name: product2.name, isLiked: false });
       });
     });
     // describe('오류', () => {});
@@ -156,7 +158,7 @@ describe('인증 필요한 상품 API', () => {
       user1 = await createTestUser(testUser1);
     });
     describe('정상', () => {
-      test('로그인 했다면 생성이 잘 되어야 함', async () => {
+      test('로그인한 userId로 새로운 상품을 생성하고 반환해야 함', async () => {
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent.post('/products').send(testProduct1);
         expect(response.status).toBe(201);
@@ -176,15 +178,18 @@ describe('인증 필요한 상품 API', () => {
       product2 = await createTestProduct({ ...testProduct2, authorId: user1.id });
       await likeProductByUser(user1.id, product1.id);
     });
-    describe('정상', () => {
-      test('로그인 했다면 isLiked 도 포함해서 반환해야 함', async () => {
+    describe('정상 (로그인 시)', () => {
+      test('like 한 product는 isLiked=true 를 포함해서 반환해야 함', async () => {
         const agent = getAuthenticatedAgent(user1.id);
-        const likeResponse = await agent.get(`/products/${product1.id}`);
-        expect(likeResponse.status).toBe(200);
-        expect(likeResponse.body).toMatchObject({ isLiked: true });
-        const NoLikeResponse = await agent.get(`/products/${product2.id}`);
-        expect(NoLikeResponse.status).toBe(200);
-        expect(NoLikeResponse.body).toMatchObject({ isLiked: false });
+        const response = await agent.get(`/products/${product1.id}`);
+        expect(response.status).toBe(200);
+        expect(response.body).toMatchObject({ isLiked: true });
+      });
+      test('like 하지 않은 product는 isLiked=false 를 포함해서 반환해야 함', async () => {
+        const agent = getAuthenticatedAgent(user1.id);
+        const response = await agent.get(`/products/${product2.id}`);
+        expect(response.status).toBe(200);
+        expect(response.body).toMatchObject({ isLiked: false });
       });
     });
     describe('오류', () => {});
@@ -196,8 +201,8 @@ describe('인증 필요한 상품 API', () => {
       user1 = await createTestUser(testUser1);
       product1 = await createTestProduct({ ...testProduct1, authorId: user1.id });
     });
-    describe('정상', () => {
-      test('로그인 했고 자신이 생성한 상품이라면 수정되어야 함', async () => {
+    describe('성공(로그인 + author)', () => {
+      test('수정하고 수정 내용을 반영햐여 반환해야 함', async () => {
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent
           .patch(`/products/${product1.id}`)
@@ -215,8 +220,8 @@ describe('인증 필요한 상품 API', () => {
       user1 = await createTestUser(testUser1);
       product1 = await createTestProduct({ ...testProduct1, authorId: user1.id });
     });
-    describe('정상', () => {
-      test('로그인 했고 자신이 생성한 상품이라면 삭제되어야 함', async () => {
+    describe('성공(로그인 + author)', () => {
+      test('삭제 시 204 & 다시 조회 시 404 응답을 반환해야 함', async () => {
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent.delete(`/products/${product1.id}`);
         expect(response.status).toBe(204);
@@ -262,7 +267,7 @@ describe('인증 필요한 상품 API', () => {
         expect(getResponse.status).toBe(200);
         expect(getResponse.body).toMatchObject({ isLiked: true });
       });
-      test('like 된 상품은 unliked 되어 get 시 isLiked=false 여야 함', async () => {
+      test('이미 like 된 상품은 unliked 되어 get 시 isLiked=false 여야 함', async () => {
         await likeProductByUser(user1.id, product1.id);
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent.post(`/products/${product1.id}/like`);
