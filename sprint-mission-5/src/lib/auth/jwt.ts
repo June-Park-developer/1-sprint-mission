@@ -11,3 +11,13 @@ export function createToken(user: User, type?: string) {
 
   return jwt.sign(payload, JWT_SECRET as jwt.Secret, options as jwt.SignOptions);
 }
+
+export const createAccessTokenWithUserId = (userId: number) => {
+  const payload = { userId };
+  const options = {
+    expiresIn: '1h',
+    algorithm: 'HS256' as const,
+  };
+
+  return jwt.sign(payload, JWT_SECRET as jwt.Secret, options as jwt.SignOptions);
+};

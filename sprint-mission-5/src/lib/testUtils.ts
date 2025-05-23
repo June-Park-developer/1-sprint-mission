@@ -4,8 +4,11 @@ import { CreateProductDTO } from '../DTO/productsDTO';
 import { CreateUserDTO } from '../DTO/usersDTO';
 import { Article } from '../typings/articleTypes';
 import { Product } from '../typings/productTypes';
+import { createAccessTokenWithUserId } from './auth/jwt';
 import { prismaClient } from './prismaClient';
 import bcrypt from 'bcrypt';
+import request from 'supertest';
+import app from '../app';
 
 export const createTestUser = async (data: CreateUserDTO) => {
   const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -37,6 +40,8 @@ export const createTestArticleComment = async (data: CreateArticleCommentDTO) =>
 
 export const clearTestDB = async () => {
   await prismaClient.comment.deleteMany();
+  await prismaClient.likedProduct.deleteMany();
+  await prismaClient.likedArticle.deleteMany();
   await prismaClient.product.deleteMany();
   await prismaClient.article.deleteMany();
   await prismaClient.user.deleteMany();
@@ -50,4 +55,23 @@ export const createTestArticle = async (data: CreateArticleDTO): Promise<Article
   return await prismaClient.article.create({
     data,
   });
+};
+
+export const likeProductByUser = async (userId: number, productId: number) => {
+  return await prismaClient.likedProduct.create({
+    data: { userId, productId },
+  });
+};
+export const likeArticleByUser = async (userId: number, articleId: number) => {
+  return await prismaClient.likedArticle.create({
+    data: { userId, articleId },
+  });
+};
+
+export const getAuthenticatedAgent = (userId: number) => {
+  const accessToken = createAccessTokenWithUserId(userId);
+  const cookie = `accessToken=${accessToken}`;
+  const agent = request.agent(app);
+  agent.jar.setCookie(cookie);
+  return agent;
 };

@@ -65,6 +65,7 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 export const getProductList: RequestHandler = async (req, res) => {
   const { page, pageSize, orderBy, keyword } = create(req.query, GetProductListParamsStruct);
   const userId = req.user?.userId;
+  console.log(`컨트롤러에서 req.user에서 확인한 userId: ${userId}`);
   const dto: GetProductListDTO = { userId, page, pageSize, orderBy, keyword };
   const productList = await productsService.getProductList(dto);
   res.send(productList);
