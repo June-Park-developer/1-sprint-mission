@@ -1,7 +1,4 @@
 import app from '../app';
-import { CreateProductCommentDTO } from '../DTO/commentsDTO';
-import { CreateProductDTO } from '../DTO/productsDTO';
-import { CreateUserDTO } from '../DTO/usersDTO';
 import {
   createTestUser,
   createTestProduct,
@@ -13,7 +10,7 @@ import request from 'supertest';
 import { Product } from '../typings/productTypes';
 
 // testDB 에 들어갈 dummy 데이터
-const testUser1: CreateUserDTO = {
+const testUser1 = {
   email: 'test@example.com',
   nickname: 'testUser1',
   password: 'password1234',
@@ -69,7 +66,6 @@ describe('인증 필요하지 않은 상품 API', () => {
           price: product1.price,
           id: product1.id,
         });
-
         expect(response.body.list[1]).toMatchObject({
           name: testProduct2.name,
           price: testProduct2.price,
@@ -113,6 +109,7 @@ describe('인증 필요하지 않은 상품 API', () => {
     describe('정상', () => {
       test('정상 댓글 목록 조회', async () => {
         const response = await request(app).get(`/products/${product1.id}/comments`);
+        expect(response.status).toBe(200);
         expect(response.body.list.length).toBe(2);
         expect(response.body.nextCursor).toBe(null);
         expect(response.body.list[0]).toMatchObject(testProductComment2);
