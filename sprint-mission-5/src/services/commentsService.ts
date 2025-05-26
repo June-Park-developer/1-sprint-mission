@@ -1,7 +1,8 @@
 import {
   CommentListResponseDTO,
   CommentResponseDTO,
-  CreateCommentDTO,
+  CreateArticleCommentDTO,
+  CreateProductCommentDTO,
   DeleteCommentDTO,
   GetCommentsForArticleDTO,
   GetCommentsForProductDTO,
@@ -10,22 +11,22 @@ import {
 import * as commentsRepository from '../repositories/commentsRepository';
 import * as productsRepository from '../repositories/productsRepository';
 import * as articlesRepository from '../repositories/articlesRepository';
-import { CreateCommentInput } from '../typings/commentTypes';
 import { NotFoundError } from '../lib/errors/NotFoundError';
 
-export const createComment = async (dto: CreateCommentDTO) => {
-  const { entityName, articleId = null, productId = null, content, authorId } = dto;
-  let existingEntity;
-  if (entityName === 'article' && articleId) {
-    existingEntity = await articlesRepository.getById(articleId);
-  } else if (entityName === 'product' && productId) {
-    existingEntity = await productsRepository.getById(productId);
+export const createCommentForArticle = async (
+  dto: CreateArticleCommentDTO,
+): Promise<CommentResponseDTO> => {
+  const comment = await commentsRepository.createForArticle(dto);
+  return new CommentResponseDTO(comment);
+};
+
+export const createCommentForProduct = async (dto: CreateProductCommentDTO) => {
+  const { productId, content, authorId } = dto;
+  const existingProduct = await productsRepository.getById(productId);
+  if (!existingProduct) {
+    throw new NotFoundError(`Product with id ${productId} does not exist.`);
   }
-  if (!existingEntity) {
-    throw new NotFoundError(`The ${entityName} with id ${articleId || productId} is not found`);
-  }
-  const data: CreateCommentInput = { articleId, productId, content, authorId };
-  const comment = await commentsRepository.create(data);
+  const comment = await commentsRepository.createForProduct(dto);
   return new CommentResponseDTO(comment);
 };
 

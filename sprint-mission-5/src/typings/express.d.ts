@@ -1,4 +1,4 @@
-import Express from 'express';
+import 'express';
 
 declare global {
   namespace Express {
@@ -6,5 +6,11 @@ declare global {
       user?: { userId: number };
       auth?: { userId: number };
     }
+  }
+}
+
+declare module 'socket.io' {
+  interface Socket {
+    user?: { userId: number };
   }
 }

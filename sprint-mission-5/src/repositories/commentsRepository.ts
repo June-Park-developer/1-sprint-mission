@@ -1,11 +1,16 @@
+import { CreateArticleCommentDTO, CreateProductCommentDTO } from '../DTO/commentsDTO';
 import { prismaClient } from '../lib/prismaClient';
-import { CreateCommentInput, Comment } from '../typings/commentTypes';
+import { Comment } from '../typings/commentTypes';
 
 export async function getById(id: number): Promise<Comment | null> {
   return await prismaClient.comment.findUnique({ where: { id } });
 }
 
-export async function create(data: CreateCommentInput): Promise<Comment> {
+export async function createForArticle(data: CreateArticleCommentDTO): Promise<Comment> {
+  return await prismaClient.comment.create({ data });
+}
+
+export async function createForProduct(data: CreateProductCommentDTO): Promise<Comment> {
   return await prismaClient.comment.create({ data });
 }
 

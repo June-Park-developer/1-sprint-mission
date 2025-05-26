@@ -10,13 +10,6 @@ export interface Comment {
 }
 
 // Input
-export type CreateCommentInput = {
-  authorId: number;
-  articleId: number | null;
-  productId: number | null;
-  content: string;
-};
-
 export type GetCommentListInput = {
   articleId: number | null;
   productId: number | null;

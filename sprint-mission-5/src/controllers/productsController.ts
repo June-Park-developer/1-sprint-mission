@@ -16,9 +16,13 @@ import {
   UpdateProductDTO,
 } from '../DTO/productsDTO';
 import * as productsService from '../services/productsService';
-import { CreateCommentDTO, GetCommentsForProductDTO } from '../DTO/commentsDTO';
-import { EntityType } from '../typings/EnumTypes';
+import {
+  CreateCommentDTO,
+  CreateProductCommentDTO,
+  GetCommentsForProductDTO,
+} from '../DTO/commentsDTO';
 import * as commentsService from '../services/commentsService';
+import * as notiService from '../services/notificationsService';
 
 export const createProduct: RequestHandler = async (req, res) => {
   const productData = create(req.body, CreateProductBodyStruct);
@@ -44,8 +48,11 @@ export const updateProduct: RequestHandler = async (req, res) => {
   const userId = req.user!.userId;
   const productData = create(req.body, UpdateProductBodyStruct);
   const dto: UpdateProductDTO = { productId, userId, ...productData };
-  const responseProduct = await productsService.updateProduct(dto);
-  res.send(responseProduct);
+  const { product, beforePrice, afterPrice } = await productsService.updateProduct(dto);
+  if (beforePrice !== afterPrice) {
+    await notiService.createPriceNotifications({ productId, beforePrice, afterPrice });
+  }
+  await res.status(200).json(product);
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {
@@ -79,13 +86,12 @@ export const createComment: RequestHandler = async (req, res) => {
   const { id: productId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
   const authorId = req.user!.userId;
-  const dto: CreateCommentDTO = {
-    entityName: EntityType.Product,
+  const dto: CreateProductCommentDTO = {
     productId,
     content,
     authorId,
   };
-  const comment = await commentsService.createComment(dto);
+  const comment = await commentsService.createCommentForProduct(dto);
   res.status(201).send(comment);
 };
 
