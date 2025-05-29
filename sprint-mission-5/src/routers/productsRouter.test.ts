@@ -222,6 +222,7 @@ describe('인증 필요한 상품 API', () => {
     });
     describe('성공(로그인 + author)', () => {
       test('삭제 시 204 & 다시 조회 시 404 응답을 반환해야 함', async () => {
+        jest.spyOn(console, 'error').mockImplementation(() => {});
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent.delete(`/products/${product1.id}`);
         expect(response.status).toBe(204);

@@ -206,6 +206,7 @@ describe('인증 필요한 상품 API', () => {
     });
     describe('성공(로그인 + author)', () => {
       test('삭제 시 204 & 다시 조회 시 404 응답을 반환해야 함', async () => {
+        jest.spyOn(console, 'error').mockImplementation(() => {});
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent.delete(`/articles/${article1.id}`);
         expect(response.status).toBe(204);
@@ -256,7 +257,6 @@ describe('인증 필요한 상품 API', () => {
         const likeExists = await prismaClient.likedArticle.findFirst({
           where: { userId: user1.id, articleId: article1.id },
         });
-        console.log('[test] 좋아요 존재 여부:', !!likeExists);
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent.post(`/articles/${article1.id}/like`);
         expect(response.status).toBe(204);
