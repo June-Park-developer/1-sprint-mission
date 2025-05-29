@@ -13,32 +13,6 @@ import { Article } from '../typings/articleTypes';
 import { User } from '../typings/userTypes';
 import { prismaClient } from '../lib/prismaClient';
 
-// 더미 데이터
-const testUser1 = {
-  email: 'test@example.com',
-  nickname: 'testUser1',
-  password: 'password1234',
-};
-
-const testArticle1 = {
-  title: '테스트 게시물 1',
-  content: '테스트 게시물 설명 1',
-  image: 'article1.png',
-};
-const testArticle2 = {
-  title: '테스트 게시물 2',
-  content: '테스트 게시물 설명 2',
-  image: 'article2.png',
-};
-
-const testArticleComment1 = {
-  content: '테스트 게시물 댓글 1',
-};
-const testArticleComment2 = {
-  content: '테스트 게시물 댓글 2',
-};
-
-// 테스트 코드
 describe('인증 필요하지 않은 게시글 API', () => {
   beforeEach(async () => {
     await clearTestDB();
