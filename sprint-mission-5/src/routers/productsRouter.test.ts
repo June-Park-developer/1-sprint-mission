@@ -243,11 +243,10 @@ describe('인증 필요한 상품 API', () => {
       let server: http.Server;
       let ioServer: ioServer;
       let clientSocket: Socket;
-      let getIoSpy: jest.SpyInstance;
       beforeEach((done) => {
         server = http.createServer(app);
         ioServer = setupWebSocket(server);
-        getIoSpy = jest.spyOn(websocket, 'getIo').mockReturnValue(ioServer); // 테스트용 ioServer를 반환하도록 스파이함
+        const getIoSpy = jest.spyOn(websocket, 'getIo').mockReturnValue(ioServer); // 테스트용 ioServer를 반환하도록 스파이함
         server.listen(() => {
           const port = (server.address() as any).port;
           clientSocket = Client(`http://localhost:${port}`, {

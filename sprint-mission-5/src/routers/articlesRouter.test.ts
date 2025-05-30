@@ -12,6 +12,12 @@ import {
 import request from 'supertest';
 import { Article } from '../typings/articleTypes';
 import { User } from '../typings/userTypes';
+import http from 'http';
+import * as websocket from '../websocket/setupWebSocket';
+import { createAccessTokenWithUserId } from '../lib/auth/jwt';
+import { setupWebSocket } from '../websocket/setupWebSocket';
+import Client, { Socket } from 'socket.io-client';
+import { Server as ioServer } from 'socket.io';
 
 describe('인증 필요하지 않은 게시글 API', () => {
   let user1Id: number;
@@ -268,18 +274,51 @@ describe('인증 필요한 게시글 API', () => {
   });
   describe('POST /articles/:id/comments', () => {
     let user1: User;
+    let user2: User;
     let article1: Article;
     beforeEach(async () => {
       user1 = await createTestUser(1);
-      article1 = await createTestArticle(user1.id);
+      user2 = await createTestUser(2);
+      article1 = await createTestArticle(user1.id); // user1 이 생성한 게시글
     });
     describe('성공(로그인 + author)', () => {
-      test('201 응답으로 생성된 댓글을 반환해야 함', async () => {
+      let server: http.Server;
+      let ioServer: ioServer;
+      let clientSocket: Socket;
+      beforeEach((done) => {
+        server = http.createServer(app);
+        ioServer = setupWebSocket(server);
+        const getIoSpy = jest.spyOn(websocket, 'getIo').mockReturnValue(ioServer); // 테스트용 ioServer를 반환하도록 스파이함
+        server.listen(() => {
+          const port = (server.address() as any).port;
+          clientSocket = Client(`http://localhost:${port}`, {
+            auth: {
+              accessToken: createAccessTokenWithUserId(user1.id),
+            },
+          });
+          clientSocket.on('connect', done);
+        });
+      });
+
+      afterAll(() => {
+        clientSocket.close();
+        ioServer.close();
+        server.close();
+      });
+      test('201 응답으로 생성된 댓글을 반환해야 하고, 게시글 작성자에게 실시간 알림', async () => {
+        const notificationPromise = new Promise((resolve) => {
+          clientSocket.once('notification', resolve);
+        });
         const newComment = {
           content: '새로운 댓글',
         };
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent.post(`/articles/${article1.id}/comments`).send(newComment);
+
+        const notification = await notificationPromise;
+        expect(notification).toMatchObject({
+          articleId: article1.id,
+        });
         expect(response.status).toBe(201);
         expect(response.body).toMatchObject(newComment);
       });
