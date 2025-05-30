@@ -16,6 +16,7 @@ export function setupWebSocket(server: http.Server) {
   io.on('connection', (socket: Socket) => {
     console.log('Client connected');
     const userId = socket.user!.userId;
+    console.log(`소켓을 룸에 조인 시킬 때의 userId!!: ${userId}`);
     socket.join(`${userId}`);
   });
 

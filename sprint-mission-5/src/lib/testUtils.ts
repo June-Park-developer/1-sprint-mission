@@ -1,7 +1,3 @@
-import { CreateArticleDTO } from '../DTO/articlesDTO';
-import { CreateArticleCommentDTO, CreateProductCommentDTO } from '../DTO/commentsDTO';
-import { CreateProductDTO } from '../DTO/productsDTO';
-import { CreateUserDTO } from '../DTO/usersDTO';
 import { Article } from '../typings/articleTypes';
 import { Product } from '../typings/productTypes';
 import { createAccessTokenWithUserId } from './auth/jwt';
@@ -11,6 +7,10 @@ import request from 'supertest';
 import app from '../app';
 import { User } from '../typings/userTypes';
 import { Comment } from '../typings/commentTypes';
+import http from 'http';
+import { Server } from 'socket.io';
+import Client, { Socket } from 'socket.io-client';
+import { setupWebSocket } from '../websocket/setupWebSocket';
 
 // Multiple 로 생성 시 id, index, createdAt 모두 같은 순서로 생성됩니다
 
@@ -62,6 +62,7 @@ export const createMultipleTestProducts = async (
 };
 
 export const likeProductByUser = async (userId: number, productId: number) => {
+  console.log(`product를 라이크 하는 사람은 ${userId}`);
   return await prismaClient.likedProduct.create({
     data: { userId, productId },
   });

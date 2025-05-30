@@ -12,6 +12,12 @@ import {
 import request from 'supertest';
 import { Product } from '../typings/productTypes';
 import { User } from '../typings/userTypes';
+import Client, { Socket } from 'socket.io-client';
+import { Server as ioServer } from 'socket.io';
+import http from 'http';
+import * as websocket from '../websocket/setupWebSocket';
+import { createAccessTokenWithUserId } from '../lib/auth/jwt';
+import { setupWebSocket } from '../websocket/setupWebSocket';
 
 // 테스트 코드
 
@@ -221,15 +227,58 @@ describe('인증 필요한 상품 API', () => {
       user1 = await createTestUser(1);
       user2 = await createTestUser(2);
       product1 = await createTestProduct(user1.id); // user1 이 생성한 상품
+      await likeProductByUser(user2.id, product1.id); // user2 가 product1 을 like 함
     });
     describe('성공(로그인 + author)', () => {
-      test('수정하고 수정 내용을 반영햐여 반환해야 함', async () => {
+      test('수정하고 수정 내용을 반영하여 반환해야 함', async () => {
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent
           .patch(`/products/${product1.id}`)
           .send({ name: '수정한 상품' });
         expect(response.status).toBe(200);
         expect(response.body.name).toBe('수정한 상품');
+      });
+    });
+    describe('웹소켓 관련', () => {
+      let server: http.Server;
+      let ioServer: ioServer;
+      let clientSocket: Socket;
+      let getIoSpy: jest.SpyInstance;
+      beforeEach((done) => {
+        server = http.createServer(app);
+        ioServer = setupWebSocket(server);
+        getIoSpy = jest.spyOn(websocket, 'getIo').mockReturnValue(ioServer); // 테스트용 ioServer를 반환하도록 스파이함
+        server.listen(() => {
+          const port = (server.address() as any).port;
+          clientSocket = Client(`http://localhost:${port}`, {
+            auth: {
+              accessToken: createAccessTokenWithUserId(user2.id),
+            },
+          });
+          clientSocket.on('connect', done);
+        });
+      });
+
+      afterAll(() => {
+        clientSocket.close();
+        ioServer.close();
+        server.close();
+      });
+      test('가격 수정 시 해당 상품을 like 한 user에게 실시간 알림이 가야 함', async () => {
+        const notificationPromise = new Promise((resolve) => {
+          clientSocket.once('notification', resolve);
+        });
+        console.log(`[테스트] PATCH 요청 전, 클라이언트 소켓 연결 상태: ${clientSocket.connected}`);
+        // 가격 수정 요청
+        const agent = getAuthenticatedAgent(user1.id);
+        await agent.patch(`/products/${product1.id}`).send({ price: 100 });
+
+        // 알림 기다리고 확인
+        const notification = await notificationPromise;
+        expect(notification).toMatchObject({
+          productId: product1.id,
+          afterPrice: 100,
+        });
       });
     });
     describe('오류', () => {
@@ -322,7 +371,7 @@ describe('인증 필요한 상품 API', () => {
         expect(getResponse.body.isLiked).toBe(true);
       });
       test('이미 like 된 상품은 unliked 되어 get 시 isLiked=false 여야 함', async () => {
-        await likeProductByUser(user1.id, product1.id);
+        await likeProductByUser(user1.id, product1.id); // 이미 like 됨
         const agent = getAuthenticatedAgent(user1.id);
         const response = await agent.post(`/products/${product1.id}/like`);
         expect(response.status).toBe(204);
