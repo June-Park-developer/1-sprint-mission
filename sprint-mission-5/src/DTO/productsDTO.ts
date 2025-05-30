@@ -68,16 +68,18 @@ export class ProductResponseDTO {
   isLiked?: boolean;
 
   constructor(product: Product, isLiked?: boolean) {
-    (this.id = product.id),
-      (this.name = product.name),
-      (this.description = product.description),
-      (this.price = product.price),
-      (this.tags = product.tags),
-      (this.images = product.images),
-      (this.createdAt = product.createdAt),
-      (this.updatedAt = product.updatedAt),
-      (this.authorId = product.authorId),
-      (this.isLiked = isLiked);
+    this.id = product.id;
+    this.name = product.name;
+    this.description = product.description;
+    this.price = product.price;
+    this.tags = product.tags;
+    this.images = product.images;
+    this.createdAt = product.createdAt;
+    this.updatedAt = product.updatedAt;
+    this.authorId = product.authorId;
+    if (isLiked !== undefined) {
+      this.isLiked = isLiked;
+    }
   }
 }
 
@@ -93,7 +95,9 @@ export class ProductSummaryDTO {
     this.name = product.name;
     this.price = product.price;
     this.createdAt = product.createdAt;
-    this.isLiked = isLiked;
+    if (isLiked !== undefined) {
+      this.isLiked = isLiked;
+    }
   }
 }
 export interface ProductListResponseDTO {
