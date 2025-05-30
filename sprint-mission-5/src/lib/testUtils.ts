@@ -71,7 +71,12 @@ export const likeProductByUser = async (userId: number, productId: number) => {
 
 export const createTestArticle = async (userId: number, index = 1): Promise<Article> => {
   return await prismaClient.article.create({
-    data: { title: `게시글 ${index}`, content: `내용 ${index}`, authorId: userId },
+    data: {
+      title: `게시글 ${index}`,
+      content: `내용 ${index}`,
+      authorId: userId,
+      image: 'example.jpg',
+    },
   });
 };
 
@@ -139,7 +144,7 @@ export const createMultipleTestArticleComments = async (
   const comments = [];
 
   for (let i = 1; i <= count; i++) {
-    comments.push(createTestProductComment(articleId, authorId, i));
+    comments.push(createTestArticleComment(articleId, authorId, i));
   }
 
   return await Promise.all(comments);

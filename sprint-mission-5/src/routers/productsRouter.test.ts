@@ -12,26 +12,19 @@ import {
 import request from 'supertest';
 import { Product } from '../typings/productTypes';
 import { User } from '../typings/userTypes';
-import { Comment } from '../typings/commentTypes';
 
 // 테스트 코드
 
 describe('인증 필요하지 않은 상품 API', () => {
   let user1Id: number;
   let product1: Product;
-  let comment1: Comment;
-  let comment2: Comment;
-  let comment11: Comment;
   beforeAll(async () => {
     await clearTestDB();
     const user1 = await createTestUser(1);
     user1Id = user1.id;
     const products = await createMultipleTestProducts(user1Id, 30);
     product1 = products[0];
-    const comments = await createMultipleTestProductComments(product1.id, user1Id, 30);
-    comment1 = comments[0];
-    comment2 = comments[1];
-    comment11 = comments[10];
+    await createMultipleTestProductComments(product1.id, user1Id, 30);
   });
   afterAll(async () => {
     await disconnectTestDB();
@@ -110,6 +103,7 @@ describe('인증 필요하지 않은 상품 API', () => {
         const response = await request(app).get(`/products/${product1.id}/comments`);
         expect(response.status).toBe(200);
         expect(response.body.list.length).toBe(10);
+        expect(response.body.nextCursor).not.toBeNull();
         nextCursor = response.body.nextCursor;
       });
       test('쿼리 cursor: 커서부터 limit개 가져오기', async () => {
@@ -271,9 +265,7 @@ describe('인증 필요한 상품 API', () => {
     describe('오류', () => {
       test('author가 아닌 사람이 요청 시 403 오류를 반환해야 함', async () => {
         const agent = getAuthenticatedAgent(user2.id);
-        const response = await agent
-          .delete(`/products/${product1.id}`)
-          .send({ name: '수정한 상품' });
+        const response = await agent.delete(`/products/${product1.id}`);
         expect(response.status).toBe(403);
         expect(response.body.message).toBe('You do not have permission to access this resource.');
       });
