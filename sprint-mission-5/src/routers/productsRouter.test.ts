@@ -259,6 +259,7 @@ describe('인증 필요한 상품 API', () => {
       });
 
       afterAll(() => {
+        // Todo: 이거 afterEach인게 더 맞지 않나..? 일단은 주말 즐겨
         clientSocket.close();
         ioServer.close();
         server.close();

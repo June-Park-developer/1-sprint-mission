@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "nodemon --watch src src/main.ts",
     "build": "tsc",
-    "start": "ts-node src/main.ts",
+    "start": "npm run build && dotenv -e .env.production -- node dist/main.js",
     "test": "dotenv -e .env.test -- npm run prisma:migrate && dotenv -e .env.test -- jest --i --coverage",
     "prisma:migrate": "prisma migrate dev"
   },
@@ -28,6 +28,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.821.0",
     "@prisma/client": "^5.16.2",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
