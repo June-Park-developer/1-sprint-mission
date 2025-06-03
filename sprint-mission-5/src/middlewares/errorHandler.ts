@@ -7,6 +7,10 @@ export const defaultNotFoundHandler: RequestHandler = (req, res) => {
 };
 
 export const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+
   if (err instanceof StructError || err instanceof BadRequestError) {
     res.status(400).send({ message: err.message });
   }
