@@ -4,7 +4,8 @@
     "build": "tsc",
     "start": "npm run build && dotenv -e .env.production -- node dist/main.js",
     "test": "dotenv -e .env.test -- npm run prisma:migrate && dotenv -e .env.test -- jest --i --coverage",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:prod": "dotenv -e .env.production -- npx prisma migrate deploy"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
