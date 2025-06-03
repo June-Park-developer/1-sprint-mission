@@ -34,13 +34,13 @@ export const loginUser: RequestHandler = async (req, res) => {
     path: '/users/token/refresh',
     httpOnly: true,
     sameSite: 'none',
-    secure: true,
+    secure: process.env.NODE_ENV !== 'test',
   });
   res.cookie('accessToken', accessToken, {
     path: '/',
     httpOnly: true,
     sameSite: 'none',
-    secure: true,
+    secure: process.env.NODE_ENV !== 'test',
   });
   res.json({ message: 'Log In Success' });
 };

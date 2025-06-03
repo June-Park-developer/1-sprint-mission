@@ -68,24 +68,39 @@ export class ProductResponseDTO {
   isLiked?: boolean;
 
   constructor(product: Product, isLiked?: boolean) {
-    (this.id = product.id),
-      (this.name = product.name),
-      (this.description = product.description),
-      (this.price = product.price),
-      (this.tags = product.tags),
-      (this.images = product.images),
-      (this.createdAt = product.createdAt),
-      (this.updatedAt = product.updatedAt),
-      (this.authorId = product.authorId),
-      (this.isLiked = isLiked);
+    this.id = product.id;
+    this.name = product.name;
+    this.description = product.description;
+    this.price = product.price;
+    this.tags = product.tags;
+    this.images = product.images;
+    this.createdAt = product.createdAt;
+    this.updatedAt = product.updatedAt;
+    this.authorId = product.authorId;
+    if (isLiked !== undefined) {
+      this.isLiked = isLiked;
+    }
   }
 }
 
-export class ProductListResponseDTO {
-  list: ProductResponseDTO[];
-  totalCount: number;
+export class ProductSummaryDTO {
+  id: number;
+  name: string;
+  price: number;
+  createdAt: Date;
+  isLiked?: boolean;
 
-  constructor(list: ProductResponseDTO[], totalCount: number) {
-    (this.list = list), (this.totalCount = totalCount);
+  constructor(product: Product, isLiked?: boolean) {
+    this.id = product.id;
+    this.name = product.name;
+    this.price = product.price;
+    this.createdAt = product.createdAt;
+    if (isLiked !== undefined) {
+      this.isLiked = isLiked;
+    }
   }
+}
+export interface ProductListResponseDTO {
+  list: ProductSummaryDTO[];
+  totalCount: number;
 }

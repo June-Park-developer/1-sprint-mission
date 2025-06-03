@@ -55,7 +55,9 @@ export class ArticleResponseDTO {
     this.authorId = article.authorId;
     this.createdAt = article.createdAt;
     this.updatedAt = article.updatedAt;
-    this.isLiked = isLiked;
+    if (isLiked !== undefined) {
+      this.isLiked = isLiked;
+    }
   }
 }
 

@@ -41,6 +41,7 @@ export const createCommentNotification = async (dto: createCommentNotiDTO) => {
 export const createPriceNotifications = async (dto: createPriceNotiDTO) => {
   const { productId, afterPrice, beforePrice } = dto;
   const userIdTuples = await likedProductsRepository.getUserIdsByProductId(productId);
+  console.log(userIdTuples);
   const userIds = userIdTuples.map((u) => u.userId);
   const payload: PayloadForPriceNoti = { productId, beforePrice, afterPrice };
   await Promise.all(

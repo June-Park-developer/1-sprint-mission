@@ -49,9 +49,11 @@ export async function getProductList({
   orderBy,
   keyword,
 }: GetProductListParamsInput): Promise<Product[]> {
-  const where = {
-    name: keyword ? { contains: keyword } : undefined,
-  };
+  const where = keyword
+    ? {
+        OR: [{ name: { contains: keyword } }, { description: { contains: keyword } }],
+      }
+    : {};
   return await prismaClient.product.findMany({
     skip: (page - 1) * pageSize,
     take: pageSize,

@@ -8,3 +8,5 @@ dist/
 public/*
 !public/.gitkeep
 
+# 커버리지 결과
+coverage/

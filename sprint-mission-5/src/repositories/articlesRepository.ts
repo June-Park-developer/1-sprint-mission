@@ -27,9 +27,9 @@ export async function countByKeyword(keyword?: string) {
 }
 
 export async function getArticleList(params: GetArticleListParamsInput): Promise<Article[]> {
-  const where = {
-    title: params.keyword ? { contains: params.keyword } : undefined,
-  };
+  const where = params.keyword
+    ? { OR: [{ title: { contains: params.keyword } }, { content: { contains: params.keyword } }] }
+    : {};
   return await prismaClient.article.findMany({
     skip: (params.page - 1) * params.pageSize,
     take: params.pageSize,

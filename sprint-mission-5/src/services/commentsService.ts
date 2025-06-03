@@ -59,7 +59,7 @@ export const getCommentsForProduct = async (dto: GetCommentsForProductDTO) => {
     cursor,
   );
   const list = commentsWithCursor.slice(0, limit);
-  const cursorComment = commentsWithCursor[limit - 1];
+  const cursorComment = commentsWithCursor[limit];
   const nextCursor = cursorComment ? cursorComment.id : null;
   return new CommentListResponseDTO(list, nextCursor);
 };
